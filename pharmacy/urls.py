@@ -64,7 +64,9 @@ urlpatterns=[
     path('manage_prescrip/',pharmacistViews.managePrescription,name='pharmacist_prescription'),
     path('pharmacist_user/drug_details/<str:pk>/', pharmacistViews.drugDetails, name="drug_detail2"),
 
+    path('sell_slip/<str:pk>/', pharmacistViews.sell_slip, name="sell_slip"),
 
+    path('pharmacist/patient_form/', pharmacistViews.createPatientPharmacist, name='patient_form3'),
 
     #Doctor
     path('doctor_home/',DoctorViews.doctorHome,name='doctor_home'),

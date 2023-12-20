@@ -12,7 +12,11 @@
             <div class="card card-primry  sc">
                 <div class="card sc table-title ">
                     <div class="card-header ">
-                        <span>Patiets Records</span>
+                        <span>Patients Records</span>
+                        <div class="card-tools d-flex">
+                            <a class="btn btn-sm btn-info mr-2" href="{% url 'patient_form3' %}" role="button">+ Add
+                                Patient</a>
+                        </div>
                         <div class="card-tools d-flex">
 
                             <form role="form" method="POST" action="" enctype="multipart/form-data" class="mr-4 mt-1">

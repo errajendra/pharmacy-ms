@@ -1,4 +1,4 @@
-{% extends 'hod_templates/base_template.html'%}
+{% extends 'pharmacist_templates/base_template.html'%}
 {% load crispy_forms_tags %}
 {% block page_title %}
 <h5>Add patient</h5>
@@ -41,7 +41,7 @@
                                                                   <span aria-hidden="true">
                                                   <i class="fa fa-times greencross"></i>
                                                   </a></span>
-                                                                  <span class="sr-only">Close</span> 
+                                                                  <span class="sr-only">Close</span>
                                                               </button>
                                     <i class="start-icon far fa-check-circle faa-tada animated"></i>
                                     <strong class="font__weight-semibold">Well done!</strong> {{message}}
@@ -53,18 +53,6 @@
 
                         <div class="card-body">
                             {{form|crispy}}
-                            <!-- <div class="form-group">
-                                {% for field in form %}
-                        
-                                        {{ field.errors }}
-                                        {{ field.label_tag }}
-                                        {{ field }}
-                                        {% endfor %}
-
-                                    </div> -->
-
-
-
 
                         </div>
                         <!-- /.card-body -->

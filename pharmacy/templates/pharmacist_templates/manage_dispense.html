@@ -1,10 +1,5 @@
 {% extends 'pharmacist_templates/base_template.html'%}
 {% load crispy_forms_tags %}
-
-{% block page_title %}
-<h5>Add patient</h5>
-
-{% endblock page_title %}
 {% block main_content %}
 <style>
     #div_id_patient_id{
@@ -49,161 +44,245 @@
     height: 45px;
 }
 
+@media print {
+        /* Styles specific to printed document */
+        body {
+            font-size: 12pt;
+        }
+
+        /* Hide unnecessary elements for print */
+        .no-print {
+            display: none;
+        }
+    }
 </style>
 <section class="content">
-        <div class="container-fluid">
-            {% include 'pharmacist_templates/alert_messeges.html' %}
-            <h5 class="mt-4 ml-2">         PATIENT   NAME: <span style="font-style: italic; color:rgb(51, 178, 236);"> {{patients.admin.first_name}} {{patients.admin.last_name}} </span> 
-            </h5>
+    <div class="container-fluid">
+        {% include 'pharmacist_templates/alert_messeges.html' %}
+        <h5 class="mt-4 ml-2"> PATIENT NAME: <span style="font-style: italic; color:rgb(51, 178, 236);"> {{patients.admin.first_name}} {{patients.admin.last_name}} </span>
+        </h5>
 
-                    <div class="col-md-12">
-                            <div class="row">
+        <div class="col-md-12">
+            <div class="row">
 
-                        <div class="col-md-6" style="display: block;">
-                            <div class="card card-info">
-                                    <div class="card-header">
-                                        
-                                            <h5>Stocked Drugs</h5>
-                                    </div>
-                                      
-                                    <table class="table table-bordered table-hover dataTable table5" id="plist">
-                                            <thead>
-                        
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Drug</th>
-                                            <th>Category</th>
-                                            <th>Quantiy</th>
-                                            <th>Date Stocked</th>
-                                        </tr>
-                                    </thead>
-                        
-                                           <tbody  id="japon">
-                                                {% for stoc in drugs %}
-
-                                        <tr class="hov" data-id={{stoc.id}}>
-                                            <td>{{stoc.id}} &#160;</td>
-                                            <td>{{stoc.drug_name}} &#160;</td>
-                                            <td>{{stoc.category}}</td>
-                                            <td>{{stoc.quantity}}</td>
-                        
-                                          <!-- start expire -->
-                        {% if expired %}
-                        <!-- Checks expired drugs -->
-
-                            {% for expire in expired %}
-                                {% if stoc.drug_name ==  expire.drug_name %}
-                                    <td class=""> <div style="background-color: rgb(48, 58, 92);border-radius: 10px;font-size: 11px; width:120px;font-weight: 600;color: white;" class="d-flex justify-content-center ml-2 mt-2 px-1 "> EXPIRED </div> </td>
-                                {% endif %}
-                            {% endfor %}
-                            <!-- Checks Not expired drugs -->
-
-                            {% for expire in expa %}
-                                {% if stoc.drug_name ==  expire.drug_name %}
-                                    <td>{{stoc.valid_to}}</td>
-                                {% endif %}
-                            {% endfor %}
-
-
-                        {% endif %}
-                       <!-- End Expire -->
-
-                                           
-                                        </tr>
-                                        {% endfor %}
-
-                                    </tbody>
-                        
-                                          </table>
-                            </div>
-                             
-                        
-                        </div>
-                        
-        
-
-
-                    
-                        
-                  
-                     
-                <div class="col-md-6">
-                    <div class="card card-info">
-                            <div class="card-header">
-                                    <h5>Stocked Drugs</h5>
-                                   
-                                </div>
-                              
-                            <table class="table2 table-bordered table-hover " >
-                                    <thead>
-            
-                                <tr>
-                                    <th>No</th>
-                                   
-                                    <th>prescription</th>
-                                    <th>description</th>
-            
-                                    <!-- <th>Mobile</th>
-            
-                                     <th>Address</th> -->
-            
-                                </tr>
-                            </thead>
-                            {% for stoc in prescrips %}
-
-                                   <tbody  >
-                                <tr class="hov" >
-                                    <td>{{forloop.counter}} &#160;</td>
-                                   
-                                    <td>{{stoc.prescribe}}</td>
-                                    <td>{{stoc.description}}</td>
-            
-                                  
-                                  
-                                </tr>
-                            </tbody>
-                            {% endfor %}
-
-                                  </table>
-                    </div>
-                     
-
-            </div>
-                       
-
-                        <!-- /.card -->
-    
-                    </div>
-                </div>
-
-                <div class="col-md-12">
+                <div class="col-md-6" style="display: block;">
                     <div class="card card-info">
                         <div class="card-header">
-                            <h5>Dispense Drug</h5>
+
+                            <h5>Stocked Drugs</h5>
                         </div>
 
-                            <form role="form" method="POST" action="" enctype="multipart/form-data">
-                                {% csrf_token %}
-                            
-                                
-                                        
-                            
-                                <div class="card-body">
-                                 
-                            {{form|crispy}}
-                           
-                                </div>
-                            
-                                <div class="card-footer">
-                                <input type="button" class="btn btn-info ml-4 mb-4" data-toggle="modal" data-target=".bd-example-modal-sm" value="Submit"> 
-                                </div>
-                                {% include 'pharmacist_templates/insert_modal.html'%}
+                        <table class="table table-bordered table-hover dataTable table5" id="plist">
+                            <thead>
 
-                            </form>
+                            <tr>
+                                <th>No</th>
+                                <th>Drug</th>
+                                <th>Category</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Expired Date</th>
+                            </tr>
+                            </thead>
 
+                            <tbody id="japon">
+                            {% for stoc in drugs %}
+
+                            <tr class="hov" data-id={{stoc.id}}>
+                                <td>{{stoc.id}} &#160;</td>
+                                <td>{{stoc.drug_name}} &#160;</td>
+                                <td>{{stoc.category}}</td>
+                                <td>{{stoc.quantity}}</td>
+                                <td>₹ {{stoc.price}}</td>
+
+                                <!-- start expire -->
+                                {% if expired %}
+                                <!-- Checks expired drugs -->
+
+                                {% for expire in expired %}
+                                {% if stoc.drug_name == expire.drug_name %}
+                                <td class="">
+                                    <div style="background-color: rgb(48, 58, 92);border-radius: 10px;font-size: 11px; width:120px;font-weight: 600;color: white;"
+                                         class="d-flex justify-content-center ml-2 mt-2 px-1 "> EXPIRED
+                                    </div>
+                                </td>
+                                {% endif %}
+                                {% endfor %}
+                                <!-- Checks Not expired drugs -->
+
+                                {% for expire in expa %}
+                                {% if stoc.drug_name == expire.drug_name %}
+                                <td>{{stoc.valid_to}}</td>
+                                {% endif %}
+                                {% endfor %}
+
+
+                                {% endif %}
+                                <!-- End Expire -->
+
+
+                            </tr>
+                            {% endfor %}
+
+                            </tbody>
+
+                        </table>
                     </div>
-                      
-                  </div>
-    
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h5>Select Drug</h5>
+                        </div>
+                        <form role="form" method="POST" action="" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="card-body">
+                                {{form|crispy}}
+                            </div>
+                            <div class="card-footer">
+                                <input type="button" class="btn btn-info ml-4 mb-4" data-toggle="modal"
+                                       data-target=".bd-example-modal-sm" value="Add Drug">
+                            </div>
+                            {% include 'pharmacist_templates/insert_modal.html'%}
+                        </form>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        {% if dispense %}
+
+        <div class="col-md-12">
+            <div class="card card-info">
+                <div class="card-header">
+                    <h5>Added Drug</h5>
+                </div>
+                <table class="table2 table-bordered table-hover ">
+                        <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Medicine Name</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Discount %</th>
+                            <th>GST %</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        {% for dispense in added_dispense %}
+                        <tbody>
+                        <tr class="hov">
+                            <td>{{forloop.counter}} &#160;</td>
+                            <td>{{dispense.drug_id.drug_name}}</td>
+                            <td>{{dispense.instructions}}</td>
+                            <td>{{dispense.dispense_quantity}}</td>
+                            <td>{{dispense.drug_id.price}}.00</td>
+                            <td>{{dispense.discount}}</td>
+                            <td>{{dispense.gst}}</td>
+                            <td>{{dispense.total_amount}}</td>
+                            <td><a href="{% url 'del_disp' dispense.id %}" class="btn btn-sm btn-danger">Delete</a>
+                        </tr>
+                        </tbody>
+                        {% endfor %}
+                    {% include 'pharmacist_templates/insert_modal.html'%}
+                </table>
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card card-info">
+                            <div class="mx-3">
+                                <br>
+                                <h5><u><b>Term's & Condition</b></u></h5>
+                            </div>
+                            <div class="mx-4">
+                                <p>Goods once sold will not be taken back or exchanged.<br>
+                                    Bills not paid due date will attract 24% interest.<br>
+                                    All disputes subject to g.b nagar Jurisdication only.<br>
+                                    Prescribed Sales Tax declaration will be given.
+                                </p>
+                                <p>Remark:</p>
+                                <div class="row">
+                                    <p class="col-md-9" style="text-transform: capitalize;">Rs. {{grand_total_str}} Only /-</p>
+                                    <p class="col-md-3">Authorised Signature</p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-info">
+<!--                            <div class="mx-2">-->
+<!--                                <h5>Sub Total</h5>-->
+<!--                            </div>-->
+                            <table class="table2 table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Sub Total</th>
+                                        <td>{{sub_total.drug_id__price__sum}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Discount</th>
+                                        <td>{{all_discount.discount__sum|floatformat:2}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>GST</th>
+                                        <td>{{all_gst.gst__sum|floatformat:2}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <td>&#160;</td>
+                                    </tr>
+                                    <tr>
+                                        <th>&#160;</th>
+                                        <td></td>
+                                    </tr>
+                                    <br>
+                                    <tr>
+                                        <th>Grand Total</th>
+                                        <td>{{grand_total.total_amount__sum|floatformat:2}}</td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-right">
+            <button class="no-print btn btn-sm btn-info" onclick="printDocument({{patient_id}})" style="width: 180px; height: 40px;">Print</button>
+        </div>
+        {% endif %}
+    </div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    function printDocument(patientId) {
+        // Make a fetch request to your URL with the patient_id parameter
+        fetch(`/sell_slip/${patientId}/`)
+            .then(response => response.text())
+            .then(data => {
+                // Create a new window to open the fetched content
+                const printWindow = window.open('', '_blank');
+
+                // Write the fetched content into the new window
+                printWindow.document.write(data);
+
+                // Close the document writing, focus on the new window, and trigger print
+                printWindow.document.close();
+                printWindow.focus();
+                printWindow.print();
+
+                // After printing, redirect to 'manage_prescrip'
+                window.location.href = '/manage_prescrip/';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+
+
 {% endblock %}

@@ -1,0 +1,278 @@
+{% load crispy_forms_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Pharmacy Dispensing System</title>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/main.css'%}">
+    <link rel="stylesheet" href="{% static 'css/profile.css'%}">
+
+    <link rel="stylesheet" href="{% static 'fontawesome-free/css/all.min.css' %}">
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
+
+  <link rel="stylesheet" href="{% static 'dist/css/adminlte.css'  %}">
+  <link rel="stylesheet" href="{% static 'pace-progress/themes/black/pace-theme-flat-top.css' %}">
+  <link rel="stylesheet" href="{% static 'datatables-bs4/css/dataTables.bootstrap4.min.css'%}">
+  <link rel="stylesheet" href="{% static 'datatables-responsive/css/responsive.bootstrap4.min.css'%}">
+  <link rel="stylesheet" href="{% static 'datatables-buttons/css/buttons.bootstrap4.min.css'%}">
+  <link rel="stylesheet" href="{% static 'css/select2.css' %}">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+  <link href="{% static 'jquery-ui2/jquery-ui.min.css' %}" rel="stylesheet">
+  <link href="{% static 'jquery-ui2/jquery-ui.structure.min.css' %}" rel="stylesheet">
+  <link href="{% static 'jquery-ui2/jquery-ui.theme.min.css' %}" rel="stylesheet">
+
+
+</head>
+<style>
+    #div_id_patient_id{
+        display: none !important;
+    }
+    .select2-container--default .select2-results__option[aria-disabled='true'] {
+    color: #0071d4 !important;
+;
+}
+.select2-container--default.select2-container--focus .select2-selection--single, .select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: #bbbfc4;
+}
+.select2-container input {
+  -webkit-transition: all 0.10s ease-in-out !important;
+  -moz-transition: all 0.10s ease-in-out !important;
+  -ms-transition: all 0.10s ease-in-out !important;
+  -o-transition: all 0.10s ease-in-out !important;
+  outline: none !important;
+  padding: 3px 0px 3px 3px!important;
+  margin: 5px 1px 3px 0px !important;
+  border: 1px solid #DDDDDD!important;
+}
+
+ .select2-container input:focus {
+  box-shadow: 0 0 5px rgba(81, 203, 238, 1)  !important;
+  padding: 3px 0px 3px 3px !important;
+  margin: 5px 1px 3px 0px !important;
+  border: 1px solid rgb(85, 148, 165)!important;
+}
+
+
+
+.select2-container--default .select2-dropdown .select2-search__field, .select2-container--default .select2-search--inline .select2-search__field {
+    border: 1px solid #ced4da !important;
+
+
+}
+.select2-container--default .select2-selection--single {
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    height: 45px;
+}
+
+</style>
+<section style="background-color: antiquewhite">
+    <div class="container-fluid">
+        <div class="card-header" style="background-color: burlywood;">
+            <h5>Pharmacy Management System !</h5>
+        </div>
+        <h6 class="mt-4 ml-2">
+            Patient Name: <span style="font-style: italic; color:rgb(51, 178, 236);"> Priyanshu Shah </span><br>
+            Patient Address: <span style="font-style: italic; color:rgb(51, 178, 236);">Singrauli, MP, India </span><br>
+            Dr Name: <span style="font-style: italic; color:rgb(51, 178, 236);"> Maxx Gen </span><br>
+            Dr Reg No. <span style="font-style: italic; color:rgb(51, 178, 236);">PS0012</span><br>
+        </h6>
+        <div class="col-md-12">
+            <div class="card card-info">
+                <div class="card-header">
+                    <h5>Medicine Details</h5>
+                </div>
+                <table class="table2 table-bordered table-hover " style="background-color: antiquewhite">
+                        <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Medicine Name</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Discount %</th>
+                            <th>GST %</th>
+                            <th>Amount</th>
+                        </tr>
+                        </thead>
+                        {% for dispense in added_dispense %}
+                        <tbody>
+                        <tr class="hov">
+                            <td>{{forloop.counter}} &#160;</td>
+                            <td>{{dispense.drug_id.drug_name}}</td>
+                            <td>{{dispense.instructions}}</td>
+                            <td>{{dispense.dispense_quantity}}</td>
+                            <td>{{dispense.drug_id.price}}.00</td>
+                            <td>{{dispense.discount}}</td>
+                            <td>{{dispense.gst}}</td>
+                            <td>{{dispense.total_amount}}</td>
+                        </tr>
+                        </tbody>
+                        {% endfor %}
+                    {% include 'pharmacist_templates/insert_modal.html'%}
+                </table>
+                <div class="row" >
+                    <div class="col-md-9" style="background-color: antiquewhite">
+                        <div class="card card-info" style="background-color: antiquewhite">
+                            <div class="mx-3">
+                                <br>
+                                <h5><u><b>Term's & Condition</b></u></h5>
+                            </div>
+                            <div class="mx-4" >
+                                <p>Goods once sold will not be taken back or exchanged.<br>
+                                    Bills not paid due date will attract 24% interest.<br>
+                                    All disputes subject to g.b nagar Jurisdication only.<br>
+                                    Prescribed Sales Tax declaration will be given.
+                                </p>
+                                <p>Remark:</p>
+                                <div class="row">
+                                    <p class="col-md-9" style="text-transform: capitalize;">Rs. {{grand_total_str}} Only /-</p>
+                                    <p class="col-md-3">Authorised Signature</p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3" style="background-color: antiquewhite">
+                        <div class="card card-info" style="background-color: antiquewhite">
+<!--                            <div class="mx-2">-->
+<!--                                <h5>Sub Total</h5>-->
+<!--                            </div>-->
+                            <table class="table2 table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Sub Total</th>
+                                        <td>{{sub_total}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Discount</th>
+                                        <td>{{all_discount.discount__sum|floatformat:2}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>GST</th>
+                                        <td>{{all_gst.gst__sum|floatformat:2}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <td>&#160;</td>
+                                    </tr>
+                                    <tr>
+                                        <th>&#160;</th>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Grand Total</th>
+                                        <td>{{grand_total.total_amount__sum|floatformat:2}}</td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+<script src="{% static "jquery/jquery.min.js"  %}"></script>
+
+<!-- Bootstrap 4 -->
+<script src="{% static "bootstrap/js/bootstrap.bundle.min.js"  %}"></script>
+
+<!-- AdminLTE App -->
+<script src="{% static 'dist/js/adminlte.js'  %}"></script>
+
+<script src="{% static 'jquery-ui2/jquery-ui.min.js' %}"></script>
+<script src="{% static 'jquery-ui2/jquery-ui.js' %}"></script>
+<!-- jquery slimscroll js -->
+<script src="{% static 'jquery-slimscroll/js/jquery.slimscroll.js'%}"></script>
+<!-- modernizr js -->
+<!-- classie js -->
+<!-- i18next.min.js -->
+<script  src="{% static 'i18next/js/i18next.min.js'%}"></script>
+<script src="{% static 'i18next-xhr-backend/js/i18nextXHRBackend.min.js'%}"></script>
+
+<script src="{% static 'js/paging.js' %}"></script>
+
+
+<script src="{% static 'pace-progress/pace.min.js' %}"></script>
+
+<script src="{% static 'datatables/jquery.dataTables.js'%}"></script>
+<script src="{% static 'datatables-bs4/js/dataTables.bootstrap4.min.js'%} "></script>
+<script src="{% static 'datatables-responsive/js/dataTables.responsive.min.js'%} "></script>
+<script src="{% static 'datatables-responsive/js/responsive.bootstrap4.min.js'%}"></script>
+<script src="{% static 'datatables-buttons/js/dataTables.buttons.min.js'%}"></script>
+<script src="{% static 'datatables-buttons/js/buttons.bootstrap4.min.js'%}"></script>
+<script src="{% static 'pdfmake/pdfmake.min.js'%}"></script>
+<script src="{% static 'pdfmake/vfs_fonts.js'%}"></script>
+<script src="{% static 'datatables-buttons/js/buttons.html5.min.js'%}"></script>
+<script src="{% static 'datatables-buttons/js/buttons.print.min.js'%}"></script>
+<script src="{% static 'datatables-buttons/js/buttons.colVis.min.js'%}"></script>
+<script src="{% static 'js/select2.min.js'%}"></script>
+
+<script src="{% static 'js/datejs.js' %}"></script>
+
+ {% block  js%}
+ {% endblock %}
+ <script>
+   $(document).ready(function(){
+  $(function () {
+
+    $("#plist").DataTable({
+      "responsive": true, "lengthChange": true, "autoWidth": false,
+      "buttons": ["excel","print"],
+      "lengthMenu": [5]
+    }).buttons().container().appendTo('#plist_wrapper .col-md-6:eq(0)');
+    // $('#plist').DataTable({
+    //   "lengthChange": true,
+
+    //   "lengthMenu":[5]
+    // });
+
+  });
+});
+ </script>
+
+ <script>
+
+$("#id_drug_id").select2({
+    placeholder: "Dispense Drug Here",
+    allowClear: true
+});
+$("#id_drug_id").select2();
+$("#id_drug_id").on("select2:open", function (e) {
+
+  $('#id_drug_id').change(function(){
+        var data= $(this).val();
+        // alert(data);
+        $("#id_taken").val(data)
+
+      });
+
+     $('#select2-search__field')
+         .text(drugname)
+         .trigger('change');
+});
+$('#id_drug_id').select2({
+    placeholder:" Search Dispense Drug here",
+    width:"100%",
+    height:"45px"
+
+
+
+ });
+
+
+</script>
+</body>
+</html>

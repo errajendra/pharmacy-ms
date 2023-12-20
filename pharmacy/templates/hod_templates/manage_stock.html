@@ -61,11 +61,12 @@
 
                         <tr>
                             <th>No</th>
-                            <th>Drug</th>
+                            <th>Medicine Name</th>
                             <th>Category</th>
-                            <th>Quantiy</th>
-                            <th>Reorder Level</th>
-                            <th>Date Stocked</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Discount</th>
+                            <th>Tax</th>
                             <th>Expiry Date</th>
                             <th class="text-center">Action</th>
 
@@ -86,11 +87,13 @@
 
                             </td>
                             <td>
-                                {% if stock.reorder_level %}
-                                <a href="{% url 'reorder_level' stock.id %}">{{stock.reorder_level}}</a></td>
+                                {% if stock.price %}
+                                <a href="{% url 'reorder_level' stock.id %}">₹ {{stock.price}}</a></td>
                             {% else %}
                             <a href="{% url 'reorder_level' stock.id %}">Add level</a> {% endif %}
-                            <td>{{stock.last_updated |date:"F d, Y"}}</td>
+<!--                            <td>{{stock.last_updated |date:"F d, Y"}}</td>-->
+                            <td>{{stock.discount}} (%)</td>
+                            <td>GST-{{stock.tax}}</td>
 
                             <!-- Checks expired drugs -->
 
