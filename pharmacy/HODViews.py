@@ -28,7 +28,7 @@ def adminDashboard(request):
 
 
     today = datetime.today()
-    for_today = Patients.objects.filter(date_admitted__year=today.year, date_admitted__month=today.month, date_admitted__day=today.day).count()
+    for_today = Patients.objects.filter(created_at__year=today.year, created_at__month=today.month, created_at__day=today.day).count()
     print(for_today)
     exipred=Stock.objects.annotate(
     expired=ExpressionWrapper(Q(valid_to__lt=Now()), output_field=BooleanField())

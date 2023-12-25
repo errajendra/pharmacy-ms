@@ -63,9 +63,8 @@ urlpatterns=[
     path('manage_stock2/',pharmacistViews.manageStock,name='manage_stock2'),    
     path('manage_prescrip/',pharmacistViews.managePrescription,name='pharmacist_prescription'),
     path('pharmacist_user/drug_details/<str:pk>/', pharmacistViews.drugDetails, name="drug_detail2"),
-
     path('sell_slip/<str:pk>/', pharmacistViews.sell_slip, name="sell_slip"),
-
+    path('view-invoice-slip/<int:pk>/', pharmacistViews.view_invoice_details, name="view_invoice"),
     path('pharmacist/patient_form/', pharmacistViews.createPatientPharmacist, name='patient_form3'),
 
     #Doctor

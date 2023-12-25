@@ -4,7 +4,7 @@
 {% endblock page_title %}
 
 {% block link %}
-<li class="breadcrumb-item active">all patients </li>
+<li class="breadcrumb-item active">all patients</li>
 {% endblock link %}
 
 {% block main_content %}
@@ -13,99 +13,74 @@
     table td { width:100px; word-wrap:break-word;}
 
 
-
-  
-
-    </style>
+</style>
 
 
 <section class="content">
-        {% if messages %}
-        <div class="form-group">
+    {% if messages %}
+    <div class="form-group">
         <div class="col-12">
             {% for message in messages %}
             {% if message.tags == "error" %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
                 {{ message }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                </div>
+            </div>
             {% elif message.tags == "success" %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
                 {{ message }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                </div>
+            </div>
             {% endif %}
             {% endfor %}
         </div>
-        </div>
-        {% endif %}
-        <div class="row">
-        
-                <div class="col-md-12">
-                       
-                    <div class="card card-primry  sc">
-                            <div class="card card-primar sc">
-                                    <div class="card-header">
-                                        <span>Patiets Records</span>
-                                       <div class="card-tools d-flex">
-                                           
-                                      
-                                    
-                    
-                                </div>
-                    
-                                    </div>
-                        <table class="table table-bordered table-hover dataTable" >
-                            <thead>
-                                    <tr>
-                                            <th>ID</th>
-                                            <th>Patient FullName</th>
-                                        
-                                            <th>Dispensed Drug</th>
+    </div>
+    {% endif %}
+    <div class="row">
 
-                                            <th>Dispensed Quantity</th>
-                                            <th>Instructions</th>
-                                            <th>Date Precribed</th>
-                                             
-                    
-                                             <th class="text-center">Action</th>
-                                            
-                
-                                    </tr>
-                            </thead>
-                             <tbody>
-                                    {% for prescrip in prescrips %}
-                                       <tr class="hov">
-                                            <td>{{prescrip.id}}</td>
-                                       
-                                        <td>{{prescrip.patient_id.first_name}}  &nbsp;  &nbsp;  &nbsp;     {{prescrip.patient_id.last_name}}</td>
+        <div class="col-md-12">
 
-                                
-                                        <td>{{prescrip.drug_id}}</td>
-                                        <td class="text-center pt-2">{{prescrip.dispense_quantity}}</td>
-                                        <td>{{prescrip.instructions}}</td>
-                                        <td>{{prescrip.dispense_at}}</td>
-                                        <td><a href="{% url 'del_disp' prescrip.id %}" class="btn btn-sm btn-danger">Delete</a>                     
-
-
-
-
-                
-                
-                                    </tr>
-                                    {% endfor %}
-                             </tbody>
-                           
-                        </table>
-
-                        
+            <div class="card card-primry  sc">
+                <div class="card card-primar sc">
+                    <div class="card-header">
+                        <span>Patient Records</span>
+                        <div class="card-tools d-flex">
+                        </div>
                     </div>
+                    <table class="table table-bordered table-hover dataTable">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Patient FullName</th>
+                            <th>Date Parched</th>
+                            <th>Amount</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for invoice in invoices %}
+                        <tr class="hov">
+                            <td>{{invoice.id}}</td>
+                            <td>{{invoice.patient_id.first_name}} &nbsp; &nbsp; &nbsp;
+                                {{invoice.patient_id.last_name}}
+                            </td>
+                            <td>{{invoice.created_at|date:"d M Y"}}</td>
+                            <td class="text-center pt-2">{{invoice.invoice_detail.grand_total}}</td>
+                            <td><a href="{% url 'view_invoice' invoice.id %}" class="btn btn-sm btn-info">View</a>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+
+                    </table>
+
+
                 </div>
             </div>
+        </div>
 </section>
 
 {% endblock %}

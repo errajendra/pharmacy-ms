@@ -18,6 +18,7 @@ admin.site.register(PharmacyClerk)
 admin.site.register(Prescription)
 admin.site.register(Dispense)
 admin.site.register(PatientFeedback)
+admin.site.register(PatientInvoice)
 
 
    

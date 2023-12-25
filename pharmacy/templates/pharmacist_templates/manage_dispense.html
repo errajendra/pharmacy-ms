@@ -276,7 +276,7 @@
                 printWindow.print();
 
                 // After printing, redirect to 'manage_prescrip'
-                window.location.href = '/manage_prescrip/';
+                window.location.href = '/{{redirect_url}}/';
             })
             .catch(error => {
                 console.error('Error:', error);

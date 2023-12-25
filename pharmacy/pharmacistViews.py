@@ -77,9 +77,11 @@ def managePatientsPharmacist(request):
 
 def managePrescription(request):
     precrip = Dispense.objects.all()
+    invoices = PatientInvoice.objects.all()
 
     context = {
         "prescrips": precrip,
+        "invoices": invoices
     }
     return render(request, "pharmacist_templates/patient_prescrip.html", context)
 
@@ -168,7 +170,8 @@ def manageDispense(request, pk):
         "grand_total": added_dispense.aggregate(Sum("total_amount")),
         "grand_total_str": grand_total_str,
         "patient_id": queryset.id,
-        "dispense": dispense
+        "dispense": dispense,
+        "redirect_url": "pharmacist_manage_patients"
     }
 
     return render(request, "pharmacist_templates/manage_dispense.html", context)
@@ -223,6 +226,10 @@ def deleteDispense4(request, pk):
         patient = Patients.objects.get(id=fed.patient_id.id)
         if request.method == "POST":
             fed.delete()
+            """ stock quantity update """
+            stock_update = Stock.objects.get(id=fed.drug_id.id)
+            stock_update.quantity += fed.dispense_quantity
+            stock_update.save()
             messages.success(request, "Dispense  deleted successfully")
             return redirect(f"/manage_disp/{patient.id}/")
 
@@ -259,7 +266,10 @@ def sell_slip(request, pk):
         "all_gst": added_dispense.aggregate(Sum("gst")),
         "grand_total": added_dispense.aggregate(Sum("total_amount")),
         "grand_total_str": grand_total_str,
+        "request": request
     }
+
+    invoice_save(context)
 
     content = render(request, 'pharmacist_templates/sell_slip.html', context)
 
@@ -307,3 +317,33 @@ def createPatientPharmacist(request):
     }
 
     return render(request, 'pharmacist_templates/patient_add.html', context)
+
+
+def invoice_save(context):
+    try:
+        json_content = {
+            "patient_id": context['patients'].id,
+            "dispense_ids": [int(dispense.id) for dispense in context['added_dispense']],
+            "sub_total": context['sub_total'],
+            "all_discount": context['all_discount']['discount__sum'],
+            "all_gst": context['all_gst']['gst__sum'],
+            "grand_total": context['grand_total']['total_amount__sum'],
+            "grand_total_str": context['grand_total_str'],
+        }
+        PatientInvoice.objects.create(patient_id=context['patients'], invoice_detail=json_content)
+        dispense_list = Dispense.objects.filter(id__in=json_content['dispense_ids']).update(order_status=True)
+        messages.success(context['request'], f"Invoice Created")
+        pass
+    except Exception as ex:
+        messages.error(context['request'],f"Invoice not generate, because {ex}")
+        return redirect(f"/manage_disp/{context['patients'].id}/")
+
+
+def view_invoice_details(request, pk):
+    get_invoice = PatientInvoice.objects.get(id=int(pk))
+    dispense_id = get_invoice.invoice_detail['dispense_ids']
+    context = {
+        "get_invoice": get_invoice,
+        "added_dispense": Dispense.objects.filter(id__in=dispense_id)
+    }
+    return render(request, "pharmacist_templates/invoice_slip.html", context)
