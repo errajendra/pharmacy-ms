@@ -149,7 +149,7 @@ def manageDispense(request, pk):
     p = inflect.engine()
     if added_dispense:
         dispense = True
-        grand_total_str = p.number_to_words(added_dispense.aggregate(Sum("total_amount")))
+        grand_total_str = p.number_to_words(added_dispense.aggregate(Sum("total_amount"))['total_amount__sum'])
     else:
         dispense = False
         grand_total_str = "Zero"
