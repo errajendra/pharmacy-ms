@@ -8,6 +8,14 @@ from django.db.models import BooleanField, ExpressionWrapper, Q
 from django.db.models.functions import Now
 
 
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
 class CustomUser(AbstractUser):
     user_type_data = (
         (1, "AdminHOD"),
@@ -19,7 +27,7 @@ class CustomUser(AbstractUser):
     user_type = models.CharField(default=1, choices=user_type_data, max_length=10)
 
 
-class Patients(models.Model):
+class Patients(BaseModel):
     gender_category = (
         ("Male", "Male"),
         ("Female", "Female"),
@@ -38,14 +46,12 @@ class Patients(models.Model):
     profile_pic = models.ImageField(default="patient.jpg", null=True, blank=True)
     age = models.IntegerField(default="0", blank=True, null=True)
     address = models.CharField(max_length=300, null=True, blank=True)
-    date_admitted = models.DateTimeField(auto_now_add=True, auto_now=False)
-    last_updated = models.DateTimeField(auto_now_add=False, auto_now=True)
 
     def __str__(self):
         return str(self.admin)
 
 
-class AdminHOD(models.Model):
+class AdminHOD(BaseModel):
     gender_category = (
         ("Male", "Male"),
         ("Female", "Female"),
@@ -56,8 +62,6 @@ class AdminHOD(models.Model):
     mobile = models.CharField(max_length=10, null=True, blank=True)
     address = models.CharField(max_length=300, null=True, blank=True)
     profile_pic = models.ImageField(default="admin.png", null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     date_employed = models.DateTimeField(auto_now_add=True, auto_now=False)
     objects = models.Manager()
 
@@ -65,7 +69,7 @@ class AdminHOD(models.Model):
         return str(self.admin)
 
 
-class Pharmacist(models.Model):
+class Pharmacist(BaseModel):
     gender_category = (
         ("Male", "Male"),
         ("Female", "Female"),
@@ -77,15 +81,13 @@ class Pharmacist(models.Model):
     mobile = models.CharField(max_length=10, null=True, blank=True)
     address = models.CharField(max_length=300, null=True, blank=True)
     profile_pic = models.ImageField(default="images2.png", null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
     def __str__(self):
         return str(self.admin)
 
 
-class Doctor(models.Model):
+class Doctor(BaseModel):
     gender_category = (
         ("Male", "Male"),
         ("Female", "Female"),
@@ -97,15 +99,13 @@ class Doctor(models.Model):
     mobile = models.CharField(max_length=10, null=True, blank=True)
     address = models.CharField(max_length=300, null=True, blank=True)
     profile_pic = models.ImageField(default="doctor.png", null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
     def __str__(self):
         return str(self.admin)
 
 
-class PharmacyClerk(models.Model):
+class PharmacyClerk(BaseModel):
     gender_category = (
         ("Male", "Male"),
         ("Female", "Female"),
@@ -117,26 +117,23 @@ class PharmacyClerk(models.Model):
     address = models.CharField(max_length=300, null=True, blank=True)
     profile_pic = models.ImageField(default="images2.png", null=True, blank=True)
     age = models.IntegerField(default="0", blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
     def __str__(self):
         return str(self.admin)
 
 
-class Category(models.Model):
+class Category(BaseModel):
     name = models.CharField(max_length=50, blank=False, null=True)
 
     def __str__(self):
         return str(self.name)
 
 
-class Prescription(models.Model):
+class Prescription(BaseModel):
     patient_id = models.ForeignKey(Patients, null=True, on_delete=models.SET_NULL)
     description = models.TextField(null=True)
     prescribe = models.CharField(max_length=100, null=True)
-    date_precribed = models.DateTimeField(auto_now_add=True, auto_now=False)
 
 
 class ExpiredManager(models.Manager):
@@ -152,7 +149,7 @@ class ExpiredManager(models.Manager):
         )
 
 
-class Stock(models.Model):
+class Stock(BaseModel):
     category = models.ForeignKey(
         Category, null=True, on_delete=models.CASCADE, blank=True
     )
@@ -164,7 +161,6 @@ class Stock(models.Model):
     discount = models.IntegerField(default="0", blank=True, null=True)
     tax = models.FloatField(default="0.0", blank=True, null=True)
     manufacture = models.CharField(max_length=50, blank=True, null=True)
-    last_updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     valid_from = models.DateTimeField(blank=True, null=True, default=timezone.now)
     valid_to = models.DateTimeField(blank=False, null=True)
     drug_description = models.TextField(blank=True, max_length=1000, null=True)
@@ -175,7 +171,7 @@ class Stock(models.Model):
         return str(self.drug_name)
 
 
-class Dispense(models.Model):
+class Dispense(BaseModel):
     patient_id = models.ForeignKey(Patients, on_delete=models.DO_NOTHING, null=True)
     drug_id = models.ForeignKey(
         Stock, on_delete=models.SET_NULL, null=True, blank=False
@@ -186,10 +182,9 @@ class Dispense(models.Model):
     gst = models.FloatField(max_length=300, null=True, blank=True)
     total_amount = models.FloatField(max_length=300, null=True, blank=False)
     order_status = models.BooleanField(default=False)
-    dispense_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
 
-class PatientFeedback(models.Model):
+class PatientFeedback(BaseModel):
     id = models.AutoField(primary_key=True)
     patient_id = models.ForeignKey(Patients, on_delete=models.CASCADE)
     admin_id = models.ForeignKey(AdminHOD, null=True, on_delete=models.CASCADE)
@@ -197,8 +192,6 @@ class PatientFeedback(models.Model):
     feedback = models.TextField(null=True)
     feedback_reply = models.TextField(null=True)
     admin_created_at = models.DateTimeField(null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     objects = models.Manager()
 
 
@@ -229,3 +222,14 @@ def save_user_profile(sender, instance, **kwargs):
         instance.pharmacyclerk.save()
     if instance.user_type == 5:
         instance.patients.save()
+
+
+""" patient invoice save model """
+
+
+class PatientInvoice(BaseModel):
+    patient_id = models.ForeignKey(Patients, on_delete=models.DO_NOTHING)
+    invoice_detail = models.JSONField()
+
+    class Meta:
+        ordering = ("-created_at",)
