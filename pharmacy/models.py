@@ -233,3 +233,9 @@ class PatientInvoice(BaseModel):
 
     class Meta:
         ordering = ("-created_at",)
+
+
+class ParchedInvoice(BaseModel):
+    invoice_data = models.JSONField()
+
+

@@ -1,0 +1,152 @@
+{% extends 'hod_templates/base_template.html'%}
+{% load crispy_forms_tags %}
+{% block main_content %}
+<style>
+    #div_id_patient_id{
+        display: none !important;
+    }
+    .select2-container--default .select2-results__option[aria-disabled='true'] {
+    color: #0071d4 !important;
+;
+}
+.select2-container--default.select2-container--focus .select2-selection--single, .select2-container--default.select2-container--focus .select2-selection--multiple {
+    border-color: #bbbfc4;
+}
+.select2-container input {
+  -webkit-transition: all 0.10s ease-in-out !important;
+  -moz-transition: all 0.10s ease-in-out !important;
+  -ms-transition: all 0.10s ease-in-out !important;
+  -o-transition: all 0.10s ease-in-out !important;
+  outline: none !important;
+  padding: 3px 0px 3px 3px!important;
+  margin: 5px 1px 3px 0px !important;
+  border: 1px solid #DDDDDD!important;
+}
+
+ .select2-container input:focus {
+  box-shadow: 0 0 5px rgba(81, 203, 238, 1)  !important;
+  padding: 3px 0px 3px 3px !important;
+  margin: 5px 1px 3px 0px !important;
+  border: 1px solid rgb(85, 148, 165)!important;
+}
+
+
+
+.select2-container--default .select2-dropdown .select2-search__field, .select2-container--default .select2-search--inline .select2-search__field {
+    border: 1px solid #ced4da !important;
+
+
+}
+.select2-container--default .select2-selection--single {
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    height: 45px;
+}
+</style>
+<section class="content" style="background-color: beige;">
+    <div class="container-fluid">
+        {% include 'pharmacist_templates/alert_messeges.html' %}
+        <h5 class="mt-4 ml-2"><b>
+            Parched Invoice Details
+            </b>
+        </h5>
+        <div class="col-md-12">
+            <div class="card card-info">
+                <div class="card-header">
+                    <h5>Medicine Details</h5>
+                </div>
+                <table class="table2 table-bordered table-hover " style="background-color: beige;">
+                        <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Medicine Name</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Discount %</th>
+                            <th>GST %</th>
+                            <th>Parched Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="hov">
+                            <td>{{forloop.counter}} &#160;</td>
+                            <td>{{get_invoice.invoice_data.medicine_name}}</td>
+                            <td>{{get_invoice.invoice_data.drug_description}}</td>
+                            <td>{{get_invoice.invoice_data.quantity}}</td>
+                            <td>{{get_invoice.invoice_data.price}}.00</td>
+                            <td>{{get_invoice.invoice_data.discount}}</td>
+                            <td>{{get_invoice.invoice_data.tax}}</td>
+                            <td>{{get_invoice.created_at}}</td>
+                        </tr>
+                        </tbody>
+                    {% include 'pharmacist_templates/insert_modal.html'%}
+                </table>
+                <div class="row" style="background-color: beige;">
+                    <div class="col-md-9">
+                        <div class="card card-info" style="background-color: beige;">
+                            <div class="mx-3">
+                                <br>
+                                <h5><u><b>Term's & Condition</b></u></h5>
+                            </div>
+                            <div class="mx-4">
+                                <p>Goods once sold will not be taken back or exchanged.<br>
+                                    Bills not paid due date will attract 24% interest.<br>
+                                    All disputes subject to g.b nagar Jurisdication only.<br>
+                                    Prescribed Sales Tax declaration will be given.
+                                </p>
+                                <p>Remark:</p>
+                                <div class="row">
+                                    <p class="col-md-9" style="text-transform: capitalize;">Rs. {{grand_total_str}} Only /-</p>
+                                    <p class="col-md-3">Authorised Signature</p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-3" style="background-color: beige;">
+                        <div class="card card-info" style="background-color: beige;">
+<!--                            <div class="mx-2">-->
+<!--                                <h5>Sub Total</h5>-->
+<!--                            </div>-->
+                            <table class="table2 table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Sub Total</th>
+                                        <td>{{get_invoice.invoice_data.price}}.00</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Discount</th>
+                                        <td>{{get_invoice.invoice_data.discount}}.00</td>
+                                    </tr>
+                                    <tr>
+                                        <th>GST</th>
+                                        <td>{{get_invoice.invoice_data.tax}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <td>&#160;</td>
+                                    </tr>
+                                    <tr>
+                                        <th>&#160;</th>
+                                        <td></td>
+                                    </tr>
+                                    <br>
+                                    <tr>
+                                        <th>Grand Total</th>
+                                        <td>{{total_amount|floatformat:2}} /-</td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}
