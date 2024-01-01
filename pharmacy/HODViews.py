@@ -260,7 +260,8 @@ def addStock(request):
             "quantity": request.POST["quantity"],
             "discount": request.POST["discount"],
             "price": request.POST["price"],
-            "tax": request.POST["tax"]
+            "tax": request.POST["tax"],
+            "batch": request.POST["batch_number"],
         }
         ParchedInvoice.objects.create(invoice_data=context)
         form.save()
@@ -717,17 +718,17 @@ def drugDetails(request, pk):
     return render(request, "hod_templates/view_drug.html", context)
 
 
-def parched_invoice_list(request):
+def purchased_invoice_list(request):
     all_invoice = ParchedInvoice.objects.all()
     context = {
         "all_invoice": all_invoice
     }
-    return render(request, "hod_templates/parched_invoice.html", context)
+    return render(request, "hod_templates/purchased_invoice.html", context)
 
 
-def parched_invoice_detail(request, pk):
+def purchased_invoice_detail(request, pk):
     get_invoice = ParchedInvoice.objects.get(id=int(pk))
-    total_amount = int(get_invoice.invoice_data['price']) - int(get_invoice.invoice_data['discount']) + int(get_invoice.invoice_data['tax'])
+    total_amount = float(get_invoice.invoice_data['price']) - float(get_invoice.invoice_data['discount']) + float(get_invoice.invoice_data['tax'])
     p = inflect.engine()
     grand_total_str = p.number_to_words(total_amount)
     context = {
@@ -736,3 +737,6 @@ def parched_invoice_detail(request, pk):
         "grand_total_str": grand_total_str
     }
     return render(request, "hod_templates/invoice_view.html", context)
+
+
+# def delete_invoice(request)

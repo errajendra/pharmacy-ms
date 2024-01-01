@@ -46,8 +46,8 @@ urlpatterns=[
     path('admin_user/drug_details/<str:pk>/', HODViews.drugDetails, name="drug_detail"),
 
     # parched invoice list
-    path('admin_user/parched_invoice/', HODViews.parched_invoice_list, name="parched_invoice_list"),
-    path('admin_user/parched_invoice_detail/<int:pk>/', HODViews.parched_invoice_detail, name="parched_invoice_detail"),
+    path('admin_user/parched_invoice/', HODViews.purchased_invoice_list, name="parched_invoice_list"),
+    path('admin_user/parched_invoice_detail/<int:pk>/', HODViews.purchased_invoice_detail, name="parched_invoice_detail"),
 
     path('patient_feedback_message/', pharmacistViews.patient_feedback_message, name="patient_feedback_message"),
     path('patient_feedback_message_reply/', pharmacistViews.patient_feedback_message_reply, name="patient_feedback_message_reply"),

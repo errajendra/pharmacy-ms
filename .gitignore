@@ -7,11 +7,8 @@
 !**/migrations
 !**/migrations/__init__.py
 __pycache__/*
-.DS_Store
-.png
-.jpg
-.mp4
-.gif
+*.DS_Store
 db.sqlite3
 db.sqlite4
 /media/
+*.jpg
