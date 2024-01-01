@@ -48,7 +48,7 @@
     <div class="container-fluid">
         {% include 'pharmacist_templates/alert_messeges.html' %}
         <h5 class="mt-4 ml-2"><b>
-            Parched Invoice Details
+            Purchased Invoice Details
             </b>
         </h5>
         <div class="col-md-12">
@@ -63,10 +63,11 @@
                             <th>Medicine Name</th>
                             <th>Description</th>
                             <th>Quantity</th>
+                            <th>Batch</th>
                             <th>Price</th>
                             <th>Discount %</th>
                             <th>GST %</th>
-                            <th>Parched Date</th>
+                            <th>Purchased Date</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -75,6 +76,7 @@
                             <td>{{get_invoice.invoice_data.medicine_name}}</td>
                             <td>{{get_invoice.invoice_data.drug_description}}</td>
                             <td>{{get_invoice.invoice_data.quantity}}</td>
+                            <td>{{get_invoice.invoice_data.batch}}</td>
                             <td>{{get_invoice.invoice_data.price}}.00</td>
                             <td>{{get_invoice.invoice_data.discount}}</td>
                             <td>{{get_invoice.invoice_data.tax}}</td>
@@ -115,11 +117,11 @@
                                 <thead>
                                     <tr>
                                         <th>Sub Total</th>
-                                        <td>{{get_invoice.invoice_data.price}}.00</td>
+                                        <td>{{get_invoice.invoice_data.price}}</td>
                                     </tr>
                                     <tr>
                                         <th>Discount</th>
-                                        <td>{{get_invoice.invoice_data.discount}}.00</td>
+                                        <td>{{get_invoice.invoice_data.discount}}</td>
                                     </tr>
                                     <tr>
                                         <th>GST</th>
