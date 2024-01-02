@@ -259,9 +259,11 @@ def addStock(request):
             "drug_description": request.POST["drug_description"],
             "quantity": request.POST["quantity"],
             "discount": request.POST["discount"],
-            "price": request.POST["price"],
+            "mrp": request.POST["mrp"],
+            "rate": request.POST["rate"],
             "tax": request.POST["tax"],
             "batch": request.POST["batch_number"],
+            "packing": request.POST["packing"],
         }
         ParchedInvoice.objects.create(invoice_data=context)
         form.save()
