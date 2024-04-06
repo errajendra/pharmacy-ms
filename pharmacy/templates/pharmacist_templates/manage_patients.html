@@ -47,12 +47,8 @@
                                 <th>LastName</th>
                                 <th>Gender</th>
                                 <th>Email</th>
-
                                 <th>Mobile</th>
-
                                 <th class="text-center">Action</th>
-
-
                             </tr>
                         </thead>
                         <tbody>
@@ -66,13 +62,8 @@
                                 <td>{{patient.gender}}</td>
                                 <td>{{patient.admin.email}}</td>
                                 <td>{{patient.phone_number}}</td>
-
                                 <td>
                                     <td><a href="{% url 'pharmacist_disp' patient.id %}" class="btn btn-sm btn-info">Dispense</a>
-
-
-
-
                             </tr>
                             {% endfor %}
                         </tbody>

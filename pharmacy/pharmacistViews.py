@@ -123,10 +123,10 @@ def manageDispense(request, pk):
                 ka = form.cleaned_data["drug_id"]
                 find_stock = Stock.objects.get(drug_name=ka)
                 form.instance.patient_id = queryset
-                discount = (2 / find_stock.price) * 100
+                discount = (2 / find_stock.mrp) * 100
                 form.instance.discount = '%.2f' % discount
                 form.instance.gst = find_stock.tax
-                total_amount = find_stock.price - (2 / find_stock.price) * 100 + find_stock.tax
+                total_amount = find_stock.mrp - (2 / find_stock.mrp) * 100 + find_stock.tax
                 form.instance.total_amount = '%.2f' % total_amount
                 form.save()
                 find_stock.quantity -= qu
@@ -138,16 +138,16 @@ def manageDispense(request, pk):
             else:
                 messages.error(request, "Validty Error")
                 return redirect(f"/manage_disp/{pk}/")
-    except:
+    except Exception as ex:
         messages.error(
             request,
-            "Dispensing Not Allowed! The Drug is Expired ,please contanct the admin for re-stock ",
+            f"Dispensing Not Allowed! The Drug is Expired ,please contact the admin for re-stock, Error in {ex} ",
         )
         return redirect(f"/manage_disp/{pk}/")
 
     added_dispense = Dispense.objects.filter(patient_id=queryset, order_status=False)
     # if added_dispense:
-    sub_total = added_dispense.aggregate(Sum('drug_id__price'))
+    sub_total = added_dispense.aggregate(Sum('drug_id__mrp'))
     p = inflect.engine()
     if added_dispense:
         dispense = True
@@ -255,7 +255,7 @@ def deleteDispense4(request, pk):
 def sell_slip(request, pk):
     queryset = Patients.objects.get(id=pk)
     added_dispense = Dispense.objects.filter(patient_id=queryset, order_status=False)
-    sub_total = float(added_dispense.aggregate(total_price=Sum('drug_id__price'))['total_price'])
+    sub_total = float(added_dispense.aggregate(total_price=Sum('drug_id__mrp'))['total_price'])
     p = inflect.engine()
     grand_total_str = p.number_to_words(added_dispense.aggregate(Sum("total_amount"))['total_amount__sum'])
     context = {
