@@ -229,7 +229,7 @@ def save_user_profile(sender, instance, **kwargs):
 """ patient invoice save model """
 
 
-class PatientInvoice(BaseModel):
+class SellInvoice(BaseModel):
     patient_id = models.ForeignKey(Patients, on_delete=models.DO_NOTHING)
     invoice_detail = models.JSONField()
 
@@ -237,7 +237,7 @@ class PatientInvoice(BaseModel):
         ordering = ("-created_at",)
 
 
-class ParchedInvoice(BaseModel):
+class PurchasedInvoice(BaseModel):
     invoice_data = models.JSONField()
 
     class Meta:

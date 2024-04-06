@@ -265,7 +265,7 @@ def addStock(request):
             "batch": request.POST["batch_number"],
             "packing": request.POST["packing"],
         }
-        ParchedInvoice.objects.create(invoice_data=context)
+        PurchasedInvoice.objects.create(invoice_data=context)
         form.save()
         return redirect("add_stock")
 
@@ -721,7 +721,7 @@ def drugDetails(request, pk):
 
 
 def purchased_invoice_list(request):
-    all_invoice = ParchedInvoice.objects.all()
+    all_invoice = PurchasedInvoice.objects.all()
     context = {
         "all_invoice": all_invoice
     }
@@ -729,7 +729,7 @@ def purchased_invoice_list(request):
 
 
 def purchased_invoice_detail(request, pk):
-    get_invoice = ParchedInvoice.objects.get(id=int(pk))
+    get_invoice = PurchasedInvoice.objects.get(id=int(pk))
     total_amount = float(get_invoice.invoice_data['price']) - float(get_invoice.invoice_data['discount']) + float(get_invoice.invoice_data['tax'])
     p = inflect.engine()
     grand_total_str = p.number_to_words(total_amount)

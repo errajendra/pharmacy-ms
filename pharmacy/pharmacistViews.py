@@ -77,7 +77,7 @@ def managePatientsPharmacist(request):
 
 def managePrescription(request):
     precrip = Dispense.objects.all()
-    invoices = PatientInvoice.objects.all()
+    invoices = SellInvoice.objects.all()
 
     context = {
         "prescrips": precrip,
@@ -330,7 +330,7 @@ def invoice_save(context):
             "grand_total": context['grand_total']['total_amount__sum'],
             "grand_total_str": context['grand_total_str'],
         }
-        PatientInvoice.objects.create(patient_id=context['patients'], invoice_detail=json_content)
+        SellInvoice.objects.create(patient_id=context['patients'], invoice_detail=json_content)
         dispense_list = Dispense.objects.filter(id__in=json_content['dispense_ids']).update(order_status=True)
         messages.success(context['request'], f"Invoice Created")
         pass
@@ -340,7 +340,7 @@ def invoice_save(context):
 
 
 def view_invoice_details(request, pk):
-    get_invoice = PatientInvoice.objects.get(id=int(pk))
+    get_invoice = SellInvoice.objects.get(id=int(pk))
     dispense_id = get_invoice.invoice_detail['dispense_ids']
     context = {
         "get_invoice": get_invoice,
