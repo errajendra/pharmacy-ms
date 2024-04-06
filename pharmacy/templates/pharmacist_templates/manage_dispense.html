@@ -93,32 +93,30 @@
                                 <td>{{stoc.drug_name}} &#160;</td>
                                 <td>{{stoc.category}}</td>
                                 <td>{{stoc.quantity}}</td>
-                                <td>₹ {{stoc.price}}</td>
+                                <td>₹ {{stoc.rate}}</td>
+                                <td> {{stoc.valid_to}}</td>
 
-                                <!-- start expire -->
-                                {% if expired %}
-                                <!-- Checks expired drugs -->
+<!--                                {% if expired %}-->
 
-                                {% for expire in expired %}
-                                {% if stoc.drug_name == expire.drug_name %}
-                                <td class="">
-                                    <div style="background-color: rgb(48, 58, 92);border-radius: 10px;font-size: 11px; width:120px;font-weight: 600;color: white;"
-                                         class="d-flex justify-content-center ml-2 mt-2 px-1 "> EXPIRED
-                                    </div>
-                                </td>
-                                {% endif %}
-                                {% endfor %}
+<!--                                {% for expire in expired %}-->
+<!--                                {% if stoc.drug_name == expire.drug_name %}-->
+<!--                                <td class="">-->
+<!--                                    <div style="background-color: rgb(48, 58, 92);border-radius: 10px;font-size: 11px; width:120px;font-weight: 600;color: white;"-->
+<!--                                         class="d-flex justify-content-center ml-2 mt-2 px-1 "> EXPIRED-->
+<!--                                    </div>-->
+<!--                                </td>-->
+<!--                                {% endif %}-->
+<!--                                {% endfor %}-->
                                 <!-- Checks Not expired drugs -->
 
-                                {% for expire in expa %}
-                                {% if stoc.drug_name == expire.drug_name %}
-                                <td>{{stoc.valid_to}}</td>
-                                {% endif %}
-                                {% endfor %}
+<!--                                {% for expire in expa %}-->
+<!--                                {% if stoc.drug_name == expire.drug_name %}-->
+<!--                                <td>{{stoc.valid_to}}</td>-->
+<!--                                {% endif %}-->
+<!--                                {% endfor %}-->
 
 
                                 {% endif %}
-                                <!-- End Expire -->
 
 
                             </tr>
