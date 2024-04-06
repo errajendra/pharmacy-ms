@@ -18,8 +18,8 @@ admin.site.register(PharmacyClerk)
 admin.site.register(Prescription)
 admin.site.register(Dispense)
 admin.site.register(PatientFeedback)
-admin.site.register(PatientInvoice)
-admin.site.register(ParchedInvoice)
+admin.site.register(SellInvoice)
+admin.site.register(PurchasedInvoice)
 
 
    
