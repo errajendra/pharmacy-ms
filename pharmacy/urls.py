@@ -18,9 +18,44 @@ urlpatterns=[
     path('admin_user/manage_doctor/',HODViews.manageDoctor,name='manage_doctor'),
     path('admin_user/add_pharmacyClerk/',HODViews.createPharmacyClerk,name='add_pharmacyClerk'),
     path('admin_user/admin_user/manage_pharmacyClerk/',HODViews.managePharmacyClerk,name='manage_pharmacyClerk'),
+    
     path('admin_user/add_stock/',HODViews.addStock,name='add_stock'),
-    path('admin_user/add_category/',HODViews.addCategory,name='add_category'),
-    path('admin_user/manage_stock/',HODViews.manageStock,name='manage_stock'),    
+    path('admin_user/manage_stock/',HODViews.manageStock,name='manage_stock'),  
+    
+    path('admin_user/add_category/',HODViews.addCategory,name='add_category'), 
+    path('admin_user/manage_category/',HODViews.manageCategory,name='manage_category'), 
+    path('admin_user/edit_category/<int:id>/',HODViews.editCategory,name='edit_category'), 
+    path('admin_user/delete_category/<int:id>/',HODViews.deleteCategory,name='delete_category'), 
+    
+    
+    path('admin_user/add_drug_leaf/',HODViews.addDrugLeaf, name='add_drug_leaf'), 
+    path('admin_user/manage_drug_leaf/',HODViews.manageDrugLeaf, name='manage_drug_leaf'), 
+    path('admin_user/edit_drug_leaf/<int:id>/',HODViews.editDrugLeaf, name='edit_drug_leaf'), 
+    path('admin_user/delete_drug_leaf/<int:id>/',HODViews.deleteDrugLeaf, name='delete_drug_leaf'), 
+    
+    # Vender Views Urls
+    path('admin_user/add_vender/',HODViews.addVender, name='add_vender'), 
+    path('admin_user/manage_vender/',HODViews.manageVender, name='manage_vender'), 
+    path('admin_user/edit_vender/<int:id>/',HODViews.editVender, name='edit_vender'), 
+    path('admin_user/delete_vender/<int:id>/',HODViews.deleteVender, name='delete_vender'), 
+    
+    # Supplier Views Urls
+    path('admin_user/add_supplier/',HODViews.addSupplier, name='add_supplier'), 
+    path('admin_user/manage_supplier/',HODViews.manageSupplier, name='manage_supplier'), 
+    path('admin_user/edit_supplier/<int:id>/',HODViews.editSupplier, name='edit_supplier'), 
+    path('admin_user/delete_supplier/<int:id>/',HODViews.deleteSupplier, name='delete_supplier'), 
+    
+    
+    path('admin_user/add_drug_type/',HODViews.addDrugType, name='add_drug_type'), 
+    path('admin_user/manage_drug_type/',HODViews.manageDrugType, name='manage_drug_type'), 
+    path('admin_user/edit_drug_type/<int:id>/',HODViews.editDrugType, name='edit_drug_type'), 
+    path('admin_user/delete_drug_type/<int:id>/',HODViews.deleteDrugType, name='delete_drug_type'), 
+    
+    path('admin_user/add_drug_unit/',HODViews.addDrugUnit, name='add_drug_unit'), 
+    path('admin_user/manage_drug_unit/',HODViews.manageDrugUnit, name='manage_drug_unit'), 
+    path('admin_user/edit_drug_unit/<int:id>/',HODViews.editDrugUnit, name='edit_drug_unit'), 
+    path('admin_user/delete_drug_unit/<int:id>/',HODViews.deleteDrugUnit, name='delete_drug_unit'), 
+      
     path('admin_user/prescribe_drug/',HODViews.addPrescription,name='prescribe'),
     path('admin_user/edit_patient/<patient_id>/',HODViews.editPatient,name='edit_patient'),
     # path('add_patient_save/',HODViews.editPatientSave,name='edit_patient_save'),
@@ -44,6 +79,8 @@ urlpatterns=[
     path('admin_user/receive_drug/<pk>/', HODViews.receiveDrug, name="receive_drug"),
     path('admin_user/reorder_level/<str:pk>/', HODViews.reorder_level, name="reorder_level"),
     path('admin_user/drug_details/<str:pk>/', HODViews.drugDetails, name="drug_detail"),
+    
+    path('admin_user/pos/', HODViews.billingPOS, name="pos"),
 
     # parched invoice list
     path('admin_user/parched_invoice/', HODViews.purchased_invoice_list, name="parched_invoice_list"),

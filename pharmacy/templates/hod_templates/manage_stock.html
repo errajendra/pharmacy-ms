@@ -63,10 +63,15 @@
                             <th>No</th>
                             <th>Medicine Name</th>
                             <th>Category</th>
+                            <th>Leaf</th>
+                            <th>Type</th>
+                            <th>Unit</th>
+                            <th>Supplier</th>
+                            <th>Vender</th>
                             <th>Quantity</th>
                             <th>Price</th>
                             <th>Discount</th>
-                            <th>Tax</th>
+                            <th>IGTA</th>
                             <th>Expiry Date</th>
                             <th class="text-center">Action</th>
 
@@ -78,6 +83,11 @@
                             <td>{{forloop.counter}}</td>
                             <td>{{stock.drug_name}}</td>
                             <td>{{stock.category}}</td>
+                            <td> {% if stock.leaf %} {{stock.leaf}} {% endif %} </td>
+                            <td> {% if stock.type %} {{stock.type}} {% endif %} </td>
+                            <td> {% if stock.unit %} {{stock.unit}} {% endif %} </td>
+                            <td> {% if stock.supplier %} {{stock.supplier}} {% endif %} </td>
+                            <td> {% if stock.vender %} {{stock.vender}} {% endif %} </td>
                             <td>
                                 <span class="d-flex justify-content-center">
                                  {% if stock.quantity <= stock.reorder_level %}
@@ -88,12 +98,13 @@
                             </td>
                             <td>
                                 {% if stock.price %}
-                                <a href="{% url 'reorder_level' stock.id %}">₹ {{stock.price}}</a></td>
-                            {% else %}
-                            <a href="{% url 'reorder_level' stock.id %}">Add level</a> {% endif %}
+                                    <a href="{% url 'reorder_level' stock.id %}">₹ {{stock.price}}</a></td>
+                                {% else %}
+                                    <a href="{% url 'reorder_level' stock.id %}">Add level</a>
+                                {% endif %}
 <!--                            <td>{{stock.last_updated |date:"F d, Y"}}</td>-->
                             <td>{{stock.discount}} (%)</td>
-                            <td>GST-{{stock.tax}}</td>
+                            <td>{{stock.igta}}</td>
 
                             <!-- Checks expired drugs -->
 

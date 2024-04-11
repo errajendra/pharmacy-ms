@@ -18,13 +18,15 @@ class BaseModel(models.Model):
 
 class CustomUser(AbstractUser):
     user_type_data = (
-        (1, "AdminHOD"),
-        (2, "Pharmacist"),
-        (3, "Doctor"),
-        (4, "PharmacyClerk"),
-        (5, "Patients"),
+        ("AdminHOD", "AdminHOD"), #1
+        ("Pharmacist", "Pharmacist"), #2 Custumer
+        ("Doctor", "Doctor"),
+        ("Supplier", "Supplier"),
+        ("Vender", "Vender"),
+        ("PharmacyClerk", "PharmacyClerk"),
+        ("Patients", "Patients"),
     )
-    user_type = models.CharField(default=1, choices=user_type_data, max_length=10)
+    user_type = models.CharField(default="Customer", choices=user_type_data, max_length=20)
 
 
 class Patients(BaseModel):
@@ -124,10 +126,50 @@ class PharmacyClerk(BaseModel):
 
 
 class Category(BaseModel):
-    name = models.CharField(max_length=50, blank=False, null=True)
+    name = models.CharField(max_length=50)
 
     def __str__(self):
         return str(self.name)
+
+
+class DrugLeaf(BaseModel):
+    leaf_type = models.CharField(max_length=50)
+    number_per_box = models.PositiveIntegerField()
+
+    def __str__(self):
+        return str(self.leaf_type)
+
+
+class DrugType(BaseModel):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return str(self.name)
+
+
+class DrugUnit(BaseModel):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return str(self.name)
+
+
+
+# class DrugSupplier(CustomUser):
+#     name = models.CharField(max_length=50)
+#     description = models.TextField(blank=True, null=True)
+
+#     def __str__(self):
+#         return str(self.name)
+    
+
+
+# class DrugVender(CustomUser):
+#     name = models.CharField(max_length=50)
+#     description = models.TextField(blank=True, null=True)
+
+#     def __str__(self):
+#         return str(self.name)
 
 
 class Prescription(BaseModel):
@@ -150,23 +192,57 @@ class ExpiredManager(models.Manager):
 
 
 class Stock(BaseModel):
+    """
+    Drug Stock
+    """
     category = models.ForeignKey(
-        Category, null=True, on_delete=models.CASCADE, blank=True
+        Category, null=True, on_delete=models.SET_NULL, blank=True
     )
-    drug_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="Medicine Name")
-    drug_color = models.CharField(max_length=50, blank=True, null=True)
-    batch_number = models.CharField(max_length=50, blank=True, null=True)
-    packing = models.PositiveIntegerField(verbose_name="No Of Tablet")
+    leaf = models.ForeignKey(
+        DrugLeaf, null=True, on_delete=models.SET_NULL, blank=True
+    )
+    type = models.ForeignKey(
+        DrugType, null=True, on_delete=models.SET_NULL, blank=True
+    )
+    unit = models.ForeignKey(
+        DrugUnit, null=True, on_delete=models.SET_NULL, blank=True
+    )
+    supplier = models.ForeignKey(
+        CustomUser, limit_choices_to={'user_type': 4},
+        related_name="supllier_stocks",
+        null=True, on_delete=models.SET_NULL, blank=True
+    )
+    vender = models.ForeignKey(
+        CustomUser, limit_choices_to={'user_type': 5},
+        related_name="vender_stocks",
+        null=True, on_delete=models.SET_NULL, blank=True
+    )
+    
+    drug_name = models.CharField(max_length=50, verbose_name="Medicine Name")
+    generic_drug_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="Medicine Generic Name")
+    strengh = models.CharField(max_length=50, blank=True, null=True, verbose_name="Strength")
+    shelf = models.CharField(max_length=50, blank=True, null=True, verbose_name="Shelf")
+    drug_description = models.TextField(blank=True, max_length=1000, null=True)
+    
+    vat = models.PositiveIntegerField(verbose_name="VAT")
     quantity = models.IntegerField(default="0", blank=True, null=True)
-    mrp = models.IntegerField(default="0", blank=True, null=True, verbose_name="M.R.P")
-    rate = models.IntegerField(default="0", blank=True, null=True)
-    discount = models.IntegerField(default="0", blank=True, null=True)
-    tax = models.FloatField(default="0.0", blank=True, null=True)
     manufacture = models.CharField(max_length=50, blank=True, null=True)
+    manufacture_price = models.IntegerField(default="0", blank=True, null=True, verbose_name="Manufacture Price")
+    price = models.IntegerField(default="0", blank=True, null=True, verbose_name="M.R.P")
+    
+    # drug_color = models.CharField(max_length=50, blank=True, null=True)
+    # batch_number = models.CharField(max_length=50, blank=True, null=True)
+    igta = models.IntegerField(default="0", blank=True, null=True)
+    hot = models.IntegerField(default="0", blank=True, null=True)
+    globle = models.IntegerField(verbose_name="Globel", default="0", blank=True, null=True)
+    discount = models.IntegerField(default="0", blank=True, null=True)
+    # tax = models.FloatField(default="0.0", blank=True, null=True)
+    
     valid_from = models.DateTimeField(blank=True, null=True, default=timezone.now)
     valid_to = models.DateTimeField(blank=False, null=True)
-    drug_description = models.TextField(blank=True, max_length=1000, null=True)
     drug_pic = models.ImageField(default="images2.png", null=True, blank=True)
+    
+    status = models.BooleanField(default=True, help_text="Active Status, Uncheck If You Want To Delete This Drug Information.")
     objects = ExpiredManager()
 
     def __str__(self):

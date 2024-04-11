@@ -4,12 +4,14 @@ from django.shortcuts import render, redirect
 
 from django.contrib import messages
 from .decorators import *
+from django.conf.global_settings import AUTH_USER_MODEL as User
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
-@unautheticated_user
+# @unautheticated_user
 def loginPage(request):
-    
+    print("siukghgjhgjhg")
     if request.method == 'POST':
         username=request.POST.get('username')
         password=request.POST.get('password')
@@ -18,17 +20,17 @@ def loginPage(request):
         if user != None:
             login(request, user)
             user_type = user.user_type
-            if user_type == '1':
-                return redirect('/')
+            if user_type == 'AdminHOD':
+                return redirect('admin_dashboard')
                 
-            elif user_type == '2':
+            elif user_type == 'Pharmacist':
                 return redirect('pharmacist_home')
 
-            elif user_type == '3':
+            elif user_type == 'Doctor':
                 return redirect('doctor_home')
-            elif user_type == '4':
+            elif user_type == 'PharmacyClerk':
                 return redirect('clerk_home')
-            elif user_type == '5':
+            elif user_type == 'Patients':
                 return redirect('patient_home')
                 
            

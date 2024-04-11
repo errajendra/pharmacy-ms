@@ -8,6 +8,8 @@ from django.http import JsonResponse
 from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
 from django.core.validators import RegexValidator
+from phonenumber_field.formfields import PhoneNumberField
+
 
 import json
 
@@ -22,8 +24,6 @@ class PatientPicForm1(forms.ModelForm):
 class DateInput(forms.DateInput):
     input_type = "date"
 
-
-from phonenumber_field.formfields import PhoneNumberField
 
 
 class ClientForm(forms.Form):
@@ -188,6 +188,24 @@ class CategoryForm(forms.ModelForm):
         fields = "__all__"
 
 
+class DrugLeafForm(forms.ModelForm):
+    class Meta:
+        model = DrugLeaf
+        fields = "__all__"
+
+
+class DrugTypeForm(forms.ModelForm):
+    class Meta:
+        model = DrugType
+        fields = "__all__"
+
+
+class DrugUnitForm(forms.ModelForm):
+    class Meta:
+        model = DrugUnit
+        fields = "__all__"
+
+
 class PrescriptionForm(forms.ModelForm):
     class Meta:
         model = Prescription
@@ -287,3 +305,22 @@ class ReorderLevelForm(forms.ModelForm):
     class Meta:
         model = Stock
         fields = ["discount"]
+
+
+class AddUserForm(ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = (
+            "username", 
+            "first_name", 
+            "last_name",
+            "email",
+            "password",
+        )
+        widgets = {
+            "username": forms.TextInput(attrs={"class": "form-control"}),
+            "first_name": forms.TextInput(attrs={"class": "form-control"}),
+            "last_name": forms.TextInput(attrs={"class": "form-control"}),
+            "email": forms.EmailInput(attrs={"class": "form-control"}),
+            "password": forms.PasswordInput(attrs={"class": "form-control"}),
+        }

@@ -69,7 +69,7 @@
                     <a href="#" class="nav-link">
                         <i class="fas fa-address-book mr-2"></i>
                         <p>
-                            Pharmacist
+                            Pharmacist (Custumer)
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -90,6 +90,62 @@
 
                     </ul>
                 </li>
+                
+                {% comment %} Vender {% endcomment %}
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-address-book mr-2"></i>
+                        <p>
+                            Vender
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item pl-2">
+                            <a href="{% url 'add_vender' %}" class="nav-link">
+                                <i class="fas fa-user-plus"></i>
+                                <p class="pl-2">add Vender</p>
+                            </a>
+                        </li>
+                        <li class="nav-item pl-2">
+                            <a href="{% url 'manage_vender'  %}" class="nav-link">
+                                <i class="fas fa-th"></i>
+                                <p class="pl-2">Manage Vender</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                
+                {% comment %} Suppliers {% endcomment %}
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-address-book mr-2"></i>
+                        <p>
+                            Supplier
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item pl-2">
+                            <a href="{% url 'add_supplier' %}" class="nav-link">
+                                <i class="fas fa-user-plus"></i>
+                                <p class="pl-2">add Supplier</p>
+                            </a>
+                        </li>
+                        <li class="nav-item pl-2">
+                            <a href="{% url 'manage_supplier'  %}" class="nav-link">
+                                <i class="fas fa-th"></i>
+                                <p class="pl-2">Manage Suppliers</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-briefcase-medical mr-2"></i>
@@ -144,7 +200,7 @@
 
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link {% if request.path == '/admin_user/manage_stock/' or request.path == '/admin_user/add_stock/' or request.path == '/admin_user/add_category/' %}active{% endif %}">
+                    <a href="#" class="nav-link {% if request.path == '/admin_user/manage_stock/' or request.path == '/admin_user/add_stock/' or request.path == '/admin_user/add_category/' or request.path == '/admin_user/manage_category/' or request.path == '/admin_user/manage_drug_leaf/' or request.path == '/admin_user/manage_drug_unit/' or request.path == '/admin_user/manage_drug_type/' %} active {% endif %}">
                         <i class="fas fa-layer-group mr-2"></i>
                         <p>
                             Stocked Drugs
@@ -152,24 +208,42 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item pl-2 {% if request.path == '/admin_user/add_stock/' %}active{% endif %}">
-                            <a href="{% url 'add_stock' %}" class="nav-link">
-                                <i class="fas fa-capsules"></i>
-                                <p class="pl-2">add Drug</p>
-                            </a>
-                        </li>
-                        <li class="nav-item pl-2 {% if request.path == '/admin_user/add_category/' %}active{% endif %}">
-                            <a href="{% url 'add_category'  %}" class="nav-link">
-                                <i class="fas fa-pills"></i>
-                                <p class="pl-2">Add Category</p>
-                            </a>
-                        </li>
                         <li class="nav-item pl-2 {% if request.path == '/admin_user/manage_stock/' %}active{% endif %}">
+                            <a href="{% url 'manage_stock' %}" class="nav-link">
+                                <i class="fas fa-capsules"></i>
+                                <p class="pl-2">Manage Drug</p>
+                            </a>
+                        </li>
+                        <li class="nav-item pl-2 {% if request.path == '/admin_user/manage_category/' %}active{% endif %}">
+                            <a href="{% url 'manage_category'  %}" class="nav-link">
+                                <i class="fas fa-pills"></i>
+                                <p class="pl-2">Category</p>
+                            </a>
+                        </li>
+                        <li class="nav-item pl-2 {% if request.path == '/admin_user/manage_drug_leaf/' %}active{% endif %}">
+                            <a href="{% url 'manage_drug_leaf'  %}" class="nav-link">
+                                <i class="fas fa-pills"></i>
+                                <p class="pl-2">Leaf</p>
+                            </a>
+                        </li>
+                        <li class="nav-item pl-2 {% if request.path == '/admin_user/manage_drug_unit/' %}active{% endif %}">
+                            <a href="{% url 'manage_drug_unit'  %}" class="nav-link">
+                                <i class="fas fa-pills"></i>
+                                <p class="pl-2">Units</p>
+                            </a>
+                        </li>
+                        <li class="nav-item pl-2 {% if request.path == '/admin_user/manage_drug_type/' %}active{% endif %}">
+                            <a href="{% url 'manage_drug_type'  %}" class="nav-link">
+                                <i class="fas fa-pills"></i>
+                                <p class="pl-2">Type</p>
+                            </a>
+                        </li>
+                        {% comment %} <li class="nav-item pl-2 {% if request.path == '/admin_user/manage_stock/' %}active{% endif %}">
                             <a href="{% url 'manage_stock'  %}" class="nav-link">
                                 <i class="fas fa-th"></i>
                                 <p class="pl-2">Manage Stock</p>
                             </a>
-                        </li>
+                        </li> {% endcomment %}
 
                     </ul>
                 </li>

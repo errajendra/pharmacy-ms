@@ -1,5 +1,5 @@
 from pharmacy.clerkViews import receptionistProfile
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
@@ -144,7 +144,7 @@ def createPharmacist(request):
             password=password,
             first_name=first_name,
             last_name=last_name,
-            user_type=2,
+            user_type="Pharmacist",
         )
         user.first_name = first_name
         user.last_name = last_name
@@ -254,20 +254,20 @@ def addStock(request):
     form = StockForm(request.POST, request.FILES)
     if form.is_valid():
         form = StockForm(request.POST, request.FILES)
-        context = {
-            "medicine_name": request.POST["drug_name"],
-            "drug_description": request.POST["drug_description"],
-            "quantity": request.POST["quantity"],
-            "discount": request.POST["discount"],
-            "mrp": request.POST["mrp"],
-            "rate": request.POST["rate"],
-            "tax": request.POST["tax"],
-            "batch": request.POST["batch_number"],
-            "packing": request.POST["packing"],
-        }
-        PurchasedInvoice.objects.create(invoice_data=context)
+        # context = {
+        #     "medicine_name": request.POST["drug_name"],
+        #     "drug_description": request.POST["drug_description"],
+        #     "quantity": request.POST["quantity"],
+        #     "discount": request.POST["discount"],
+        #     "mrp": request.POST["price"],
+        #     "rate": request.POST["igst"],
+        #     "tax": request.POST["tax"],
+        #     "batch": request.POST["batch_number"],
+        #     "packing": request.POST["packing"],
+        # }
+        # PurchasedInvoice.objects.create(invoice_data=context)
         form.save()
-        return redirect("add_stock")
+        return redirect("manage_stock")
 
     context = {"form": form, "title": "Add New Drug"}
     return render(request, "hod_templates/add_stock.html", context)
@@ -292,25 +292,170 @@ def manageStock(request):
     return render(request, "hod_templates/manage_stock.html", context)
 
 
+def manageCategory(request):
+    categories = Category.objects.all().order_by("-id")
+    context = {
+        "categories": categories,
+        "title": "Manage Drugs Categories",
+    }
+    return render(request, "hod_templates/manage_categories.html", context)
+
+
 def addCategory(request):
-    try:
-        form = CategoryForm(request.POST or None)
+    form = CategoryForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Category added Successfully!")
 
-        if request.method == "POST":
-            if form.is_valid():
-                form.save()
-                messages.success(request, "Category added Successfully!")
-
-                return redirect("add_category")
-    except:
-        messages.error(request, "Category Not added! Try again")
-
-        return redirect("add_category")
-
+            return redirect("manage_category")
     context = {"form": form, "title": "Add a New Drug Category"}
     return render(request, "hod_templates/add_category.html", context)
 
 
+def editCategory(request, id):
+    cat = get_object_or_404(Category, id=id)
+    form = CategoryForm(instance=cat, data=request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Category Updated Successfully!")
+
+            return redirect("manage_category")
+    context = {"form": form, "title": "Update Drug Category"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+def deleteCategory(request, id):
+    cat = get_object_or_404(Category, id=id)
+    cat.delete()
+    return redirect("manage_category")
+
+
+# Drug Leaf
+def manageDrugLeaf(request):
+    drug_leafs = DrugLeaf.objects.all().order_by("-id")
+    context = {
+        "drug_leafs": drug_leafs,
+        "title": "Manage Drugs Leaf",
+    }
+    return render(request, "hod_templates/manage_drug_leaf.html", context)
+
+
+def addDrugLeaf(request):
+    form = DrugLeafForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "DrugLeaf added Successfully!")
+
+            return redirect("manage_drug_leaf")
+    context = {"form": form, "title": "Add a New Drug DrugLeaf"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+def editDrugLeaf(request, id):
+    cat = get_object_or_404(DrugLeaf, id=id)
+    form = DrugLeafForm(instance=cat, data=request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "DrugLeaf Updated Successfully!")
+
+            return redirect("manage_drug_leaf")
+    context = {"form": form, "title": "Update Drug DrugLeaf"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+def deleteDrugLeaf(request, id):
+    cat = get_object_or_404(DrugLeaf, id=id)
+    cat.delete()
+    return redirect("manage_drug_leaf")
+
+
+# Drug Type
+def manageDrugType(request):
+    drug_Types = DrugType.objects.all().order_by("-id")
+    context = {
+        "drug_types": drug_Types,
+        "title": "Manage Drugs Type",
+    }
+    return render(request, "hod_templates/manage_drug_type.html", context)
+
+
+def addDrugType(request):
+    form = DrugTypeForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Drug Type added Successfully!")
+
+            return redirect("manage_drug_type")
+    context = {"form": form, "title": "Add a New Drug DrugType"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+def editDrugType(request, id):
+    cat = get_object_or_404(DrugType, id=id)
+    form = DrugTypeForm(instance=cat, data=request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Drug Type Updated Successfully!")
+
+            return redirect("manage_drug_type")
+    context = {"form": form, "title": "Update DrugType"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+def deleteDrugType(request, id):
+    cat = get_object_or_404(DrugType, id=id)
+    cat.delete()
+    return redirect("manage_drug_type")
+
+
+# Drug Unit
+def manageDrugUnit(request):
+    drug_units = DrugUnit.objects.all().order_by("-id")
+    context = {
+        "drug_units": drug_units,
+        "title": "Manage Drugs Unit",
+    }
+    return render(request, "hod_templates/manage_drug_unit.html", context)
+
+
+def addDrugUnit(request):
+    form = DrugUnitForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Drug Unit added Successfully!")
+
+            return redirect("manage_drug_unit")
+    context = {"form": form, "title": "Add a New Drug Unit"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+def editDrugUnit(request, id):
+    cat = get_object_or_404(DrugUnit, id=id)
+    form = DrugUnitForm(instance=cat, data=request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Drug Unit Updated Successfully!")
+
+            return redirect("manage_drug_unit")
+    context = {"form": form, "title": "Update Drug Unit"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+def deleteDrugUnit(request, id):
+    cat = get_object_or_404(DrugUnit, id=id)
+    cat.delete()
+    return redirect("manage_drug_unit")
+
+
+# Prescription
 def addPrescription(request):
     form = PrescriptionForm(request.POST or None)
     if form.is_valid():
@@ -629,6 +774,7 @@ def editStock(request, pk):
                 drugs.save()
                 form.save()
                 messages.success(request, "Receptionist Updated Succefully")
+                return redirect("manage_stock")
             except:
                 messages.error(
                     request, "An Error Was Encounterd Receptionist Not Updated"
@@ -698,7 +844,7 @@ def reorder_level(request, pk):
             "Reorder level for "
             + str(instance.drug_name)
             + " is updated to "
-            + str(instance.reorder_level),
+            + str(instance.price),
         )
 
         return redirect("manage_stock")
@@ -742,3 +888,107 @@ def purchased_invoice_detail(request, pk):
 
 
 # def delete_invoice(request)
+
+
+# Billing POS
+def  billingPOS(request):
+    drugs = Stock.objects.prefetch_related().all()
+    categories = drugs.values_list('category', flat=True)
+    categories = Category.objects.all()
+    venders = CustomUser.objects.filter(user_type='Vender')
+    custumers = CustomUser.objects.filter(user_type="Customer")
+    print(categories)
+    context = {
+        "drugs" : drugs,
+        'categories' : categories,
+        "venders": venders,
+        "custumers": custumers
+    }
+    return render(request, "hod_templates/pos.html", context)
+
+
+
+
+# Manage Vender
+def manageVender(request):
+    venders = CustomUser.objects.filter(user_type="Vender").order_by("-id")
+    context = {
+        "venders": venders,
+        "title": "Manage Vensers",
+    }
+    return render(request, "hod_templates/manage_venders.html", context)
+
+
+def addVender(request):
+    form = AddUserForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.instance.user_type = "Vender"
+            form.save()
+            messages.success(request, "Vender added Successfully!")
+
+            return redirect("manage_vender")
+    context = {"form": form, "title": "Add a New Vender"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+def editVender(request, id):
+    cat = get_object_or_404(CustomUser, id=id)
+    form = AddUserForm(instance=cat, data=request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Vender Updated Successfully!")
+
+            return redirect("manage_vender")
+    context = {"form": form, "title": "Update Vender"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+def deleteVender(request, id):
+    cat = get_object_or_404(CustomUser, id=id)
+    cat.delete()
+    return redirect("manage_vender")
+
+
+
+# Manage Supplier
+def manageSupplier(request):
+    suppliers = CustomUser.objects.filter(user_type="Supplier").order_by("-id")
+    context = {
+        "suppliers": suppliers,
+        "title": "Manage Vensers",
+    }
+    return render(request, "hod_templates/manage_suppliers.html", context)
+
+
+def addSupplier(request):
+    form = AddUserForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.instance.user_type = "Supplier"
+            form.save()
+            messages.success(request, "Supplier added Successfully!")
+
+            return redirect("manage_supplier")
+    context = {"form": form, "title": "Add a New Supplier"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+def editSupplier(request, id):
+    supplier = get_object_or_404(CustomUser, id=id)
+    form = AddUserForm(instance=supplier, data=request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Supplier Updated Successfully!")
+
+            return redirect("manage_supplier")
+    context = {"form": form, "title": "Update Supplier"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+def deleteSupplier(request, id):
+    supplier = get_object_or_404(CustomUser, id=id)
+    supplier.delete()
+    return redirect("manage_supplier")
