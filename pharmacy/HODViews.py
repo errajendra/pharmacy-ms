@@ -253,7 +253,7 @@ def managePharmacyClerk(request):
 def addStock(request):
     form = StockForm(request.POST, request.FILES)
     if form.is_valid():
-        form = StockForm(request.POST, request.FILES)
+        # form = StockForm(request.POST, request.FILES)
         # context = {
         #     "medicine_name": request.POST["drug_name"],
         #     "drug_description": request.POST["drug_description"],
@@ -756,11 +756,11 @@ def editAdmin(request):
 
 def editStock(request, pk):
     drugs = Stock.objects.get(id=pk)
-    form = StockForm(request.POST or None, instance=drugs)
+    form = StockForm(data=request.POST or None, files=request.FILES or None, instance=drugs)
 
     if request.method == "POST":
         if form.is_valid():
-            form = StockForm(request.POST or None, instance=drugs)
+            # form = StockForm(request.POST or None, instance=drugs)
 
             category = request.POST.get("category")
             drug_name = request.POST.get("drug_name")
@@ -775,9 +775,10 @@ def editStock(request, pk):
                 form.save()
                 messages.success(request, "Receptionist Updated Succefully")
                 return redirect("manage_stock")
-            except:
+            except  Exception as e:
+                print(e)
                 messages.error(
-                    request, "An Error Was Encounterd Receptionist Not Updated"
+                    request, f"{e}"
                 )
 
     context = {"drugs": drugs, "form": form, "title": "Edit Stock"}
@@ -896,15 +897,14 @@ def  billingPOS(request):
     categories = drugs.values_list('category', flat=True)
     categories = Category.objects.all()
     venders = CustomUser.objects.filter(user_type='Vender')
-    custumers = CustomUser.objects.filter(user_type="Customer")
-    print(categories)
+    custumers = CustomUser.objects.filter(user_type="Pharmacist")
     context = {
         "drugs" : drugs,
         'categories' : categories,
         "venders": venders,
         "custumers": custumers
     }
-    return render(request, "hod_templates/pos.html", context)
+    return render(request, "pos/pos.html", context)
 
 
 

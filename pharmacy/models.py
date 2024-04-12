@@ -208,12 +208,12 @@ class Stock(BaseModel):
         DrugUnit, null=True, on_delete=models.SET_NULL, blank=True
     )
     supplier = models.ForeignKey(
-        CustomUser, limit_choices_to={'user_type': 4},
+        CustomUser, limit_choices_to={'user_type': "Supplier"},
         related_name="supllier_stocks",
         null=True, on_delete=models.SET_NULL, blank=True
     )
     vender = models.ForeignKey(
-        CustomUser, limit_choices_to={'user_type': 5},
+        CustomUser, limit_choices_to={'user_type': "Vender"},
         related_name="vender_stocks",
         null=True, on_delete=models.SET_NULL, blank=True
     )

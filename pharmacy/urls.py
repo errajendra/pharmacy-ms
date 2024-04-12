@@ -1,10 +1,11 @@
-from django.urls import path
+from django.urls import path, include
 from .import HODViews
 from .import pharmacistViews,DoctorViews,views,patient_view,clerkViews
 from django.contrib.auth import views as auth_views
 
 
 urlpatterns=[
+    path("ajax/", include("pharmacy.ajax.urls")),
     path('',HODViews.adminDashboard,name='admin_dashboard'),
     path('admin_user/patient_form/',HODViews.createPatient,name='patient_form'),
     path('admin_user/all_patients/',HODViews.allPatients,name='all_patients'),
@@ -97,7 +98,7 @@ urlpatterns=[
     path('pharmacist_home/',pharmacistViews.pharmacistHome,name='pharmacist_home'),
     path('pharmacist_manage_patients/',pharmacistViews.managePatientsPharmacist,name='manage_patient_pharmacist'),
     path('manage_disp/<pk>/',pharmacistViews.manageDispense,name='pharmacist_disp'),
-#    path('manage_dispe/<str:pk>/',pharmacistViews.dispenseDrug,name='pharm_disp'),
+    # path('manage_dispe/<str:pk>/',pharmacistViews.dispenseDrug,name='pharm_disp'),
     # path('manage_stock_form/<str:pk>/',pharmacistViews.dispense,name='pharm_disp2'),
     path('staff_profile/',pharmacistViews.userProfile,name='pharmacist_profile'),
 
@@ -136,8 +137,6 @@ urlpatterns=[
     path('receptionist/delete_patient/<str:pk>/',clerkViews.confirmDelete,name='delete_patient_clerk'),
     # path('receptionist/dispense_drug/<str:pk>/',pharmacistViews.dispenseDrug,name='dispense_drug'),
 
-
-  
     path('reset_password/',auth_views.PasswordResetView.as_view(template_name="password_reset.html"),name="reset_password"),
 
     path('reset_password_sent/',auth_views.PasswordResetDoneView
@@ -146,10 +145,7 @@ urlpatterns=[
     path('reset/<uidb64>/<token>/',auth_views.PasswordResetConfirmView
     .as_view(template_name="password_reset_form.html"),name="password_reset_confirm"),
 
-
-
     
-
    path('reset_password_complete/',auth_views.PasswordResetCompleteView
     .as_view(template_name="password_reset_done.html"),name="password_reset_complete"),
 ]
