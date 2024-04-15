@@ -67,19 +67,26 @@ def createPatient(request):
             phone_number = form.cleaned_data["phone_number"]
             dob = form.cleaned_data["dob"]
             gender = form.cleaned_data["gender"]
-            reg_no = form.cleaned_data["reg_no"]
+            doctor = form.cleaned_data["doctor"]
+            # print(type(doctor), doctor, doctor.id)
+            # if doctor:
+            #     try:
+            #         doctor = Doctor.objects.get(username=doctor)
+            #     except:
+            #         doctor = None
+            print(doctor)
 
             user = CustomUser.objects.create_user(
                 username=username,
                 email=email,
                 password=password,
                 last_name=last_name,
-                user_type=5,
+                user_type="Patients",
             )
             user.patients.address = address
             user.patients.phone_number = phone_number
             user.patients.dob = dob
-            user.patients.reg_no = reg_no
+            user.patients.doctor = doctor
             user.patients.first_name = first_name
             user.patients.last_name = last_name
             user.patients.gender = gender
@@ -104,7 +111,7 @@ def allPatients(request):
         patients = Patients.objects.filter(first_name__icontains=name)
 
         context = {"patients": patients, form: form}
-    return render(request, "hod_templates/admited_patients.html", context)
+    return render(request, "hod_templates/admited_patients.html", context) 
 
 
 def confirmDelete(request, pk):
@@ -184,7 +191,7 @@ def createDoctor(request):
                 password=password,
                 first_name=first_name,
                 last_name=last_name,
-                user_type=3,
+                user_type="Doctor",
             )
             user.doctor.address = address
             user.doctor.mobile = mobile

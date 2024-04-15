@@ -49,14 +49,13 @@
                 <table class="table table-bordered table-hover dataTable" id="plist">
                     <thead>
                     <tr>
-                        <th>No</th>
+                        <th>ID</th>
                         <th>Profile</th>
                         <th>UserName</th>
                         <th>LastName</th>
                         <th>Email</th>
-
                         <th>Mobile</th>
-
+                        <th>Doctor</th>
                         <th>Last Login</th>
                         <th class="text-center">Action</th>
 
@@ -74,13 +73,15 @@
 
                         <td>{{patient.admin.email}}</td>
                         <td>{{patient.phone_number}}</td>
+                        <td>{{patient.doctor.admin.get_full_name}}</td>
 
                         <td>{{patient.admin.last_login}}</td>
 
-                        <td><a href="{% url 'edit_patient' patient.admin.id %}" class="btn btn-sm btn-success">Edit</a>
-                            <a href="{% url 'delete_patient' patient.id %}" class="btn btn-sm btn-danger">Delete</a></
-                        <a>
-                            <a href="{% url 'patient_record' patient.id %}" class="btn btn-sm btn-warning">View</a></td>
+                        <td>
+                            <a href="{% url 'edit_patient' patient.admin.id %}" class="btn btn-sm btn-success">Edit</a>
+                            <a href="{% url 'delete_patient' patient.id %}" class="btn btn-sm btn-danger">Delete</a>
+                            {% comment %} <a href="{% url 'patient_record' patient.id %}" class="btn btn-sm btn-warning">View</a> {% endcomment %}
+                        </td>
 
                     </tr>
                     {% endfor %}

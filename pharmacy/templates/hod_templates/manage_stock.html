@@ -63,7 +63,6 @@
                             <th>No</th>
                             <th>Medicine Name</th>
                             <th>Category</th>
-                            <th>Leaf</th>
                             <th>Type</th>
                             <th>Unit</th>
                             <th>Supplier</th>
@@ -71,7 +70,7 @@
                             <th>Quantity</th>
                             <th>Price</th>
                             <th>Discount</th>
-                            <th>IGTA</th>
+                            <th>GST</th>
                             <th>Expiry Date</th>
                             <th class="text-center">Action</th>
 
@@ -83,7 +82,6 @@
                             <td>{{forloop.counter}}</td>
                             <td>{{stock.drug_name}}</td>
                             <td>{{stock.category}}</td>
-                            <td> {% if stock.leaf %} {{stock.leaf}} {% endif %} </td>
                             <td> {% if stock.type %} {{stock.type}} {% endif %} </td>
                             <td> {% if stock.unit %} {{stock.unit}} {% endif %} </td>
                             <td> {% if stock.supplier %} {{stock.supplier}} {% endif %} </td>
@@ -117,14 +115,14 @@
 
 
                             {% for expire in expa %} {% if stock.drug_name == expire.drug_name %}
-                            <td>{{expire.valid_to}}</td>
+                            <td>{{expire.valid_to|date}}</td>
                             {% endif %} {% endfor %}
                             <!-- End Expire -->
                             <td class="d-flex justify-content-center">
                                 <a href="{%url 'edit_drug' stock.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
                                 <a href="{%url 'delete_drug' stock.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
                                 <a href="{% url 'drug_detail' stock.id %}" class="btn btn-sm btn-warning">View</a>
-                                <a href="{%url 'receive_drug' stock.id %}" class="btn btn-sm btn-primary ml-2">Add</a>
+                                {% comment %} <a href="{%url 'receive_drug' stock.id %}" class="btn btn-sm btn-primary ml-2">Add</a> {% endcomment %}
                             </td>
 
                         </tr>

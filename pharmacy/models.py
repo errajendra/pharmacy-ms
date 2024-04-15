@@ -29,30 +29,6 @@ class CustomUser(AbstractUser):
     user_type = models.CharField(default="AdminHOD", choices=user_type_data, max_length=20)
 
 
-class Patients(BaseModel):
-    gender_category = (
-        ("Male", "Male"),
-        ("Female", "Female"),
-    )
-    admin = models.OneToOneField(CustomUser, null=True, on_delete=models.CASCADE)
-    reg_no = models.CharField(max_length=30, null=True, blank=True, unique=True)
-    gender = models.CharField(
-        max_length=7, null=True, blank=True, choices=gender_category
-    )
-    first_name = models.CharField(max_length=20, null=True, blank=True)
-    last_name = models.CharField(max_length=20, null=True, blank=True)
-    dob = models.DateTimeField(
-        auto_now_add=False, auto_now=False, null=True, blank=True
-    )
-    phone_number = models.CharField(max_length=10, null=True, blank=True)
-    profile_pic = models.ImageField(default="patient.jpg", null=True, blank=True)
-    age = models.IntegerField(default="0", blank=True, null=True)
-    address = models.CharField(max_length=300, null=True, blank=True)
-
-    def __str__(self):
-        return str(self.admin)
-
-
 class AdminHOD(BaseModel):
     gender_category = (
         ("Male", "Male"),
@@ -123,6 +99,31 @@ class PharmacyClerk(BaseModel):
 
     def __str__(self):
         return str(self.admin)
+
+
+class Patients(BaseModel):
+    gender_category = (
+        ("Male", "Male"),
+        ("Female", "Female"),
+    )
+    admin = models.OneToOneField(CustomUser, null=True, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=True, blank=True)
+    gender = models.CharField(
+        max_length=7, null=True, blank=True, choices=gender_category
+    )
+    first_name = models.CharField(max_length=20, null=True, blank=True)
+    last_name = models.CharField(max_length=20, null=True, blank=True)
+    dob = models.DateTimeField(
+        auto_now_add=False, auto_now=False, null=True, blank=True
+    )
+    phone_number = models.CharField(max_length=10, null=True, blank=True)
+    profile_pic = models.ImageField(default="patient.jpg", null=True, blank=True)
+    age = models.IntegerField(default="0", blank=True, null=True)
+    address = models.CharField(max_length=300, null=True, blank=True)
+
+    def __str__(self):
+        return str(self.admin)
+
 
 
 class Category(BaseModel):
@@ -198,14 +199,15 @@ class Stock(BaseModel):
     category = models.ForeignKey(
         Category, null=True, on_delete=models.SET_NULL, blank=True
     )
-    leaf = models.ForeignKey(
-        DrugLeaf, null=True, on_delete=models.SET_NULL, blank=True
-    )
+    # leaf = models.ForeignKey(
+    #     DrugLeaf, null=True, on_delete=models.SET_NULL, blank=True
+    # )
     type = models.ForeignKey(
         DrugType, null=True, on_delete=models.SET_NULL, blank=True
     )
     unit = models.ForeignKey(
-        DrugUnit, null=True, on_delete=models.SET_NULL, blank=True
+        DrugUnit, null=True, on_delete=models.SET_NULL, blank=True,
+        help_text=("1 Unit = 1 Tablet")
     )
     supplier = models.ForeignKey(
         CustomUser, limit_choices_to={'user_type': "Supplier"},
@@ -224,7 +226,7 @@ class Stock(BaseModel):
     shelf = models.CharField(max_length=50, blank=True, null=True, verbose_name="Shelf")
     drug_description = models.TextField(blank=True, max_length=1000, null=True)
     
-    vat = models.PositiveIntegerField(verbose_name="VAT")
+    vat = models.PositiveIntegerField(verbose_name="VAT", blank=True, null=True)
     quantity = models.IntegerField(default="0", blank=True, null=True)
     manufacture = models.CharField(max_length=50, blank=True, null=True)
     manufacture_price = models.IntegerField(default="0", blank=True, null=True, verbose_name="Manufacture Price")
@@ -232,9 +234,20 @@ class Stock(BaseModel):
     
     # drug_color = models.CharField(max_length=50, blank=True, null=True)
     # batch_number = models.CharField(max_length=50, blank=True, null=True)
-    igta = models.IntegerField(default="0", blank=True, null=True)
-    hot = models.IntegerField(default="0", blank=True, null=True)
-    globle = models.IntegerField(verbose_name="Globel", default="0", blank=True, null=True)
+    igta = models.IntegerField(
+        # 0, 5, 12, 18, 28
+        choices=(
+            (0, 0),
+            (5, 5),
+            (12, 12),
+            (18, 18),
+            (28, 28),
+        ),
+        verbose_name="GST",
+        default="0", blank=True, null=True, 
+        help_text='Invoice GST in percentage')
+    # hot = models.IntegerField(default="0", blank=True, null=True)
+    # globle = models.IntegerField(verbose_name="Globel", default="0", blank=True, null=True)
     discount = models.IntegerField(default=0)
     # tax = models.FloatField(default="0.0", blank=True, null=True)
     
@@ -276,29 +289,29 @@ class PatientFeedback(BaseModel):
 @receiver(post_save, sender=CustomUser)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        if instance.user_type == 1:
+        if instance.user_type == "AdminHOD":
             AdminHOD.objects.create(admin=instance)
-        if instance.user_type == 2:
+        if instance.user_type == "Pharmacist":
             Pharmacist.objects.create(admin=instance, address="")
-        if instance.user_type == 3:
+        if instance.user_type == "Doctor":
             Doctor.objects.create(admin=instance, address="")
-        if instance.user_type == 4:
+        if instance.user_type == "PharmacyClerk":
             PharmacyClerk.objects.create(admin=instance, address="")
-        if instance.user_type == 5:
+        if instance.user_type == "Patients":
             Patients.objects.create(admin=instance, address="")
 
 
 @receiver(post_save, sender=CustomUser)
 def save_user_profile(sender, instance, **kwargs):
-    if instance.user_type == 1:
+    if instance.user_type == "AdminHOD":
         instance.adminhod.save()
-    if instance.user_type == 2:
+    if instance.user_type == "Pharmacist":
         instance.pharmacist.save()
-    if instance.user_type == 3:
+    if instance.user_type == "Doctor":
         instance.doctor.save()
-    if instance.user_type == 4:
+    if instance.user_type == "PharmacyClerk":
         instance.pharmacyclerk.save()
-    if instance.user_type == 5:
+    if instance.user_type == "Patients":
         instance.patients.save()
 
 
@@ -318,5 +331,3 @@ class PurchasedInvoice(BaseModel):
 
     class Meta:
         ordering = ("-created_at",)
-
-

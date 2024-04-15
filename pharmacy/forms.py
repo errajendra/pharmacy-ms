@@ -46,10 +46,10 @@ class PatientForm(forms.Form):
         max_length=50,
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
     )
-    reg_no = forms.CharField(
-        label="Reg No",
-        max_length=50,
-        widget=forms.TextInput(attrs={"class": "form-control"}),
+    doctor = forms.ModelChoiceField(
+        label="Doctor",
+        queryset=Doctor.objects.all(),
+        widget=forms.Select(attrs={"class": "form-control"}),
     )
     first_name = forms.CharField(
         label="First Name",
@@ -180,6 +180,13 @@ class StockForm(forms.ModelForm):
             "receive_quantity",
             "prescrip_drug_acess",
         ]
+        widgets = {
+            "category": forms.Select(attrs={"class":"form-control w-auto"}),
+            "type": forms.Select(attrs={"class":"form-control w-auto"}),
+            "unit": forms.Select(attrs={"class":"form-control w-auto"}),
+            "supplier": forms.Select(attrs={"class":"form-control w-auto"}),
+            "vender": forms.Select(attrs={"class":"form-control w-auto"}),
+        }
 
 
 class CategoryForm(forms.ModelForm):
