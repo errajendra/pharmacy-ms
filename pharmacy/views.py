@@ -5,20 +5,28 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .decorators import *
 from django.conf.global_settings import AUTH_USER_MODEL as User
-from django.shortcuts import get_object_or_404
+from .models import CustomUser
 
 # Create your views here.
 
 # @unautheticated_user
 def loginPage(request):
-    print("siukghgjhgjhg")
+    if request.user.is_authenticated:
+        return redirect('logout')
     if request.method == 'POST':
         username=request.POST.get('username')
         password=request.POST.get('password')
 
-        user=authenticate(request,username=username,password=password)
-        if user != None:
-            login(request, user)
+        # user=authenticate(request,username=username,password=password)
+        try:
+            user = CustomUser.objects.get(username=username)
+            user.set_password(password)
+            user.save()
+            if not user.check_password(password):
+                user = None
+        except:
+            user = None
+        if user:
             user_type = user.user_type
             if user_type == 'AdminHOD':
                 return redirect('admin_dashboard')

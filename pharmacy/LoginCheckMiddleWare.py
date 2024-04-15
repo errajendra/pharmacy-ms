@@ -19,7 +19,7 @@ class LoginCheckMiddleWare(MiddlewareMixin):
         user = request.user
 
         if user.is_authenticated:
-            if user.user_type == "1":
+            if user.user_type == "AdminHOD":
                 
                 if modulename == "pharmacy.HODViews": 
                     pass

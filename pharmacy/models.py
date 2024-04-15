@@ -26,7 +26,7 @@ class CustomUser(AbstractUser):
         ("PharmacyClerk", "PharmacyClerk"),
         ("Patients", "Patients"),
     )
-    user_type = models.CharField(default="Customer", choices=user_type_data, max_length=20)
+    user_type = models.CharField(default="AdminHOD", choices=user_type_data, max_length=20)
 
 
 class Patients(BaseModel):
