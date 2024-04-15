@@ -235,7 +235,7 @@ class Stock(BaseModel):
     igta = models.IntegerField(default="0", blank=True, null=True)
     hot = models.IntegerField(default="0", blank=True, null=True)
     globle = models.IntegerField(verbose_name="Globel", default="0", blank=True, null=True)
-    discount = models.IntegerField(default="0", blank=True, null=True)
+    discount = models.IntegerField(default=0)
     # tax = models.FloatField(default="0.0", blank=True, null=True)
     
     valid_from = models.DateTimeField(blank=True, null=True, default=timezone.now)
