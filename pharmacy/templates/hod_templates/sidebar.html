@@ -202,10 +202,10 @@
 
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link {% if request.path == '/admin_user/manage_stock/' or request.path == '/admin_user/add_stock/' or request.path == '/admin_user/add_category/' or request.path == '/admin_user/manage_category/' or request.path == '/admin_user/manage_drug_leaf/' or request.path == '/admin_user/manage_drug_unit/' or request.path == '/admin_user/manage_drug_type/' %} active {% endif %}">
+                    <a href="#" class="nav-link {% if request.path == '/admin_user/manage_stock/' or request.path == '/admin_user/add_stock/' or request.path == '/admin_user/add_category/' or request.path == '/admin_user/manage_category/' or request.path == '/admin_user/manage_drug_leaf/' or request.path == '/admin_user/manage_drug_unit/' or request.path == '/admin_user/manage_drug_type/' or request.path == '/admin_user/manage-stock-expired/' %} active {% endif %}">
                         <i class="fas fa-layer-group mr-2"></i>
                         <p>
-                            Stocked Drugs
+                            Stocked Medicines
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -213,7 +213,13 @@
                         <li class="nav-item pl-2 {% if request.path == '/admin_user/manage_stock/' %}active{% endif %}">
                             <a href="{% url 'manage_stock' %}" class="nav-link">
                                 <i class="fas fa-capsules"></i>
-                                <p class="pl-2">Manage Drug</p>
+                                <p class="pl-2">Manage Medicines</p>
+                            </a>
+                        </li>
+                        <li class="nav-item pl-2 {% if request.path == '/admin_user/manage-stock-expired/' %}active{% endif %}">
+                            <a href="{% url 'manage_stock_expired' %}" class="nav-link">
+                                <i class="fas fa-capsules"></i>
+                                <p class="pl-2">Expired Medicines</p>
                             </a>
                         </li>
                         <li class="nav-item pl-2 {% if request.path == '/admin_user/manage_category/' %}active{% endif %}">

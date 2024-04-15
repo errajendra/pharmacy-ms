@@ -87,7 +87,6 @@ def managePrescription(request):
 
 
 def manageStock(request):
-    stocks = Stock.objects.all()
     stocks = Stock.objects.all().order_by("-id")
     ex = Stock.objects.annotate(
         expired=ExpressionWrapper(Q(valid_to__lt=Now()), output_field=BooleanField())
@@ -96,6 +95,7 @@ def manageStock(request):
         expired=ExpressionWrapper(Q(valid_to__lt=Now()), output_field=BooleanField())
     ).filter(expired=False)
     context = {
+        "title": "Manage Medicines",
         "stocks": stocks,
         "expired": ex,
     }

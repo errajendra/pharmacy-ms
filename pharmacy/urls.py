@@ -22,6 +22,7 @@ urlpatterns=[
     
     path('admin_user/add_stock/',HODViews.addStock,name='add_stock'),
     path('admin_user/manage_stock/',HODViews.manageStock,name='manage_stock'),  
+    path('admin_user/manage-stock-expired/',HODViews.manageStockExpirerd, name='manage_stock_expired'), 
     
     path('admin_user/add_category/',HODViews.addCategory,name='add_category'), 
     path('admin_user/manage_category/',HODViews.manageCategory,name='manage_category'), 

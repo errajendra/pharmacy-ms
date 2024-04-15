@@ -281,22 +281,39 @@ def addStock(request):
 
 
 def manageStock(request):
-    stocks = Stock.objects.all().order_by("-id")
-    ex = Stock.objects.annotate(
-        expired=ExpressionWrapper(Q(valid_to__lt=Now()), output_field=BooleanField())
-    ).filter(expired=True)
+    # stocks = Stock.objects.all().order_by("-id")
+    # ex = Stock.objects.annotate(
+    #     expired=ExpressionWrapper(Q(valid_to__lt=Now()), output_field=BooleanField())
+    # ).filter(expired=True)
     eo = Stock.objects.annotate(
         expired=ExpressionWrapper(Q(valid_to__lt=Now()), output_field=BooleanField())
     ).filter(expired=False)
 
     context = {
-        "stocks": stocks,
-        "expired": ex,
+        "stocks": eo,
+        # "expired": ex,
         "expa": eo,
         "title": "Manage Stocked Drugs",
     }
 
     return render(request, "hod_templates/manage_stock.html", context)
+
+
+def manageStockExpirerd(request):
+    # stocks = Stock.objects.all().order_by("-id")
+    ex = Stock.objects.annotate(
+        expired=ExpressionWrapper(Q(valid_to__lt=Now()), output_field=BooleanField())
+    ).filter(expired=True)
+    # eo = Stock.objects.annotate(
+    #     expired=ExpressionWrapper(Q(valid_to__lt=Now()), output_field=BooleanField())
+    # ).filter(expired=False)
+    context = {
+        "title": "Manage Expired Medicines",
+        "stocks": ex,
+        "expired": ex,
+    }
+    return render(request, "hod_templates/manage_stock.html", context)
+
 
 
 def manageCategory(request):

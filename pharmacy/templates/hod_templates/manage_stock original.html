@@ -106,21 +106,17 @@
 
                             <!-- Checks expired drugs -->
 
-                            {% comment %} {% for expire in expired %} {% if stock.drug_name == expire.drug_name %}
+                            {% for expire in expired %} {% if stock.drug_name == expire.drug_name %}
                             <td class="">
                                 <div style="background-color: rgb(48, 58, 92);border-radius: 10px;font-size: 11px; width:120px;font-weight: 600;color: white;" class="d-flex justify-content-center ml-2 mt-2 px-1 "> EXPIRED </div>
                             </td>
-                            {% endif %} {% endfor %} {% endcomment %}
+                            {% endif %} {% endfor %}
                             <!-- Checks Not expired drugs -->
 
 
-                            {% comment %} {% for expire in expa %} {% if stock.drug_name == expire.drug_name %} {% endcomment %}
-                            <td>
-                                {% if stock.valid_to %}
-                                {{stock.valid_to|date}}
-                                {% endif %}
-                            </td>
-                            {% comment %} {% endif %} {% endfor %} {% endcomment %}
+                            {% for expire in expa %} {% if stock.drug_name == expire.drug_name %}
+                            <td>{{expire.valid_to|date}}</td>
+                            {% endif %} {% endfor %}
                             <!-- End Expire -->
                             <td class="d-flex justify-content-center">
                                 <a href="{%url 'edit_drug' stock.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
