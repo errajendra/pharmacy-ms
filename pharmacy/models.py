@@ -326,8 +326,33 @@ class SellInvoice(BaseModel):
         ordering = ("-created_at",)
 
 
+class NewPurchaseData(BaseModel):
+    drug_name = models.ForeignKey(Stock, on_delete=models.CASCADE)
+    batches = models.CharField(max_length=10, null=True, blank=True)
+    mrp_per_unit = models.FloatField()
+    buy_price_per_unit = models.FloatField()
+    quantity = models.IntegerField()
+    sub_total = models.FloatField()
+    discount = models.FloatField()
+    total = models.FloatField()
+    status = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ("-created_at",)
+
+
 class PurchasedInvoice(BaseModel):
-    invoice_data = models.JSONField()
+    medicine_data = models.ManyToManyField(NewPurchaseData)
+    invoice_no = models.CharField(30)
+    manufacture = models.CharField(max_length=200)
+    date = models.DateField()
+    quantity = models.IntegerField()
+    sub_total = models.FloatField()
+    discount = models.FloatField()
+    total = models.FloatField()
+    paid = models.FloatField()
+    due = models.FloatField()
+    payment_type = models.CharField(max_length=20)
 
     class Meta:
         ordering = ("-created_at",)
