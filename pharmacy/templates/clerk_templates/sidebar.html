@@ -6,7 +6,7 @@
 
 
     <div class="sidebar">
-        <div class="user-panel mr-3">
+        {% comment %} <div class="user-panel mr-3">
             <div class="pull-left image ml-2">
                 <img src="{{request.user.pharmacyclerk.profile_pic.url}}" class="img-circle mt-2" width="36" height="36" alt="User Image">
             </div>
@@ -14,7 +14,7 @@
                 <p>{{user.first_name}} {{user.last_name}}</p>
                 <a href="#"><i class="fa fa-circle text-success "></i> Online</a>
             </div>
-        </div>
+        </div> {% endcomment %}
 
 
         <nav class="mt-2">

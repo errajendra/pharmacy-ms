@@ -156,23 +156,6 @@ class DrugUnit(BaseModel):
 
 
 
-# class DrugSupplier(CustomUser):
-#     name = models.CharField(max_length=50)
-#     description = models.TextField(blank=True, null=True)
-
-#     def __str__(self):
-#         return str(self.name)
-    
-
-
-# class DrugVender(CustomUser):
-#     name = models.CharField(max_length=50)
-#     description = models.TextField(blank=True, null=True)
-
-#     def __str__(self):
-#         return str(self.name)
-
-
 class Prescription(BaseModel):
     patient_id = models.ForeignKey(Patients, null=True, on_delete=models.SET_NULL)
     description = models.TextField(null=True)
@@ -331,3 +314,25 @@ class PurchasedInvoice(BaseModel):
 
     class Meta:
         ordering = ("-created_at",)
+
+
+class Cart(BaseModel):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="cart_items")
+    medicine = models.ForeignKey(Stock, on_delete=models.CASCADE, related_name="carts")
+    quantity = models.PositiveIntegerField(default=1)
+    discount = models.PositiveIntegerField(default=0)
+    batch = models.CharField(max_length=50, null=True, blank=True, default=" ")
+    
+    class Meta:
+        verbose_name = "Cart"
+        unique_together = ('user', 'medicine')  # Avoid duplicate entries for same product by a user
+    
+    def __str__(self) -> str:
+        return f"{self.pk}"
+    
+    @property
+    def total_price(self):
+        try:
+            return (self.medicine.price * self.quantity) - (self.medicine.price * self.quantity * self.discount / 100)
+        except:
+            return None

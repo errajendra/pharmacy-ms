@@ -55,12 +55,8 @@ admin.site.register(PatientFeedback)
 admin.site.register(SellInvoice)
 admin.site.register(PurchasedInvoice)
 
-
-   
-
-
-
- 
-
-
-
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ('user', 'medicine', 'quantity', 'updated_at')
+    list_filter = ('updated_at', 'quantity')
+    search_fields = ('user__first_name', 'user__last_name', 'user__username')

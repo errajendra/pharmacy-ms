@@ -176,7 +176,7 @@
                         {% for drug in drugs %}
                             <div class="col-lg-3 col-6 col-xl-3 px-2 mb-3">
                                 <div class="position-relative">
-                                    <div class="product-card card shadow-sm pvl26 position-relative" onclick="ADD_TO_CART('17','https://api.cart.com')">
+                                    <div class="product-card card shadow-sm pvl26 position-relative" onclick="addToCart({{drug.id}})">
                                         <div class="card-header inline_product clickable p-3 pvl27">
                                             <div class="d-flex align-items-center justify-content-center d-block">
                                                 <img src="{{drug.drug_pic.url}}" onerror="this.src='https://demopharma.ayaantec.com/public/pos/img/160x160/imag.png'" class="pvl28">
@@ -236,10 +236,11 @@
                                         </button> {% endcomment %}
                                     </div>
                                     <div class="col-lg-4">
-                                        <select onchange="customer_change(this.value);" id="customer" name="customer_id" data-placeholder="Walk In Customer" class="form-control">
-                                            <option value="0" selected> Walking Customer </option>
+                                        {% comment %} <select onchange="customer_change(this.value);" id="customer" name="customer_id" data-placeholder="Walk In Customer" class="form-control"> {% endcomment %}
+                                            <select onchange="getCartDetails();" id="customer" name="customer" class="form-control">
+                                            {% comment %} <option value="0" selected> Walking Customer </option> {% endcomment %}
                                             {% for c in custumers %}
-                                            <option value="c.id"> {{c.get_full_name}} </option>
+                                            <option value="{{c.id}}"> {{c.get_full_name}} </option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -279,20 +280,21 @@
                                                 <thead>
                                                     <tr>
                                                         <th>Medicine</th>
-                                                        <th>Batch</th>
+                                                        <th>Batch </th>
                                                         <th>Expiry Date</th>
                                                         <th>Quantity</th>
                                                         <th>Price</th>
                                                         <th>Discount%</th>
                                                         <th>Total</th>
-                                                        <th></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody id="cart_items">
                                                     
                                                 </tbody>
                                             </table>
                                         </div>
+
+                                        {% comment %} Sub total {% endcomment %}
                                         <div class="form-group mb-1">
                                             <div class="row justify-content-end align-items-center">
                                                 <label for="invoice_discount" class="col-5 col-sm-6 col-lg-6 col-xl-7 text-right font-weight-bold mb-0">
@@ -303,6 +305,8 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <!-- Invoicing  -->
                                         <div class="form-group mb-1">
                                             <div class="row justify-content-end align-items-center">
                                                 <label for="invoice_discount" class="col-5 col-sm-6 col-lg-6 col-xl-7 text-right font-weight-bold mb-0">
@@ -357,7 +361,7 @@
                                             </div>
                                         </div>
 
-                                            <div class="form-group mb-1">
+                                        <div class="form-group mb-1">
                                             <div class="row justify-content-end align-items-center">
                                                 <label for="grandTotal" class="col-5 col-sm-6 col-lg-6 col-xl-7 text-right font-weight-bold mb-0">
                                                     Grand Total:</label>
@@ -487,6 +491,7 @@
                 </div>
             </div>
         </div>
+
         <div class="modal fade" id="add-customer" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -543,6 +548,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="modal fade" id="paymentModal" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content pvl14">
@@ -617,60 +623,7 @@
 
     {% comment %} Filering the Products {% endcomment %}
     <script type="text/javascript">
-        {% comment %} Filter Drugs by Category {% endcomment %}
-        {% comment %} $("#category").on('change', function() {
-            var category_id = $("#category").find(":selected").val();
-            $.ajax({
-                type: 'POST',
-                url: '{% url "search_product_pos" %}',
-                dataType: 'json',
-                data: {
-                    "search_by": "category",
-                    "category_id": category_id,
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                },
-                success: function(data) {
-                    $('#product-list').html(data.result);
-                },
-            });
-        }); {% endcomment %}
-
-        {% comment %} Filter Drug by Vender {% endcomment %}
-        {% comment %} $("#vendor").on('change', function() {
-            var vender_id = $("#vendor").find(":selected").val();
-            $.ajax({
-                type: 'POST',
-                url: '{% url "search_product_pos" %}',
-                dataType: 'json',
-                data: {
-                    "search_by": "vender",
-                    "vender_id": vender_id,
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                },
-                success: function(data) {
-                    $('#product-list').html(data.result);
-                },
-            });
-        }); {% endcomment %}
-
-        {% comment %} Search Drug {% endcomment %}
-        {% comment %} $("#search").keyup(function() {
-            var keywords = $(this).val();
-            $.ajax({
-                type: 'POST',
-                url: '{% url "search_product_pos" %}',
-                dataType: 'json',
-                data: {
-                    "search_by": "keywords",
-                    "keywords": keywords,
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                },
-                success: function(data) {
-                    $('#product-list').html(data.result);
-                },
-            });
-        }); {% endcomment %}
-
+        
         function searchProducts() {
             var keywords = $("#search").val();
             var vender_id = $("#vendor").find(":selected").val();
@@ -694,6 +647,96 @@
 
 
     </script>
+
+    {% comment %} Cart Add and Listing  Functionality {% endcomment %}
+    <script type="text/javascript">
+        function addToCart(product_id){
+            var customer_id = $("#customer").find(":selected").val();
+
+            $.ajax({
+                type: "POST",
+                url:'{% url "add_to_cart_pos" %}',
+                dataType:'json',
+                data:{
+                    "user_id": customer_id,
+                    "product_id": product_id,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(data) {
+                    toastr.success('Item has been added in your cart!', {
+                        CloseButton: true,
+                        ProgressBar: true
+                    });
+                    getCartDetails();
+                },
+           });
+        };
+
+        function getCartDetails(){
+            var customer_id = $("#customer").find(":selected").val();
+
+            $.ajax({
+                type: "POST",
+                url:'{% url "load_cart_items_pos" %}',
+                dataType:'json',
+                data:{
+                    "user_id": customer_id,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(data) {
+                    $('#cart_items').html(data.result);
+                    $("#subtotal").val(data.total_cart_price);
+                    $("#subtotal").data("subtotal", data.total_cart_price);
+                },
+           });
+        };
+
+        window.onload = function() {
+            getCartDetails(); 
+        };
+
+        
+        function cartUpdate(cart_id) {
+            // Validate cart_id
+            if (!cart_id) {
+                console.error("Invalid cart_id");
+                return;
+            }
+            
+            // Retrieve values
+            var quantity = $("#id_cart_quantity_" + cart_id).val();
+            var discount = $("#id_cart_discount_" + cart_id).val();
+            var batch = $("#id_cart_batch_" + cart_id).val();
+        
+            // AJAX request
+            $.ajax({
+                type: "POST",
+                url: '{% url "cart_item_update_pos" %}',
+                dataType: 'json',
+                data: {
+                    "cart_id": cart_id,
+                    "quantity": quantity,
+                    "discount": discount,
+                    "batch": batch,
+                    "csrfmiddlewaretoken": '{{ csrf_token }}'
+                },
+                success: function(data) {
+                    $("#id_cart_price_" + cart_id).val(data.price);
+                    $("#subtotal").val(data.total_cart_price);
+                    $("#subtotal").data("subtotal", data.total_cart_price);
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", error);
+                }
+            });
+        }
+        
+
+        
+
+    </script>
+    
+
 
 
     <script type="text/javascript">
@@ -735,7 +778,7 @@
             });
         });
     </script>
-        <script>
+    <script>
         function bottomActionBar() {
             if ($('.action-bottom-bar').is(':visible')) {
                 $('.action-bar-switcher').animate({
@@ -1163,7 +1206,7 @@
             }
         }
 
-        function addToCart(form_id = 'add-to-cart-form') {
+        function addTo_Cart(form_id = 'add-to-cart-form') {
             if (checkAddToCartValidity()) {
                 toastr.success('Item has been added in your cart!', {
                     CloseButton: true,
