@@ -148,4 +148,14 @@ urlpatterns=[
     
    path('reset_password_complete/',auth_views.PasswordResetCompleteView
     .as_view(template_name="password_reset_done.html"),name="password_reset_complete"),
+
+    # purchase url
+    path("new-purchase/", HODViews.new_purchase_fun, name="new_purchase"),
+    path('search-stock/', HODViews.search_stock, name="search_stock"),
+    path('add-search-stock/', HODViews.add_searched_stock, name="add_searched_stock"),
+    path('delete-search-stock/<int:id>/', HODViews.delete_searched_stock, name="delete_searched_stock"),
+    path('update-added-stock/', HODViews.update_added_stock_detail, name="update_added_stock_detail"),
+
+    path("purchase-history/", HODViews.purchase_history, name="purchase_history"),
+
 ]

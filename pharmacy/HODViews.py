@@ -11,6 +11,8 @@ import inflect
 from .forms import *
 from .models import *
 
+from django.views.decorators.csrf import csrf_exempt
+
 
 def adminDashboard(request):
     patients_total = Patients.objects.all().count()
@@ -877,36 +879,40 @@ def purchased_invoice_list(request):
 
 def purchased_invoice_detail(request, pk):
     get_invoice = PurchasedInvoice.objects.get(id=int(pk))
-    total_amount = float(get_invoice.invoice_data['price']) - float(get_invoice.invoice_data['discount']) + float(get_invoice.invoice_data['tax'])
+    # total_amount = float(get_invoice.invoice_data['price']) - float(get_invoice.invoice_data['discount']) + float(
+    #     get_invoice.invoice_data['tax'])
+    # p = inflect.engine()
+    # grand_total_str = p.number_to_words(total_amount)
+    medicine_list = NewPurchaseData.objects.filter(id__in=get_invoice.medicine_data.all())
     p = inflect.engine()
-    grand_total_str = p.number_to_words(total_amount)
+    grand_total_str = p.number_to_words(get_invoice.total)
+    print(medicine_list, "medicine_list")
     context = {
+        "medicine_list": medicine_list,
         "get_invoice": get_invoice,
-        "total_amount": total_amount,
+        "total_amount": "total_amount",
         "grand_total_str": grand_total_str
     }
-    return render(request, "hod_templates/invoice_view.html", context)
+    return render(request, "hod_templates/purchase/invoice_view.html", context)
 
 
 # def delete_invoice(request)
 
 
 # Billing POS
-def  billingPOS(request):
+def billingPOS(request):
     drugs = Stock.objects.prefetch_related().all()
     categories = drugs.values_list('category', flat=True)
     categories = Category.objects.all()
     venders = CustomUser.objects.filter(user_type='Vender')
     custumers = CustomUser.objects.filter(user_type="Pharmacist")
     context = {
-        "drugs" : drugs,
-        'categories' : categories,
+        "drugs": drugs,
+        'categories': categories,
         "venders": venders,
         "custumers": custumers
     }
     return render(request, "pos/pos.html", context)
-
-
 
 
 # Manage Vender
@@ -951,7 +957,6 @@ def deleteVender(request, id):
     return redirect("manage_vender")
 
 
-
 # Manage Supplier
 def manageSupplier(request):
     suppliers = CustomUser.objects.filter(user_type="Supplier").order_by("-id")
@@ -992,3 +997,126 @@ def deleteSupplier(request, id):
     supplier = get_object_or_404(CustomUser, id=id)
     supplier.delete()
     return redirect("manage_supplier")
+
+
+def new_purchase_fun(request):
+    manufacture_list = Stock.objects.all()
+    purchased_list = NewPurchaseData.objects.filter(status=False)
+
+    sub_total = sum(purchase.sub_total for purchase in purchased_list)
+    discount = sum(purchase.discount for purchase in purchased_list)
+    total = sum(purchase.total for purchase in purchased_list)
+
+    context = {
+        "manufacture_list": manufacture_list,
+        "purchased_list": purchased_list,
+        "sub_total": sub_total,
+        "discount": discount,
+        "total": total,
+    }
+
+    if request.method == "POST":
+        date_get = request.POST.get("purchase_date")
+        invoice_num = request.POST.get("voice_num")
+        manufacture_name = request.POST.get("manufacture_name")
+        purchase_ids = request.POST.getlist('purchase_id[]')
+        payment_type = request.POST.get("payment_type")
+        paid_amount = request.POST.get("paid_amount")
+        due_amount = request.POST.get("due_amount")
+
+        sub_total_pur = sum(
+            get_object_or_404(NewPurchaseData, id=int(purchase_id)).sub_total for purchase_id in purchase_ids)
+        discount_pur = sum(
+            get_object_or_404(NewPurchaseData, id=int(purchase_id)).discount for purchase_id in purchase_ids)
+        total_pur = sum(get_object_or_404(NewPurchaseData, id=int(purchase_id)).total for purchase_id in purchase_ids)
+
+        purchased_invoice = PurchasedInvoice.objects.create(
+            invoice_no=invoice_num,
+            manufacture=manufacture_name,
+            date=date_get,
+            quantity=discount_pur,
+            sub_total=sub_total_pur,
+            discount=discount_pur,
+            total=total_pur,
+            paid=paid_amount,
+            due=due_amount,
+            payment_type=payment_type
+        )
+
+        for purchase_id in purchase_ids:
+            instance = get_object_or_404(NewPurchaseData, id=int(purchase_id))
+            purchased_invoice.medicine_data.add(instance)
+            instance.status = True
+            instance.save()
+        messages.success(request, "Purchase created successfully")
+        return redirect("new_purchase")
+
+    return render(request, "hod_templates/purchase/new_purchase.html", context)
+
+
+@csrf_exempt
+def search_stock(request):
+    query = request.GET.get('query', '')
+    results = Stock.objects.filter(drug_name__icontains=query) | Stock.objects.filter(
+        generic_drug_name__icontains=query)
+    data = [
+        {'drug_name': stock.drug_name,
+         'generic_name': stock.generic_drug_name,
+         'price': stock.price,
+         'image': stock.drug_pic.url,
+         'id': stock.id,
+         } for stock in results]
+    return JsonResponse(data, safe=False)
+
+
+def add_searched_stock(request):
+    stock_id = request.GET.get("selected_option")
+    ins_stock = Stock.objects.get(id=int(stock_id))
+    if NewPurchaseData.objects.filter(drug_name=ins_stock, status=False).exists():
+        pass
+    else:
+        instance = NewPurchaseData.objects.create(drug_name=ins_stock, mrp_per_unit=0, buy_price_per_unit=0, quantity=0,
+                                                  sub_total=0, discount=0, total=0)
+        messages.success(request, "Item has been added")
+    return redirect("new_purchase")
+
+
+def delete_searched_stock(request, id):
+    ins = get_object_or_404(NewPurchaseData, id=int(id))
+    ins.delete()
+    messages.success(request, "Item has been removed")
+    return redirect("new_purchase")
+
+
+@csrf_exempt
+def update_added_stock_detail(request):
+    stock_id = request.POST.get("purchase_id")
+    new_value = request.POST.get("new_value")
+    data_type = request.POST.get("data_type")
+    get_instance = get_object_or_404(NewPurchaseData, id=int(stock_id))
+    if data_type == "buy_price_per_unit":
+        get_instance.buy_price_per_unit = int(new_value)
+        get_instance.sub_total = int(get_instance.quantity) * int(new_value)
+        get_instance.total = int(get_instance.quantity) * int(new_value)
+        messages.success(request, "MRP Item updated")
+    elif data_type == "quantity":
+        get_instance.quantity = int(new_value)
+        get_instance.sub_total = int(get_instance.buy_price_per_unit) * int(new_value)
+        get_instance.total = int(get_instance.buy_price_per_unit) * int(new_value)
+        messages.success(request, "Item updated")
+    elif data_type == "discount":
+        get_instance.discount = int(new_value)
+        discount_price = ((int(new_value) / get_instance.sub_total) * 100)
+        get_instance.total = int(get_instance.sub_total - discount_price)
+        print((get_instance.sub_total - discount_price), discount_price)
+        messages.success(request, "Item updated")
+    get_instance.save()
+    return redirect("new_purchase")
+
+
+def purchase_history(request):
+    all_history = PurchasedInvoice.objects.all()
+    context = {
+        "all_history": all_history
+    }
+    return render(request, "hod_templates/purchase/purchase_history.html", context)

@@ -249,7 +249,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link {% if request.path == '/admin_user/parched_invoice/' %}active{% endif %}">
+                    <a href="#" class="nav-link {% if request.resolver_match.url_name == 'new_purchase' or request.resolver_match.url_name == 'purchase_history' %}active{% endif %}">
                         <i class="fas fa-file-invoice mr-2"></i>
                         <p>
                             Purchased Invoice
@@ -257,22 +257,19 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item pl-2 {% if request.path == '/admin_user/parched_invoice/' %}active{% endif %}">
-                            <a href="{% url 'parched_invoice_list'  %}" class="nav-link">
-                                <i class="fas fa-th"></i>
-
-                                <p class="pl-2">Purchased Invoice</p>
+                        <li class="nav-item pl-2 {% if request.resolver_match.url_name == 'new_purchase' %}active{% endif %}">
+                            <a href="{% url 'new_purchase'  %}" class="nav-link">
+                                <i class="fas fa-circle"></i>
+                                <p class="pl-2">New Purchase</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{% url 'manage_stock2' %}" class="nav-link">
-                                <i class="fas fa-layer-group mr-2"></i>
-                                <p>
-                                    Manage Stock
-                                </p>
+                        <li class="nav-item pl-2 {% if request.resolver_match.url_name == 'purchase_history' %}active{% endif %}">
+                            <a href="{% url 'purchase_history'  %}" class="nav-link">
+                                <i class="fas fa-circle"></i>
+
+                                <p class="pl-2">Purchased History</p>
                             </a>
                         </li>
-
                     </ul>
                 </li>
 

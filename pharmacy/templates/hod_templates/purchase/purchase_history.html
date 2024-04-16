@@ -1,0 +1,96 @@
+{% extends 'hod_templates/base_template.html'%} {% block page_title %}
+{% endblock page_title %} {% block main_content %}
+<section class="content">
+    {% if messages %}
+    <div class="form-group">
+        <div class="col-12">
+            {% for message in messages %} {% if message.tags == "error" %}
+            <div class="col-sm-12">
+                <div class="alert fade alert-simple alert-danger alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show mt-1 " role="alert" data-brk-library="component__alert">
+                    <button type="button" class="close font__size-18" data-dismiss="alert">
+                        <span aria-hidden="true">
+                            <i class="fa fa-times danger "></i>
+                        </span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <i class="start-icon far fa-times-circle faa-pulse animated"></i>
+                    <strong class="font__weight-semibold">Oh snap!</strong> {{message}}
+                </div>
+            </div>
+            {% elif message.tags == "success" %}
+            <div class="alert fade alert-simple alert-success alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show mt-1">
+                <button type="button" class="close font__size-18" data-dismiss="alert">
+                                              <span aria-hidden="true">
+                              <i class="fa fa-times greencross"></i>
+                              </a></span>
+                                              <span class="sr-only">Close</span>
+                                          </button>
+                <i class="start-icon far fa-check-circle faa-tada animated"></i>
+                <strong class="font__weight-semibold">Well done!</strong> {{message}}
+            </div>
+            {% endif %} {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="card manage sc">
+                <div class="card-header">
+                    <span>Purchase Lis</span>
+                    <div class="card-tools d-flex">
+                        <a class="btn btn-sm btn-info mr-2" href="{% url 'new_purchase' %}" role="button">+ New Purchase</a>
+                    </div>
+
+                </div>
+                <table class="table table-bordered table-hover dataTable">
+                    <thead>
+
+                        <tr>
+                            <th>#</th>
+                            <th>Invoice No</th>
+                            <th>Manufacture</th>
+                            <th>Date</th>
+                            <th>Quantity</th>
+                            <th>Sub Total</th>
+                            <th>Discount</th>
+                            <th>Total</th>
+                            <th>Paid</th>
+                            <th>Due</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for purchase_his in all_history %}
+                        <tr class="hov">
+                            <td>{{forloop.counter}}</td>
+                            <td>{{purchase_his.invoice_no}}</td>
+                            <td>{{purchase_his.manufacture}}</td>
+                            <td>{{purchase_his.date}}</td>
+                            <td>{{purchase_his.quantity}}</td>
+                            <td>{{purchase_his.sub_total}}</td>
+                            <td>{{purchase_his.discount}}</td>
+                            <td>{{purchase_his.total}}</td>
+                            <td>{{purchase_his.paid}}</td>
+                            <td>{{purchase_his.due}}</td>
+                            <td>
+                                <a href="{% url 'parched_invoice_detail' purchase_his.id %}" class="btn btn-sm btn-primary" title="Update" style="font-size: smaller;">
+                                    <i class="fa fa-eye"></i> Views
+                                </a>
+                                <!-- Delete action with icon -->
+                                <a href="#" class="btn btn-sm btn-danger" title="Delete" style="font-size: smaller;">
+                                    <i class="fa fa-trash"></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
