@@ -1,0 +1,220 @@
+{% extends 'hod_templates/base_template.html'%}
+{% load crispy_forms_tags %}
+{% block main_content %}
+<style>
+    /* Hide patient_id */
+    #div_id_patient_id {
+        display: none !important;
+    }
+
+    /* Disabled option color */
+    .select2-container--default .select2-results__option[aria-disabled='true'] {
+        color: #0071d4 !important;
+    }
+
+    /* Input focus style */
+    .select2-container--default .select2-selection--single,
+    .select2-container--default .select2-selection--multiple {
+        border-color: #bbbfc4;
+    }
+
+    .select2-container input {
+        -webkit-transition: all 0.10s ease-in-out !important;
+        -moz-transition: all 0.10s ease-in-out !important;
+        -ms-transition: all 0.10s ease-in-out !important;
+        -o-transition: all 0.10s ease-in-out !important;
+        outline: none !important;
+        padding: 3px 0px 3px 3px!important;
+        margin: 5px 1px 3px 0px !important;
+        border: 1px solid #DDDDDD!important;
+    }
+
+    .select2-container input:focus {
+        box-shadow: 0 0 5px rgba(81, 203, 238, 1)  !important;
+        padding: 3px 0px 3px 3px !important;
+        margin: 5px 1px 3px 0px !important;
+        border: 1px solid rgb(85, 148, 165)!important;
+    }
+
+    /* Search field border */
+    .select2-container--default .select2-dropdown .select2-search__field,
+    .select2-container--default .select2-search--inline .select2-search__field {
+        border: 1px solid #ced4da !important;
+    }
+
+    /* Single selection style */
+    .select2-container--default .select2-selection--single {
+        background-color: #fff;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        height: 45px;
+    }
+
+    /* Custom table style */
+    .table2 {
+        width: 100%;
+        margin-bottom: 1rem;
+        color: #212529;
+        border-collapse: collapse;
+    }
+
+    .table2 th,
+    .table2 td {
+        padding: 0.75rem;
+        vertical-align: top;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .table2 thead th {
+        vertical-align: bottom;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    /* Term's & Condition style */
+    .terms-condition {
+        margin-top: 1rem;
+    }
+
+    .terms-condition h5 {
+        text-decoration: underline;
+    }
+
+    .terms-condition p {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Customized billing from/to */
+    .billing-section {
+        margin-bottom: 1rem;
+    }
+
+    .billing-section h6 {
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+
+    .billing-section p {
+        margin-bottom: 0.2rem;
+    }
+</style>
+<section class="content">
+    <div class="container-fluid">
+        {% include 'pharmacist_templates/alert_messeges.html' %}
+        <h5 class="mt-4 ml-2 card-header" style="background:#A9B7B8"><b>
+            Purchased Invoice #{{ get_invoice.id }}
+            <span style="float:right;" >Date: April 04, 2024</span>
+            </b>
+        </h5>
+        <div class="row billing-section card-header">
+            <div class="col-md-6">
+                <h6>BILLING FROM</h6>
+                <p>Aexim Pharmaceuticals Ltd.</p>
+                <p>Khutar, Singrauli Mp, India</p>
+                <p>Phone: +919144882339</p>
+            </div>
+            <div class="col-md-6" style="float:right;">
+                <h6>BILLING TO</h6>
+                <p>CVS Ltd.</p>
+                <p>Khutar, Singrauli Mp, India</p>
+                <p>Phone: +919144882339</p>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card card-info">
+                <div class="card-header" >
+                    <h5>Medicine Details</h5>
+                </div>
+                <table class="table2 table-bordered table-hover">
+                    <thead style="background:#A9B7B8">
+                        <tr>
+                            <th>#</th>
+                            <th>MEDICINE NAME</th>
+                            <th>BATCH</th>
+                            <th>MRP PER UNIT</th>
+                            <th>BUY PRICE PER UNIT</th>
+                            <th>QUANTITY</th>
+                            <th>TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for medicine in medicine_list %}
+                        <tr class="hov">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ medicine.drug_name.drug_name }}</td>
+                            <td>{{ medicine.batches }}</td>
+                            <td>{{ medicine.mrp_per_unit }}</td>
+                            <td>{{ medicine.buy_price_per_unit }}</td>
+                            <td>{{ medicine.quantity }}</td>
+                            <td>{{ medicine.total }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card card-info terms-condition">
+                            <div class="mx-3">
+                                <h5><u><b>Term's & Condition</b></u></h5>
+                            </div>
+                            <div class="mx-4">
+                                <p>Goods once sold will not be taken back or exchanged.</p>
+                                <p>Bills not paid by the due date will attract 24% interest.</p>
+                                <p>All disputes subject to G.B. Nagar Jurisdiction only.</p>
+                                <p>Prescribed Sales Tax declaration will be given.</p>
+                                <p><strong>Remark:</strong></p>
+                                <div class="row">
+                                    <p class="col-md-9" style="text-transform: capitalize;">Rs. {{ grand_total_str }} Only /-</p>
+                                    <p class="col-md-3">Authorized Signature</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-info">
+                            <table class="table2 table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Sub Total</th>
+                                        <td>{{ get_invoice.sub_total }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Total Discount</th>
+                                        <td>{{ get_invoice.discount }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Total</th>
+                                        <td>{{ get_invoice.total }} /-</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Total Paid</th>
+                                        <td>{{ get_invoice.paid }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Due</th>
+                                        <td>{{ get_invoice.due }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>&#160;</th>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Paid By:</th>
+                                        <td>{{ get_invoice.payment_type }}</td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Print Button -->
+<div style="text-align: center; margin-top: 20px;">
+    <button onclick="window.print()" class="btn btn-primary">Print Invoice</button>
+</div>
+
+{% endblock %}
