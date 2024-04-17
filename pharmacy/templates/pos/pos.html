@@ -438,7 +438,7 @@
                     </div>
                     <div class="col-lg-12 col-xl-4 text-xl-right">
                         <div class="action-btns d-flex justify-content-center justify-content-xl-end mt-2 mt-xl-0">
-                            <input type="button" id="full_paid_tab" class="btn btn-warning font-weight-600 mr-2" value="Full Paid" onclick="fullPaid()">
+                            <input type="button" id="full_paid_tab" class="btn btn-warning font-weight-600 mr-2" value="Place Order" onclick="placeOrder()">
                             {% comment %} <button type="button" onclick="placeOrder('Cash Payment')" id="placeOrderWithCash" class="btn btn-success font-weight-600 mr-2">
                                 Cash Payment
                             </button>
@@ -556,7 +556,7 @@
             </div>
         </div>
         
-        <div class="modal fade" id="paymentModal" tabindex="-1">
+        {% comment %} <div class="modal fade" id="paymentModal" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content pvl14">
                     <div class="modal-header">
@@ -585,7 +585,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> {% endcomment %}
 
         {% comment %} <div class="modal fade" id="short-cut-keys" tabindex="-1">
             <div class="modal-dialog">
@@ -769,7 +769,98 @@
 
     {% comment %} Place order {% endcomment %}
     <script type="text/javascript">
-    
+        // Place Order
+        function placeOrder(){
+            if (confirm('Are you sure?')){
+
+                const paid_amount = $('#paidAmount').val();
+                const due_amount = $("#due_amount").val();
+            
+                if (paid_amount == 0){
+                    showError('Please enter paid amount!');
+                    return false;
+                }
+                if (!payment_method){
+                    showError('Please select payment method!');
+                    return false;
+                }
+
+                let data = {
+                    customer_id: $('#customer').val(),
+                    payment_method: payment_method,
+                    sub_total: $('#subtotal').data('subtotal'),
+                    invoice__discount__type: $('#invoice__discount__type').val(),
+                    invoice_discount: $('#invoice_discount').val(),
+                    total_discount: $('#total_discount_ammount').val(),
+                    vat: $('#vat').val(),
+                    tax: $('#tax_amount').val(),
+                    igta: $('#igta_amount').val(),
+                    grand_total: $('#grandTotal').data('grandtotal'),
+                    paid_amount: paid_amount,
+                    due_amount: due_amount,
+                    recieve_amount: $("#recieved_amount").val(),
+                    change_amount: $("#change").val(),
+                }
+
+
+                let batches = document.querySelectorAll('.batch');
+                let expires = document.querySelectorAll('#expire');
+                let emptyBatch = 0;
+                let emptyExpire = 0;
+                batches.forEach(batch => {
+                    if (batch.value ==  null || batch.value == "") {
+                        emptyBatch ++;
+                    }
+                });
+                expires.forEach(expire => {
+
+                    if (expire.value ==  null || expire.value == "") {
+                        emptyExpire ++;
+                    }
+                });
+                if (emptyBatch < 1 && emptyExpire < 1) {
+                    $.post({
+                        url: action,
+                        data: data,
+                        success: function (res) {
+                            if (res.error){
+                                showError(res.message);
+                            }
+                            if (res.success) {
+                                toastr.success(res.message, {
+                                    CloseButton: true,
+                                    ProgressBar: true
+                                });
+                                Swal.fire({
+                                    title: 'Order has been placed successfully!',
+                                    type: 'success',
+                                    showCancelButton: true,
+                                    cancelButtonColor: '#e01313',
+                                    confirmButtonColor: '#161853',
+                                    cancelButtonText: 'Cancel',
+                                    confirmButtonText: 'Print Invoice',
+                                    reverseButtons: true
+                                }).then((result) => {
+                                    if (result.value) {
+                                        window.location.href = res.redirect_url;
+                                    } else {
+                                        window.location.reload()
+                                    }
+                                })
+                            }
+
+                        },
+                    });
+                }else {
+                    showError('Please select batch and expire')
+                }
+
+            } else { 
+                return false;  
+            }
+
+        }
+
     </script>
     
     
