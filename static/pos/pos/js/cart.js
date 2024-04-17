@@ -242,6 +242,7 @@ function setInvoiceDiscount() {
 
 // Calculate grand total
 function calculateGrandTotal() {
+    alert("efuhjkj");
     const invoiceDiscountAmount = $('#total_discount_ammount').val();
     let subTotalField = $('#grandTotal');
     let subtotal = $('#subtotal').data('subtotal');

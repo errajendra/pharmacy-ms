@@ -183,9 +183,10 @@ class StockForm(forms.ModelForm):
         widgets = {
             "category": forms.Select(attrs={"class":"form-control w-auto"}),
             "type": forms.Select(attrs={"class":"form-control w-auto"}),
-            "unit": forms.Select(attrs={"class":"form-control w-auto"}),
+            "manufacture": forms.Select(attrs={"class":"form-control w-auto"}),
             "supplier": forms.Select(attrs={"class":"form-control w-auto"}),
             "vender": forms.Select(attrs={"class":"form-control w-auto"}),
+            "gst": forms.Select(attrs={"class":"form-control w-auto"}),
         }
 
 
@@ -195,9 +196,15 @@ class CategoryForm(forms.ModelForm):
         fields = "__all__"
 
 
-class DrugLeafForm(forms.ModelForm):
+class VenderForm(forms.ModelForm):
     class Meta:
-        model = DrugLeaf
+        model = Vender
+        fields = "__all__"
+
+
+class ManufacturerForm(forms.ModelForm):
+    class Meta:
+        model = Manufacturer
         fields = "__all__"
 
 

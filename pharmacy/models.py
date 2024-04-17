@@ -133,12 +133,12 @@ class Category(BaseModel):
         return str(self.name)
 
 
-class DrugLeaf(BaseModel):
-    leaf_type = models.CharField(max_length=50)
-    number_per_box = models.PositiveIntegerField()
+# class DrugLeaf(BaseModel):
+#     leaf_type = models.CharField(max_length=50)
+#     number_per_box = models.PositiveIntegerField()
 
-    def __str__(self):
-        return str(self.leaf_type)
+#     def __str__(self):
+#         return str(self.leaf_type)
 
 
 class DrugType(BaseModel):
@@ -149,6 +149,20 @@ class DrugType(BaseModel):
 
 
 class DrugUnit(BaseModel):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return str(self.name)
+
+
+class Manufacturer(BaseModel):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return str(self.name)
+
+
+class Vender(BaseModel):
     name = models.CharField(max_length=50)
 
     def __str__(self):
@@ -188,50 +202,47 @@ class Stock(BaseModel):
     type = models.ForeignKey(
         DrugType, null=True, on_delete=models.SET_NULL, blank=True
     )
-    unit = models.ForeignKey(
-        DrugUnit, null=True, on_delete=models.SET_NULL, blank=True,
-        help_text=("1 Unit = 1 Tablet")
-    )
-    supplier = models.ForeignKey(
-        CustomUser, limit_choices_to={'user_type': "Supplier"},
-        related_name="supllier_stocks",
+    manufacture = models.ForeignKey(
+        Manufacturer,
         null=True, on_delete=models.SET_NULL, blank=True
     )
     vender = models.ForeignKey(
-        CustomUser, limit_choices_to={'user_type': "Vender"},
-        related_name="vender_stocks",
+        Vender,
         null=True, on_delete=models.SET_NULL, blank=True
     )
     
     drug_name = models.CharField(max_length=50, verbose_name="Medicine Name")
     generic_drug_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="Medicine Generic Name")
-    strengh = models.CharField(max_length=50, blank=True, null=True, verbose_name="Strength")
-    shelf = models.CharField(max_length=50, blank=True, null=True, verbose_name="Shelf")
+    # strengh = models.CharField(max_length=50, blank=True, null=True, verbose_name="Strength")
+    # shelf = models.CharField(max_length=50, blank=True, null=True, verbose_name="Shelf")
     drug_description = models.TextField(blank=True, max_length=1000, null=True)
     
+    unit = models.PositiveIntegerField(
+        default=1, null=True, blank=True,
+    )
     vat = models.PositiveIntegerField(verbose_name="VAT", blank=True, null=True)
     quantity = models.IntegerField(default="0", blank=True, null=True)
-    manufacture = models.CharField(max_length=50, blank=True, null=True)
-    manufacture_price = models.IntegerField(default="0", blank=True, null=True, verbose_name="Manufacture Price")
-    price = models.IntegerField(default="0", blank=True, null=True, verbose_name="M.R.P")
+    batch = models.CharField(max_length=50, blank=True, null=True)
+    actual_price = models.FloatField(default="0", blank=True, null=True, verbose_name="Actual Price")
+    price = models.FloatField(default="0", blank=True, null=True, verbose_name="M.R.P")
     
     # drug_color = models.CharField(max_length=50, blank=True, null=True)
     # batch_number = models.CharField(max_length=50, blank=True, null=True)
-    igta = models.IntegerField(
+    discount = models.IntegerField(default=0)
+    gst = models.IntegerField(
         # 0, 5, 12, 18, 28
         choices=(
-            (0, 0),
-            (5, 5),
-            (12, 12),
-            (18, 18),
-            (28, 28),
+            (0, "0 %"),
+            (5, "5 %"),
+            (12, "12 %"),
+            (18, "18 %"),
+            (28, "28 %"),
         ),
         verbose_name="GST",
         default="0", blank=True, null=True, 
         help_text='Invoice GST in percentage')
     # hot = models.IntegerField(default="0", blank=True, null=True)
     # globle = models.IntegerField(verbose_name="Globel", default="0", blank=True, null=True)
-    discount = models.IntegerField(default=0)
     # tax = models.FloatField(default="0.0", blank=True, null=True)
     
     valid_from = models.DateTimeField(blank=True, null=True, default=timezone.now)
@@ -346,7 +357,6 @@ class Cart(BaseModel):
     medicine = models.ForeignKey(Stock, on_delete=models.CASCADE, related_name="carts")
     quantity = models.PositiveIntegerField(default=1)
     discount = models.PositiveIntegerField(default=0)
-    batch = models.CharField(max_length=50, null=True, blank=True, default=" ")
     
     class Meta:
         verbose_name = "Cart"
@@ -358,6 +368,15 @@ class Cart(BaseModel):
     @property
     def total_price(self):
         try:
-            return (self.medicine.price * self.quantity) - (self.medicine.price * self.quantity * self.discount / 100)
+            return round((self.medicine.price * self.quantity) - (self.medicine.price * self.quantity * self.discount / 100), 2)
         except:
             return None
+
+
+
+class BillingPOS(BaseModel):
+    custumer = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    details = models.JSONField()
+    
+    def __str__(self) -> str:
+        return str(self.pk)

@@ -30,10 +30,10 @@ urlpatterns=[
     path('admin_user/delete_category/<int:id>/',HODViews.deleteCategory,name='delete_category'), 
     
     
-    path('admin_user/add_drug_leaf/',HODViews.addDrugLeaf, name='add_drug_leaf'), 
-    path('admin_user/manage_drug_leaf/',HODViews.manageDrugLeaf, name='manage_drug_leaf'), 
-    path('admin_user/edit_drug_leaf/<int:id>/',HODViews.editDrugLeaf, name='edit_drug_leaf'), 
-    path('admin_user/delete_drug_leaf/<int:id>/',HODViews.deleteDrugLeaf, name='delete_drug_leaf'), 
+    path('admin_user/add_manufacturer/',HODViews.addManufacturer, name='add_manufacturer'), 
+    path('admin_user/manage_manufacturer/',HODViews.manageManufacturer, name='manage_manufacturer'), 
+    path('admin_user/edit_manufacturer/<int:id>/',HODViews.editManufacturer, name='edit_manufacturer'), 
+    path('admin_user/delete_manufacturer/<int:id>/',HODViews.deleteManufacturer, name='delete_manufacturer'), 
     
     # Vender Views Urls
     path('admin_user/add_vender/',HODViews.addVender, name='add_vender'), 

@@ -56,6 +56,7 @@ def add_to_cart(request):
         Cart.objects.create(
             user = user,
             medicine = medicine,
+            discount = medicine.discount
         )
         return JsonResponse(
             {
@@ -81,6 +82,7 @@ def load_cart_items(request):
             safe=False
         )
 
+
 def cart_item_update(request):
     """ Cart Items of perticular user """
     if request.method == 'POST':
@@ -88,26 +90,37 @@ def cart_item_update(request):
         
         quantity = request.POST.get("quantity")
         discount = request.POST.get("discount")
-        batch = request.POST.get("batch")
-        print(quantity, discount, batch)
+        
         cart.quantity = quantity
         cart.discount = discount
-        cart.batch = batch
         cart.save()
         
         cart = Cart.objects.get(id=cart.id)
         user = cart.user
         user_cart_total_price = get_total_cart_value(user)
-        print(cart.total_price)
+        
         return JsonResponse(
             {
                 "status": 200,
                 "quantity": quantity,                
-                "discount": discount,                
-                "batch": batch,
+                "discount": discount,
                 "price": cart.total_price,   
                 "total_cart_price": user_cart_total_price,            
                 "message": "Successfully Updated",
+            },
+            safe=False
+        )
+
+
+def cart_item_delete(request):
+    """ Cart Items of perticular user """
+    if request.method == 'POST':
+        cart = get_object_or_404(Cart, id=request.POST.get('cart_id', None))
+        cart.delete()
+        return JsonResponse(
+            {
+                "status": 200,         
+                "message": "Successfully Deleted.",
             },
             safe=False
         )

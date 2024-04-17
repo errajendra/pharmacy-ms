@@ -1,5 +1,5 @@
 {% extends 'hod_templates/base_template.html'%} {% block page_title %}
-<h5>Manage Venders</h5>
+<h5>Manage Manufacturers</h5>
 
 {% endblock page_title %} {% block main_content %}
 <section class="content">
@@ -39,7 +39,7 @@
 
             <div class="card manage sc">
                 <div class="card-header">
-                    <span>Manage Venders</span>
+                    <span>Manage Manufacturer</span>
                     <div class="card-tools d-flex">
                         <!--                
                     <div class="input-group input-group-sm" style="width: 150px;">
@@ -51,7 +51,7 @@
                         <!-- <input type="search" name="search" id="filter" class="form-control float-right" placeholder="Search"> -->
 
 
-                        <a class="btn btn-sm btn-info mr-2" href="{% url 'add_vender' %}" role="button">+ Add New Vender</a>
+                        <a class="btn btn-sm btn-info mr-2" href="{% url 'add_manufacturer' %}" role="button">+ Add New Vender</a>
 
                     </div>
 
@@ -67,15 +67,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for vender in venders %}
+                        {% for manufacturer in manufacturers %}
                         <tr class="hov">
                             <td>{{forloop.counter}}</td>
-                            <td>{{vender.name}}</td>
+                            <td>{{manufacturer.name}}</td>
 
                             <!-- End Expire -->
                             <td class="d-flex justify-content-center">
-                                <a href="{%url 'edit_vender' vender.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
-                                <a href="{%url 'delete_vender' vender.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
+                                <a href="{%url 'edit_manufacturer' manufacturer.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
+                                <a href="{%url 'delete_manufacturer' manufacturer.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
                             </td>
 
                         </tr>

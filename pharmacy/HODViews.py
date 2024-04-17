@@ -295,7 +295,7 @@ def manageStock(request):
         "stocks": eo,
         # "expired": ex,
         "expa": eo,
-        "title": "Manage Stocked Drugs",
+        "title": "Manage Stocked Medicines",
     }
 
     return render(request, "hod_templates/manage_stock.html", context)
@@ -358,45 +358,45 @@ def deleteCategory(request, id):
     return redirect("manage_category")
 
 
-# Drug Leaf
-def manageDrugLeaf(request):
-    drug_leafs = DrugLeaf.objects.all().order_by("-id")
+# Manufacturer
+def manageManufacturer(request):
+    manufacturers = Manufacturer.objects.all().order_by("-id")
     context = {
-        "drug_leafs": drug_leafs,
+        "manufacturers": manufacturers,
         "title": "Manage Drugs Leaf",
     }
-    return render(request, "hod_templates/manage_drug_leaf.html", context)
+    return render(request, "hod_templates/manage_manufacturer.html", context)
 
 
-def addDrugLeaf(request):
-    form = DrugLeafForm(request.POST or None)
+def addManufacturer(request):
+    form = ManufacturerForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
             form.save()
-            messages.success(request, "DrugLeaf added Successfully!")
+            messages.success(request, "Manufacturer added Successfully!")
 
-            return redirect("manage_drug_leaf")
-    context = {"form": form, "title": "Add a New Drug DrugLeaf"}
+            return redirect("manage_manufacturer")
+    context = {"form": form, "title": "Add a New Drug Manufacturer"}
     return render(request, "hod_templates/add_category.html", context)
 
 
-def editDrugLeaf(request, id):
-    cat = get_object_or_404(DrugLeaf, id=id)
-    form = DrugLeafForm(instance=cat, data=request.POST or None)
+def editManufacturer(request, id):
+    cat = get_object_or_404(Manufacturer, id=id)
+    form = ManufacturerForm(instance=cat, data=request.POST or None)
     if request.method == "POST":
         if form.is_valid():
             form.save()
-            messages.success(request, "DrugLeaf Updated Successfully!")
+            messages.success(request, "Manufacturer Updated Successfully!")
 
-            return redirect("manage_drug_leaf")
-    context = {"form": form, "title": "Update Drug DrugLeaf"}
+            return redirect("manage_manufacturer")
+    context = {"form": form, "title": "Update Drug Manufacturer"}
     return render(request, "hod_templates/add_category.html", context)
 
 
-def deleteDrugLeaf(request, id):
-    cat = get_object_or_404(DrugLeaf, id=id)
+def deleteManufacturer(request, id):
+    cat = get_object_or_404(Manufacturer, id=id)
     cat.delete()
-    return redirect("manage_drug_leaf")
+    return redirect("manage_manufacturer")
 
 
 # Drug Type
@@ -926,9 +926,9 @@ def purchased_invoice_detail(request, pk):
 # Billing POS
 def billingPOS(request):
     drugs = Stock.objects.prefetch_related().all()
-    categories = drugs.values_list('category', flat=True)
+    # categories = drugs.values_list('category', flat=True)
     categories = Category.objects.all()
-    venders = CustomUser.objects.filter(user_type='Vender')
+    venders = Vender.objects.all()
     custumers = CustomUser.objects.filter(user_type="Pharmacist")
     context = {
         "drugs": drugs,
@@ -941,7 +941,7 @@ def billingPOS(request):
 
 # Manage Vender
 def manageVender(request):
-    venders = CustomUser.objects.filter(user_type="Vender").order_by("-id")
+    venders = Vender.objects.all()
     context = {
         "venders": venders,
         "title": "Manage Vensers",
@@ -950,7 +950,7 @@ def manageVender(request):
 
 
 def addVender(request):
-    form = AddUserForm(request.POST or None)
+    form = VenderForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
             form.instance.user_type = "Vender"
@@ -963,8 +963,8 @@ def addVender(request):
 
 
 def editVender(request, id):
-    cat = get_object_or_404(CustomUser, id=id)
-    form = AddUserForm(instance=cat, data=request.POST or None)
+    cat = get_object_or_404(Vender, id=id)
+    form = VenderForm(instance=cat, data=request.POST or None)
     if request.method == "POST":
         if form.is_valid():
             form.save()
@@ -976,7 +976,7 @@ def editVender(request, id):
 
 
 def deleteVender(request, id):
-    cat = get_object_or_404(CustomUser, id=id)
+    cat = get_object_or_404(Vender, id=id)
     cat.delete()
     return redirect("manage_vender")
 

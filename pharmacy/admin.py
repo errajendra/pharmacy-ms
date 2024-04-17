@@ -46,14 +46,21 @@ admin.site.register(Patients,PatientsAdmin)
 admin.site.register(Pharmacist)
 admin.site.register(AdminHOD)
 admin.site.register(Stock)
-admin.site.register(Category)
 admin.site.register(Doctor)
 admin.site.register(PharmacyClerk)
 admin.site.register(Prescription)
 admin.site.register(Dispense)
 admin.site.register(PatientFeedback)
 admin.site.register(SellInvoice)
-admin.site.register(PurchasedInvoice)
+
+class NameAdmin(admin.ModelAdmin):
+    list_display = ("name", "created_at")
+
+admin.site.register(Manufacturer, NameAdmin)
+admin.site.register(Vender, NameAdmin)
+admin.site.register(Category, NameAdmin)
+admin.site.register(DrugType, NameAdmin)
+admin.site.register(DrugUnit, NameAdmin)
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
