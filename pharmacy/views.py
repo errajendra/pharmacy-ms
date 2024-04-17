@@ -20,13 +20,14 @@ def loginPage(request):
         # user=authenticate(request,username=username,password=password)
         try:
             user = CustomUser.objects.get(username=username)
-            user.set_password(password)
-            user.save()
+            # user.set_password(password)
+            # user.save()
             if not user.check_password(password):
                 user = None
         except:
             user = None
         if user:
+            login(request, user)
             user_type = user.user_type
             if user_type == 'AdminHOD':
                 return redirect('admin_dashboard')
