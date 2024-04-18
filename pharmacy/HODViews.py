@@ -279,7 +279,7 @@ def upload_medicine_bulk_by_csv(request):
             try:
                 cat, _md_type_created = Category.objects.get_or_create(name=column[0].strip())
                 vender, _md_vender_created = Vender.objects.get_or_create(name=column[11].strip())
-                manufacturer, _md_manufacturer_created = Manufacturer.objects.get_or_create(name=column[12].strip())
+                # manufacturer, _md_manufacturer_created = Manufacturer.objects.get_or_create(name=column[12].strip())
                 med = Stock(
                     category=cat,
                     drug_name=column[1],
@@ -292,7 +292,7 @@ def upload_medicine_bulk_by_csv(request):
                     batch = column[8],
                     valid_to = datetime.strptime(f"01/{column[9]}", "%d/%m/%y"),
                     vender = vender,
-                    manufacturer = manufacturer,
+                    # manufacturer = manufacturer,
                 )
                 medicines_to_create.append(med)
             except Exception as e:
