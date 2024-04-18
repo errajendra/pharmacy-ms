@@ -65,6 +65,7 @@
                             <th>Category</th>
                             <th>Type</th>
                             <th>Unit</th>
+                            <th>Batch</th>
                             <th>Manufacturer</th>
                             <th>Vender</th>
                             <th>Quantity</th>
@@ -84,6 +85,7 @@
                             <td>{{stock.category}}</td>
                             <td> {% if stock.type %} {{stock.type}} {% endif %} </td>
                             <td> {% if stock.unit %} {{stock.unit}} {% endif %} </td>
+                            <td> {% if stock.batch %} {{stock.batch}} {% endif %} </td>
                             <td> {% if stock.manufacture %} {{stock.manufacture}} {% endif %} </td>
                             <td> {% if stock.vender %} {{stock.vender}} {% endif %} </td>
                             <td>

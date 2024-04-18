@@ -2,7 +2,7 @@ from django.http.response import JsonResponse
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
-from ..models import Stock, CustomUser as User, Cart
+from ..models import Stock, CustomUser as User, Cart, BillingPOS
 
 
 
@@ -124,3 +124,63 @@ def cart_item_delete(request):
             },
             safe=False
         )
+
+
+
+""" Place Order from POS Billing Page. """
+def place_order_poc_billing(request):
+    if request.method == 'POST':
+        try:
+            data = request.POST
+            message = "OK"
+            
+            custumer = get_object_or_404(User, id=data['customer_id'])
+            sub_total = data['sub_total']
+            invoice_discount_type = data['invoice_discount_type']
+            invoice_discount = data['invoice_discount']
+            total_discount = data['total_discount']
+            tax_percent = data['tax_percent']
+            grand_total = data['grand_total']
+            
+            custumer_cart_items = custumer.cart_items.all()
+            order_details = []
+            for cart in custumer_cart_items:
+                order_details.append(
+                    {
+                        "medicine_id": cart.medicine.id,
+                        "medicine": cart.medicine.drug_name,
+                        "medicine_batch": cart.medicine.batch,
+                        "quantity": cart.quantity,
+                        "discount": f"{cart.discount} %",
+                        "total": cart.total_price
+                    }
+                )
+            
+            order_data = {
+                "sub_total": sub_total,
+                "invoice_discount_type": invoice_discount_type,
+                "invoice_discount_value": invoice_discount,
+                "total_discount": total_discount,
+                "tax_percent": tax_percent,
+                "grand_total": grand_total,
+                "item_details": order_details,            
+            }
+            # Create order here
+            order = BillingPOS.objects.create(
+                custumer = custumer,
+                details = order_data
+            )
+            
+            bill_slip_url = f"billing/{order.id}/print/"
+            data = {
+                "status": 200,
+                "message": message,
+                "bill_slip_url": bill_slip_url,
+            }
+            return JsonResponse(data)
+        
+        except Exception as ex:
+            print(ex)
+            return JsonResponse({"status":500, "message": "Internal Server Error", "error": f"{ex}"}, status=500)
+        
+    return JsonResponse({"status":405, "message": "Method Not allowed"}, status=405)

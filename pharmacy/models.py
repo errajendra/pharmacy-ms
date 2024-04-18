@@ -127,7 +127,7 @@ class Patients(BaseModel):
 
 
 class Category(BaseModel):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return str(self.name)
@@ -142,7 +142,7 @@ class Category(BaseModel):
 
 
 class DrugType(BaseModel):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return str(self.name)
@@ -156,14 +156,14 @@ class DrugUnit(BaseModel):
 
 
 class Manufacturer(BaseModel):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return str(self.name)
 
 
 class Vender(BaseModel):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return str(self.name)

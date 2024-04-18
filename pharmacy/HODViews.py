@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .decorators import *
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import datetime
-import inflect
+import inflect, io, csv
 
 from .forms import *
 from .models import *
@@ -257,6 +257,52 @@ def managePharmacyClerk(request):
     context = {"staffs": staffs, "title": "Manage PharmacyClerk"}
 
     return render(request, "hod_templates/manage_pharmacyClerk.html", context)
+
+
+""" Upload medicine in bulk through csv. """
+def upload_medicine_bulk_by_csv(request):
+    if request.method == "POST":
+        
+        csv_file = request.FILES['file']
+        
+        # let's check if it is a csv file
+        if not csv_file.name.endswith('.csv'):
+            messages.error(request, 'THIS IS NOT A CSV FILE')
+            
+        data_set = csv_file.read().decode('UTF-8')
+        
+        # setup a stream which is when we loop through each line we are able to handle a data in a stream    
+        io_string = io.StringIO(data_set)
+        next(io_string)
+        medicines_to_create = []
+        for column in csv.reader(io_string, delimiter=',', quotechar="|"):
+            try:
+                cat, _md_type_created = Category.objects.get_or_create(name=column[0].strip())
+                vender, _md_vender_created = Vender.objects.get_or_create(name=column[11].strip())
+                manufacturer, _md_manufacturer_created = Manufacturer.objects.get_or_create(name=column[12].strip())
+                med = Stock(
+                    category=cat,
+                    drug_name=column[1],
+                    generic_drug_name=column[2],
+                    drug_description=column[3],
+                    unit = column[4],
+                    quantity = column[5],
+                    price = column[6],
+                    actual_price = column[7],
+                    batch = column[8],
+                    valid_to = datetime.strptime(f"01/{column[9]}", "%d/%m/%y"),
+                    vender = vender,
+                    manufacturer = manufacturer,
+                )
+                medicines_to_create.append(med)
+            except Exception as e:
+                break
+        Stock.objects.bulk_create(objs=medicines_to_create, batch_size=50, ignore_conflicts=True)
+        messages.success(request, f"{len(medicines_to_create)} medicines added successfuly.")
+    context = {
+        "title": "Upload Medicines by CSV"
+    }
+    return render(request, "hod_templates/upload_medicines_by_csv.html", context)
 
 
 def addStock(request):
@@ -937,6 +983,16 @@ def billingPOS(request):
         "custumers": custumers
     }
     return render(request, "pos/pos.html", context)
+
+
+#  Billing Print POS
+def billingPrintPOS(request, id, action=None):
+    bill = get_object_or_404(BillingPOS, id=id)
+    context = {
+        "bill": bill
+    }
+    return render(request, "pos/bill-print.html", context)
+
 
 
 # Manage Vender

@@ -20,6 +20,8 @@ urlpatterns=[
     path('admin_user/add_pharmacyClerk/',HODViews.createPharmacyClerk,name='add_pharmacyClerk'),
     path('admin_user/admin_user/manage_pharmacyClerk/',HODViews.managePharmacyClerk,name='manage_pharmacyClerk'),
     
+    path('admin_user/add-medines-bulk-by-csv/',HODViews.upload_medicine_bulk_by_csv,name='upload_medicine_bulk_by_csv'),
+    
     path('admin_user/add_stock/',HODViews.addStock,name='add_stock'),
     path('admin_user/manage_stock/',HODViews.manageStock,name='manage_stock'),  
     path('admin_user/manage-stock-expired/',HODViews.manageStockExpirerd, name='manage_stock_expired'), 
@@ -83,6 +85,7 @@ urlpatterns=[
     path('admin_user/drug_details/<str:pk>/', HODViews.drugDetails, name="drug_detail"),
     
     path('admin_user/pos/', HODViews.billingPOS, name="pos"),
+    path('admin_user/pos/billing/<int:id>/print/', HODViews.billingPrintPOS, name="pos-billing-print"),
 
     # parched invoice list
     path('admin_user/parched_invoice/', HODViews.purchased_invoice_list, name="parched_invoice_list"),

@@ -24,6 +24,7 @@ function calculateGrandTotal() {
     const total = dicounted_sub_total + tax;
 
     subTotalField.val(amountFormatted(total));
+    subTotalField.data('grandtotal', amountFormatted(total));
     $('#net_total_text').text(amountFormatted(total));
     $('#n_total').val(amountFormatted(total));
 }
