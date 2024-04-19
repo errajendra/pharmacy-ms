@@ -351,6 +351,7 @@
                                                 </label>
                                                 <div class="col-5 col-sm-5 col-lg-5 col-xl-3">
                                                     <input id="tax_amount" tabindex="-1" onkeyup="calculateGrandTotal()" onchange="calculateGrandTotal()" class="form-control gui-foot text-right valid totalTax valid_number" name="gst_tax_amount" value="0.00" type="number">
+                                                    <small class="float-right" id="taxAmount"></small>
                                                 </div>
                                             </div>
                                         </div>
@@ -780,6 +781,7 @@
                 const customer_id = $("#customer").find(":selected").val();
                 const paid_amount = $('#paidAmount').val();
                 const due_amount = $("#due_amount").val();
+                const tax = $("#taxAmount").text();
                 
                 var grand_total = $('#grandTotal').data('grandtotal'); // Final amount or Net Pay
             
@@ -791,6 +793,7 @@
                     total_discount: $('#total_discount_ammount').val(), // Discounted value
 
                     tax_percent: $('#tax_amount').val(), // tax percentage input applied on 
+                    tax: tax,
                     grand_total: grand_total, // Final amount or Net Pay
                     
                     csrfmiddlewaretoken: '{{ csrf_token }}',

@@ -21,6 +21,7 @@ function calculateGrandTotal() {
     let taxValue = taxInputAmount == '' ? 0 : taxInputAmount;
     const tax = (dicounted_sub_total * parseInt(taxValue)) / 100;
     // const totatVatTax = !isNaN(tax) ? tax : 0;
+    $('#taxAmount').text((tax).toFixed(2));
     const total = dicounted_sub_total + tax;
 
     subTotalField.val(amountFormatted(total));

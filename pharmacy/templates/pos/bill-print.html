@@ -1,3 +1,125 @@
-{{bill.custumer.get_full_name}}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Medical Billing Slip</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+		}
+		table {
+			margin: 0 auto;
+			font-family: Arial, sans-serif;
+			border-collapse: collapse;
+			width: -webkit-fill-available;
+		}
+		th, td {
+			border: 1px solid #dddddd;
+			padding: 8px;
+			text-align: left;
+		}
+		tr:nth-child(even) {
+			background-color: #dddddd;
+		}
+		h1, p {
+			text-align: center;
+		}
+		#company-details {
+			float: left;
+			width: 30%;
+		}
+		#customer-details {
+			float: right;
+			width: 30%;
+		}
+		#purchase-details {
+			clear: both;
+		}
+		@media print {
+			@page {
+				size: A4;
+				margin: 0;
+			}
+			body {
+				margin: 1.6cm;
+				font-size: 12pt;
+				line-height: 1.2;
+			}
+			table {
+				font-size: 10pt;
+			}
+			h1, h2 {
+				page-break-after: avoid;
+			}
+			p, table {
+				page-break-inside: avoid;
+			}
+		}
+	</style>
+</head>
+<body>
+	<h1>Medical Billing Slip</h1>
+	<h3>Bill No: {{bill.id}}</h3>
+	<div id="company-details">
+		<h2>Wooshelf Pharmacy</h2>
+		<p>Name: XYZ Medical Supplies</p>
+		<p>Address: 123 Main Street, Noida, UP</p>
+		<p>Contact: +91 9876451236</p>
+	</div>
+	<div id="customer-details">
+		<h2>Customer Details</h2>
+		<p>Name: {{bill.custumer.get_full_name}} </p>
+		{% comment %} <p>Address: 456 Elm Street, Anytown, USA</p> {% endcomment %}
+		<p>Contact: {{bill.custumer.email}} </p>
+	</div>
+	<div id="purchase-details">
+		<h2>Purchase Details</h2>
+		<table>
+			<tr>
+				<th>SN</th>
+				<th>Medicine</th>
+				<th>Batch</th>
+				<th>Quantity</th>
+				<th>Price</th>
+				<th>Discount</th>
+				<th>Total Price</th>
+			</tr>
+            {% for medicine in bill.details.item_details %}
+			<tr>
+                <td> {{forloop.counter}} </td>
+				<td>{{medicine.medicine}} </td>
+				<td>{{medicine.medicine_batch}} </td>
+				<td>{{medicine.quantity}} </td>
+				<td>{{medicine.price}} </td>
+				<td>{{medicine.discount}} </td>
+				<td>{{medicine.total}} </td>
+			</tr>
+            {% endfor %}
+            <tr >
+                <td colspan="7"></td>
+            </tr>
+			<tr style="background: #dddddd;">
+				<th colspan="6">Sub Total</th>
+				<th>{{bill.details.sub_total}} </th>
+			</tr>
+            {% if bill.details.invoice_discount_value %}
+			<tr style="background: #dddddd;">
+				<th colspan="6">Discount ({{bill.details.invoice_discount_value}}  {{bill.details.invoice_discount_type}})</th>
+				<th> {{bill.details.total_discount}} </th>
+			</tr>
+            {% endif %}
+			<tr style="background: #dddddd;">
+				<th colspan="6">Tax ({{bill.details.tax_percent}}%)</th>
+				<th>{{bill.details.tax}} </th>
+			</tr>
+			<tr style="background: #dddddd;">
+				<th colspan="6">Net Pay</th>
+				<th> {{bill.details.grand_total}} </th>
+			</tr>
+		</table>
 
-{{bill.details|safe}}
+		<h4>Thankyou</h4>
+        <button onclick="window.print()">Print</button>
+	</div>
+</body>
+</html>

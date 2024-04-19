@@ -141,6 +141,7 @@ def place_order_poc_billing(request):
             total_discount = data['total_discount']
             tax_percent = data['tax_percent']
             grand_total = data['grand_total']
+            tax = data['tax']
             
             custumer_cart_items = custumer.cart_items.all()
             order_details = []
@@ -149,6 +150,7 @@ def place_order_poc_billing(request):
                     {
                         "medicine_id": cart.medicine.id,
                         "medicine": cart.medicine.drug_name,
+                        "price": cart.medicine.price,
                         "medicine_batch": cart.medicine.batch,
                         "quantity": cart.quantity,
                         "discount": f"{cart.discount} %",
@@ -162,6 +164,7 @@ def place_order_poc_billing(request):
                 "invoice_discount_value": invoice_discount,
                 "total_discount": total_discount,
                 "tax_percent": tax_percent,
+                "tax": tax,
                 "grand_total": grand_total,
                 "item_details": order_details,            
             }
@@ -169,7 +172,7 @@ def place_order_poc_billing(request):
             order = BillingPOS.objects.create(
                 custumer = custumer,
                 details = order_data
-            )
+            ) 
             
             bill_slip_url = f"billing/{order.id}/print/"
             data = {
