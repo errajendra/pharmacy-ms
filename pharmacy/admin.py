@@ -67,3 +67,9 @@ class CartAdmin(admin.ModelAdmin):
     list_display = ('user', 'medicine', 'quantity', 'updated_at')
     list_filter = ('updated_at', 'quantity')
     search_fields = ('user__first_name', 'user__last_name', 'user__username')
+
+
+@admin.register(Addmission)
+class AddmissionAdmin(admin.ModelAdmin):
+    list_display = ("patient", "purpose", "department", "doctor", "reason", "created_at")
+    list_filter = ("department", "purpose", "created_at")

@@ -82,6 +82,25 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Department</label>
+                                    <div class="input-group">
+                                        <span class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <i class="fas fa-envelope"></i>
+                                            </span>
+                                        </span>
+                                        <select name="department" class="form-control select form-select" id="id_department">
+                                            <option value="" selected >--Select-- </option>
+                                            {% for d in departments %}
+                                            <option value="{{d.id}}">{{d}} </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <hr>
                         <h5>Contact Information</h5>

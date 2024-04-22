@@ -16,6 +16,15 @@ class BaseModel(models.Model):
         abstract = True
 
 
+
+class Department(BaseModel):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return str(self.name)
+
+
+
 class CustomUser(AbstractUser):
     user_type_data = (
         ("AdminHOD", "AdminHOD"), #1
@@ -24,7 +33,7 @@ class CustomUser(AbstractUser):
         ("Supplier", "Supplier"),
         ("Vender", "Vender"),
         ("PharmacyClerk", "PharmacyClerk"),
-        ("Patients", "Patients"),
+        ("Patients", "Patients"), # Custumer
     )
     user_type = models.CharField(default="AdminHOD", choices=user_type_data, max_length=20)
 
@@ -71,6 +80,7 @@ class Doctor(BaseModel):
         ("Female", "Female"),
     )
     admin = models.OneToOneField(CustomUser, null=True, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
     emp_no = models.CharField(max_length=100, null=True, blank=True)
     age = models.IntegerField(default="0", blank=True, null=True)
     gender = models.CharField(max_length=100, null=True, choices=gender_category)
@@ -113,12 +123,13 @@ class Patients(BaseModel):
     )
     first_name = models.CharField(max_length=20, null=True, blank=True)
     last_name = models.CharField(max_length=20, null=True, blank=True)
-    dob = models.DateTimeField(
-        auto_now_add=False, auto_now=False, null=True, blank=True
+    age = models.CharField(
+        max_length=2,
+        choices=[(i, i) for i in range(100)], null=True, blank=True
     )
     phone_number = models.CharField(max_length=10, null=True, blank=True)
     profile_pic = models.ImageField(default="patient.jpg", null=True, blank=True)
-    age = models.IntegerField(default="0", blank=True, null=True)
+    age = models.PositiveIntegerField(default="0", blank=True, null=True)
     address = models.CharField(max_length=300, null=True, blank=True)
 
     def __str__(self):
@@ -174,6 +185,28 @@ class Prescription(BaseModel):
     patient_id = models.ForeignKey(Patients, null=True, on_delete=models.SET_NULL)
     description = models.TextField(null=True)
     prescribe = models.CharField(max_length=100, null=True)
+    
+    def __str__(self) -> str:
+        return f"{self.pk}"
+
+
+
+class Addmission(BaseModel):
+    patient = models.ForeignKey(Patients, on_delete=models.SET_NULL, null=True, blank=True)
+    purpose = models.CharField(
+        choices=(
+            ("OPD", "OPD"),
+            ("Bed Addmission", "Bed Addmission"),
+        ),
+        max_length=20, default="OPD"
+    )
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
+    doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True)
+    reason = models.CharField(max_length=100, null=True, blank=True)
+    
+    def __str__(self) -> str:
+        return f"{self.patient}"
+
 
 
 class ExpiredManager(models.Manager):

@@ -67,16 +67,16 @@ def createPatient(request):
             password = form.cleaned_data["password"]
             address = form.cleaned_data["address"]
             phone_number = form.cleaned_data["phone_number"]
-            dob = form.cleaned_data["dob"]
+            # dob = form.cleaned_data["dob"]
             gender = form.cleaned_data["gender"]
-            doctor = form.cleaned_data["doctor"]
+            # doctor = form.cleaned_data["doctor"]
             # print(type(doctor), doctor, doctor.id)
             # if doctor:
             #     try:
             #         doctor = Doctor.objects.get(username=doctor)
             #     except:
             #         doctor = None
-            print(doctor)
+            # print(doctor)
 
             user = CustomUser.objects.create_user(
                 username=username,
@@ -87,8 +87,8 @@ def createPatient(request):
             )
             user.patients.address = address
             user.patients.phone_number = phone_number
-            user.patients.dob = dob
-            user.patients.doctor = doctor
+            # user.patients.dob = dob
+            # user.patients.doctor = doctor
             user.patients.first_name = first_name
             user.patients.last_name = last_name
             user.patients.gender = gender
@@ -185,6 +185,7 @@ def createDoctor(request):
         address = request.POST.get("address")
         mobile = request.POST.get("mobile")
         password = request.POST.get("password")
+        department = request.POST.get("department")
 
         try:
             user = CustomUser.objects.create_user(
@@ -197,6 +198,9 @@ def createDoctor(request):
             )
             user.doctor.address = address
             user.doctor.mobile = mobile
+            if department:
+                department = Department.objects.get(id=department)
+            user.doctor.department = department
 
             user.save()
             messages.success(request, "Staff Added Successfully!")
@@ -205,7 +209,10 @@ def createDoctor(request):
             messages.error(request, "Failed to Add Staff!")
             return redirect("add_doctor")
 
-    context = {"title": "Add Doctor"}
+    context = {
+        "title": "Add Doctor",
+        "departments": Department.objects.all()
+    }
 
     return render(request, "hod_templates/add_doctor.html", context)
 
@@ -364,6 +371,7 @@ def manageStockExpirerd(request):
 
 
 
+# Category View
 def manageCategory(request):
     categories = Category.objects.all().order_by("-id")
     context = {
@@ -402,6 +410,48 @@ def deleteCategory(request, id):
     cat = get_object_or_404(Category, id=id)
     cat.delete()
     return redirect("manage_category")
+
+
+# Department View
+def manageDepartment(request):
+    departments = Department.objects.all().order_by("-id")
+    context = {
+        "departments": departments,
+        "title": "Manage Department",
+    }
+    return render(request, "hod_templates/manage_department.html", context)
+
+
+def addDepartment(request):
+    form = DepartmentForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Department added Successfully!")
+
+            return redirect("manage_department")
+    context = {"form": form, "title": "Add a New Department"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+def editDepartment(request, id):
+    cat = get_object_or_404(Department, id=id)
+    form = DepartmentForm(instance=cat, data=request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Department Updated Successfully!")
+
+            return redirect("manage_department")
+    context = {"form": form, "title": "Update Department"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+def deleteDepartment(request, id):
+    cat = get_object_or_404(Department, id=id)
+    cat.delete()
+    return redirect("manage_department")
+
 
 
 # Manufacturer
@@ -554,7 +604,7 @@ def editPatient(request, patient_id):
     form.fields["address"].initial = patient.address
     form.fields["gender"].initial = patient.gender
     form.fields["phone_number"].initial = patient.phone_number
-    form.fields["dob"].initial = patient.dob
+    form.fields["age"].initial = patient.age
     if request.method == "POST":
         if patient_id == None:
             return redirect("all_patients")
@@ -567,7 +617,7 @@ def editPatient(request, patient_id):
             last_name = form.cleaned_data["last_name"]
             address = form.cleaned_data["address"]
             gender = form.cleaned_data["gender"]
-            dob = form.cleaned_data["dob"]
+            age = form.cleaned_data["age"]
             phone_number = form.cleaned_data["phone_number"]
 
             try:
@@ -582,7 +632,7 @@ def editPatient(request, patient_id):
                 patients_edit = Patients.objects.get(admin=patient_id)
                 patients_edit.address = address
                 patients_edit.gender = gender
-                patients_edit.dob = dob
+                patients_edit.age = age
                 patients_edit.phone_number = phone_number
                 patients_edit.first_name = first_name
                 patients_edit.last_name = last_name
@@ -739,6 +789,7 @@ def editDoctor(request, doctor_id):
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
         address = request.POST.get("address")
+        department = request.POST.get("department", None)
 
         # INSERTING into Customuser Model
         user = CustomUser.objects.get(id=doctor_id)
@@ -751,11 +802,18 @@ def editDoctor(request, doctor_id):
         # INSERTING into Staff Model
         staff = Doctor.objects.get(admin=doctor_id)
         staff.address = address
+        if department:
+            department = Department.objects.get(id=department)
+            staff.department = department
         staff.save()
 
         messages.success(request, "Staff Updated Successfully.")
 
-    context = {"staff": staff, "title": "Edit Doctor"}
+    context = {
+        "staff": staff, 
+        "title": "Edit Doctor",
+        "departments": Department.objects.all()
+    }
     return render(request, "hod_templates/edit_doctor.html", context)
 
 
@@ -1200,3 +1258,47 @@ def purchase_history(request):
         "all_history": all_history
     }
     return render(request, "hod_templates/purchase/purchase_history.html", context)
+
+
+
+
+# Patient Addmission
+def manageAddmission(request):
+    addmissions = Addmission.objects.all().order_by("-id")
+    context = {
+        "addmissions": addmissions,
+        "title": "Manage Patient Addmission",
+    }
+    return render(request, "hod_templates/manage_addmission.html", context)
+
+
+def addAddmission(request):
+    form = AddmissionForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Patient Addmission added Successfully!")
+
+            return redirect("manage_addmission")
+    context = {"form": form, "title": "New Patient Addmission"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+def editAddmission(request, id):
+    cat = get_object_or_404(Addmission, id=id)
+    form = AddmissionForm(instance=cat, data=request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Patient Addmission Updated Successfully!")
+
+            return redirect("manage_addmission")
+    context = {"form": form, "title": "Update Addmission"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+def deleteAddmission(request, id):
+    cat = get_object_or_404(Addmission, id=id)
+    cat.delete()
+    return redirect("manage_addmission")
+

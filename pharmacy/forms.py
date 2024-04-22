@@ -46,11 +46,11 @@ class PatientForm(forms.Form):
         max_length=50,
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
     )
-    doctor = forms.ModelChoiceField(
-        label="Doctor",
-        queryset=Doctor.objects.all(),
-        widget=forms.Select(attrs={"class": "form-control"}),
-    )
+    # doctor = forms.ModelChoiceField(
+    #     label="Doctor",
+    #     queryset=Doctor.objects.all(),
+    #     widget=forms.Select(attrs={"class": "form-control"}),
+    # )
     first_name = forms.CharField(
         label="First Name",
         max_length=50,
@@ -73,8 +73,13 @@ class PatientForm(forms.Form):
         choices=gender_list,
         widget=forms.Select(attrs={"class": "form-control"}),
     )
-    dob = forms.DateField(
-        label="dob", widget=DateInput(attrs={"class": "form-control"})
+    # dob = forms.DateField(
+    #     label="dob", widget=DateInput(attrs={"class": "form-control"})
+    # )
+    age = forms.ChoiceField(
+        choices=[(i, i) for i in range(100)],
+        label="Age",
+        widget=forms.Select(attrs={"class": "form-control"})
     )
 
     # Validations for patient
@@ -161,8 +166,13 @@ class EditPatientForm(forms.Form):
         choices=gender_list,
         widget=forms.Select(attrs={"class": "form-control"}),
     )
-    dob = forms.DateField(
-        label="dob", widget=DateInput(attrs={"class": "form-control"})
+    # dob = forms.DateField(
+    #     label="dob", widget=DateInput(attrs={"class": "form-control"})
+    # )
+    age = forms.ChoiceField(
+        choices=[(i, i) for i in range(100)],
+        label="Age",
+        widget=forms.Select(attrs={"class": "form-control"})
     )
 
 
@@ -194,6 +204,14 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = "__all__"
+
+
+
+class DepartmentForm(forms.ModelForm):
+    class Meta:
+        model = Department
+        fields = "__all__"
+
 
 
 class VenderForm(forms.ModelForm):
@@ -337,4 +355,17 @@ class AddUserForm(ModelForm):
             "last_name": forms.TextInput(attrs={"class": "form-control"}),
             "email": forms.EmailInput(attrs={"class": "form-control"}),
             "password": forms.PasswordInput(attrs={"class": "form-control"}),
+        }
+
+
+class AddmissionForm(ModelForm):
+    class Meta:
+        model = Addmission
+        fields = "__all__"
+        
+        widgets = {
+            "patient": forms.Select(attrs={"class":"form-control"}),
+            "doctor": forms.Select(attrs={"class":"form-control"}),
+            "department": forms.Select(attrs={"class":"form-control"}),
+            "purpose": forms.Select(attrs={"class":"form-control"}),
         }

@@ -44,10 +44,10 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link {% if request.path == '/admin_user/patient_form/' or request.path == '/admin_user/all_patients/' %}active{% endif %}">
+                    <a href="#" class="nav-link {% if request.path == '/admin_user/patient_form/' or request.path == '/admin_user/all_patients/' or request.path == '/admin_user/add_addmission/' or request.path == '/admin_user/manage_addmission/'%}active{% endif %}">
                         <i class="fas fa-hospital-user mr-2"></i>
                         <p>
-                            Patient
+                            Addmission
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -62,6 +62,18 @@
                             <a href="{% url 'all_patients'  %}" class="nav-link">
                                 <i class="fas fa-th"></i>
                                 <p class="pl-2">Manage Patient</p>
+                            </a>
+                        </li>
+                        <li class="nav-item pl-2 {% if request.path == '/admin_user/add_addmission/' %}active{% endif %}">
+                            <a href="{% url 'add_addmission' %}" class="nav-link">
+                                <i class="fas fa-user-plus"></i>
+                                <p class="pl-2">add Addmission</p>
+                            </a>
+                        </li>
+                        <li class="nav-item pl-2 {% if request.path == '/admin_user/manage_addmission/' %}active{% endif %}">
+                            <a href="{% url 'manage_addmission'  %}" class="nav-link">
+                                <i class="fas fa-th"></i>
+                                <p class="pl-2">Manage Addmission</p>
                             </a>
                         </li>
                     </ul>
@@ -173,6 +185,34 @@
 
                     </ul>
                 </li>
+
+                {% comment %} Department {% endcomment %}
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-briefcase-medical mr-2"></i>
+                        <p>
+                            Department
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item pl-2">
+                            <a href="{% url 'add_department' %}" class="nav-link">
+                                <i class="fas fa-user-plus"></i>
+                                <p class="pl-2">add Department</p>
+                            </a>
+                        </li>
+                        <li class="nav-item pl-2">
+                            <a href="{% url 'manage_department'  %}" class="nav-link">
+                                <i class="fas fa-th"></i>
+                                <p class="pl-2">Manage Department</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-chalkboard-teacher mr-2"></i>

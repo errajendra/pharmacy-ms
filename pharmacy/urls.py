@@ -55,6 +55,18 @@ urlpatterns=[
     path('admin_user/edit_drug_type/<int:id>/',HODViews.editDrugType, name='edit_drug_type'), 
     path('admin_user/delete_drug_type/<int:id>/',HODViews.deleteDrugType, name='delete_drug_type'), 
     
+    # Patient Addmission Urls
+    path('admin_user/add_addmission/',HODViews.addAddmission, name='add_addmission'), 
+    path('admin_user/manage_addmission/',HODViews.manageAddmission, name='manage_addmission'), 
+    path('admin_user/edit_addmission/<int:id>/',HODViews.editAddmission, name='edit_addmission'), 
+    path('admin_user/delete_addmission/<int:id>/',HODViews.deleteAddmission, name='delete_addmission'), 
+    
+    # Department Urls
+    path('admin_user/add_department/',HODViews.addDepartment, name='add_department'), 
+    path('admin_user/manage_department/',HODViews.manageDepartment, name='manage_department'), 
+    path('admin_user/edit_department/<int:id>/',HODViews.editDepartment, name='edit_department'), 
+    path('admin_user/delete_department/<int:id>/',HODViews.deleteDepartment, name='delete_department'), 
+    
     path('admin_user/add_drug_unit/',HODViews.addDrugUnit, name='add_drug_unit'), 
     path('admin_user/manage_drug_unit/',HODViews.manageDrugUnit, name='manage_drug_unit'), 
     path('admin_user/edit_drug_unit/<int:id>/',HODViews.editDrugUnit, name='edit_drug_unit'), 
