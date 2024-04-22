@@ -1033,7 +1033,7 @@ def billingPOS(request):
     # categories = drugs.values_list('category', flat=True)
     categories = Category.objects.all()
     venders = Vender.objects.all()
-    custumers = CustomUser.objects.filter(user_type="Pharmacist")
+    custumers = CustomUser.objects.filter(user_type="Patients")
     context = {
         "drugs": drugs,
         'categories': categories,
