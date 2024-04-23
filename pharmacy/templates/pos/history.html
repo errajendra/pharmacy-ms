@@ -42,7 +42,7 @@
                 <div class="card-header">
                     <span>{{title}} </span>
                     <div class="card-tools d-flex">
-                        <a class="btn btn-sm btn-info mr-2" href="{% url 'add_billing' %}" role="button">+ Add New Drug</a>
+                        <a class="btn btn-sm btn-info mr-2" href="{% url 'pos' %}" role="button">+ Add New</a>
                     </div>
 
                 </div>
@@ -50,19 +50,13 @@
                     <thead>
 
                         <tr>
-                            <th>No</th>
-                            <th>Medicine Name</th>
-                            <th>Category</th>
-                            <th>Type</th>
-                            <th>Unit</th>
-                            <th>Batch</th>
-                            <th>Manufacturer</th>
-                            <th>Vender</th>
-                            <th>Quantity</th>
+                            <th>SN</th>
+                            <th>Billing No</th>
+                            <th>Customer</th>
                             <th>Price</th>
                             <th>Discount</th>
                             <th>GST</th>
-                            <th>Expiry Date</th>
+                            <th>Total</th>
                             <th class="text-center">Action</th>
 
                         </tr>
@@ -71,53 +65,16 @@
                         {% for billing in billings %}
                         <tr class="hov">
                             <td>{{forloop.counter}}</td>
-                            <td>{{billing.drug_name}}</td>
-                            <td>{{billing.category}}</td>
-                            <td> {% if billing.type %} {{billing.type}} {% endif %} </td>
-                            <td> {% if billing.unit %} {{billing.unit}} {% endif %} </td>
-                            <td> {% if billing.batch %} {{billing.batch}} {% endif %} </td>
-                            <td> {% if billing.manufacture %} {{billing.manufacture}} {% endif %} </td>
-                            <td> {% if billing.vender %} {{billing.vender}} {% endif %} </td>
-                            <td>
-                                <span class="d-flex justify-content-center">
-                                 {% if billing.quantity <= billing.reorder_level %}
-                                <div  class="d-flex justify-content-center px-2 mt-2"style="background-color:#a00b80;;border-radius: 10px;font-size: 11px; width:70px;font-weight: 600;color: white;">{{billing.quantity}}</div>
-                                {% else %}{{billing.quantity}}
-                                {% endif %}</span>
+                            <td>{{billing.id}} </td>
+                            <td>{{billing.custumer.get_full_name}} </td>
+                            <td>{{billing.details.sub_total}}</td>
+                            <td>{{billing.details.total_discount}} <span class="text-gray"> ({{billing.details.invoice_discount_value}} - {{billing.details.invoice_discount_type}}) </span> </td>
+                            <td>{{billing.details.tax}} <span class="text-gray"> ({{billing.details.tax_percent}}%) </span> </td>
+                            <td>{{billing.details.grand_total}}</td>
 
-                            </td>
-                            <td>
-                                {% if billing.price %}
-                                    <a href="{% url 'reorder_level' billing.id %}">₹ {{billing.price}}</a></td>
-                                {% else %}
-                                    <a href="{% url 'reorder_level' billing.id %}">Add level</a>
-                                {% endif %}
-<!--                            <td>{{billing.last_updated |date:"F d, Y"}}</td>-->
-                            <td>{{billing.discount}} (%)</td>
-                            <td>{{billing.igta}}</td>
-
-                            <!-- Checks expired drugs -->
-
-                            {% comment %} {% for expire in expired %} {% if billing.drug_name == expire.drug_name %}
-                            <td class="">
-                                <div style="background-color: rgb(48, 58, 92);border-radius: 10px;font-size: 11px; width:120px;font-weight: 600;color: white;" class="d-flex justify-content-center ml-2 mt-2 px-1 "> EXPIRED </div>
-                            </td>
-                            {% endif %} {% endfor %} {% endcomment %}
-                            <!-- Checks Not expired drugs -->
-
-
-                            {% comment %} {% for expire in expa %} {% if billing.drug_name == expire.drug_name %} {% endcomment %}
-                            <td>
-                                {% if billing.valid_to %}
-                                {{billing.valid_to|date}}
-                                {% endif %}
-                            </td>
-                            {% comment %} {% endif %} {% endfor %} {% endcomment %}
                             <!-- End Expire -->
                             <td class="d-flex justify-content-center">
-                                <a href="{%url 'edit_drug' billing.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
-                                <a href="{%url 'delete_drug' billing.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
-                                <a href="{% url 'drug_detail' billing.id %}" class="btn btn-sm btn-warning">View</a>
+                                <a href="{% url 'pos-billing-print' billing.id %}" class="btn btn-sm btn-warning">Print</a>
                                 {% comment %} <a href="{%url 'receive_drug' billing.id %}" class="btn btn-sm btn-primary ml-2">Add</a> {% endcomment %}
                             </td>
 

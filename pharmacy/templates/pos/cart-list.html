@@ -7,6 +7,6 @@
     <td> <span id="id_cart_medicine_price_{{cart.id}}"> {% if cart.medicine.price %} {{cart.medicine.price}} {% endif %} </span> </td>
     <td> <input id="id_cart_discount_{{cart.id}}" type="number" min="0" max="90" value="{% if cart.discount %}{{cart.discount}}{% else %}{{cart.medicine.discount}}{% endif %}" onchange="cartUpdate({{cart.id}});" > </td>
     <td> <input id="id_cart_price_{{cart.id}}" class="w-100" {% if cart.total_price %} value="{{cart.total_price}}" {% endif %} readonly > </td>
-    <td> <span type="button" class="text-danger" onclick="deleteFromCart({{cart.id}});">Del</span> </td>
+    <td> <span type="button" class="text-danger fa fa-trash" onclick="deleteFromCart({{cart.id}});"> </span> </td>
 </tr>
 {% endfor %}

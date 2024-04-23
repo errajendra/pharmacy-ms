@@ -18,6 +18,9 @@
     <link rel="stylesheet" type="text/css" href="/static/pos/slick/slick.css">
     <link rel="stylesheet" type="text/css" href="/static/pos/slick/slick-theme.css">
     <link rel="stylesheet" href="/static/pos/pos/css/pos.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <!-- PWA  -->
     <meta name="theme-color" content="#7367f0">
     <style>
@@ -192,7 +195,7 @@
                                     <span class="position-absolute top-0 end-0 badge bg-primary text-white m-1">QTY: {{drug.quantity}} </span>
                                     {% else %} 
                                     <div class="stockout">
-                                        <span class="badge bg-danger text-white">Stockout</span>
+                                        <span class="badge bg-danger text-white">Out of stock</span>
                                     </div>
                                     {% endif %} 
                                 </div>
@@ -250,9 +253,12 @@
                                             {% comment %} <button data-toggle="modal" data-target="#short-cut-keys" class="btn btn-warning rounded mx-2" type="button" title="Keyboard shortcuts">
                                                 <i class="tio-keyboard text-white"></i>
                                             </button> {% endcomment %}
-                                            {% comment %} <a href="https://demopharma.ayaantec.com/dashboard" class="btn btn-primary rounded mx-2 mr-4" type="button" title="Back to Dashboard">
-                                                <i class="tio-imac"></i>
-                                            </a> {% endcomment %}
+                                            <a href="{% url 'pos_billing_history' %}" class="btn btn-primary rounded mx-1 mr-4" type="button" title="Back to Dashboard">
+                                                <i class="fa fa-list"></i>
+                                            </a>
+                                            <a href="/" class="btn btn-primary rounded mx-1 mr-4" type="button" title="Back to Dashboard">
+                                                <i class="fa fa-dashboard"></i>
+                                            </a>
                                             <div class="dropdown user-profile-button">
                                                 <a href="javascript:" class="avatar avatar-circle" data-toggle="dropdown">
                                                     <img class="avatar-img" onerror="this.src='https://demopharma.ayaantec.com/public/pos/img/160x160/img1.jpg'" src="https://fgcucdn.fgcu.edu/_resources/images/faculty-staff-male-avatar-200x200.jpg" alt="Image">
