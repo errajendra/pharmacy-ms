@@ -1052,6 +1052,15 @@ def billingPrintPOS(request, id, action=None):
     return render(request, "pos/bill-print.html", context)
 
 
+# Billing POS History
+def billingHistory(request):
+    context = {
+        "title": "Billing POS History",
+        "billings": BillingPOS.objects.all()
+    }
+    return render(request, "pos/history.html", context)
+
+
 
 # Manage Vender
 def manageVender(request):

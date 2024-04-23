@@ -25,11 +25,11 @@
 			text-align: center;
 		}
 		#company-details {
-			float: left;
+			float: right;
 			width: 30%;
 		}
 		#customer-details {
-			float: right;
+			float: left;
 			width: 30%;
 		}
 		#purchase-details {
@@ -58,19 +58,21 @@
 	</style>
 </head>
 <body>
-	<h1>Medical Billing Slip</h1>
-	<h3>Bill No: {{bill.id}}</h3>
-	<div id="company-details">
+	<h1>SDM Hospital & Trama Center</h1>
+	<p>Address: Naini, Mahewa Patti Pashchim Kachh, Uttar Pradesh 211007</p>
+	<p>Contact: +91 7080802045</p>
+	<h3>Medical Bill No: {{bill.id}}</h3>
+	{% comment %} <div id="company-details">
 		<h2>Wooshelf Pharmacy</h2>
 		<p>Name: XYZ Medical Supplies</p>
-		<p>Address: 123 Main Street, Noida, UP</p>
+		<p>Address: Naini, Mahewa Patti Pashchim Kachh, Uttar Pradesh 211007</p>
 		<p>Contact: +91 9876451236</p>
-	</div>
+	</div> {% endcomment %}
 	<div id="customer-details">
 		<h2>Customer Details</h2>
 		<p>Name: {{bill.custumer.get_full_name}} </p>
 		{% comment %} <p>Address: 456 Elm Street, Anytown, USA</p> {% endcomment %}
-		<p>Contact: {{bill.custumer.email}} </p>
+		<p>Contact: {{bill.custumer.phone_number}} </p>
 	</div>
 	<div id="purchase-details">
 		<h2>Purchase Details</h2>
