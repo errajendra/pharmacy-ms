@@ -1145,10 +1145,11 @@ def deleteSupplier(request, id):
     supplier.delete()
     return redirect("manage_supplier")
 
-
+import random
 def new_purchase_fun(request):
-    manufacture_list = Stock.objects.all()
+    manufacture_list = Manufacturer.objects.all()
     purchased_list = NewPurchaseData.objects.filter(status=False)
+    invoice_no = f"INV{random.randint(2, 12345)}"
 
     sub_total = sum(purchase.sub_total for purchase in purchased_list)
     discount = sum(purchase.discount for purchase in purchased_list)
@@ -1160,6 +1161,7 @@ def new_purchase_fun(request):
         "sub_total": sub_total,
         "discount": discount,
         "total": total,
+        "invoice_no": invoice_no,
     }
 
     if request.method == "POST":
@@ -1170,6 +1172,7 @@ def new_purchase_fun(request):
         payment_type = request.POST.get("payment_type")
         paid_amount = request.POST.get("paid_amount")
         due_amount = request.POST.get("due_amount")
+        manufacture = Manufacturer.objects.get(id=int(manufacture_name))
 
         sub_total_pur = sum(
             get_object_or_404(NewPurchaseData, id=int(purchase_id)).sub_total for purchase_id in purchase_ids)
@@ -1179,7 +1182,7 @@ def new_purchase_fun(request):
 
         purchased_invoice = PurchasedInvoice.objects.create(
             invoice_no=invoice_num,
-            manufacture=manufacture_name,
+            manufacture=manufacture,
             date=date_get,
             quantity=discount_pur,
             sub_total=sub_total_pur,
@@ -1208,10 +1211,12 @@ def search_stock(request):
         generic_drug_name__icontains=query)
     data = [
         {'drug_name': stock.drug_name,
-         'generic_name': stock.generic_drug_name,
+         'category': stock.category.name,
          'price': stock.price,
          'image': stock.drug_pic.url,
          'id': stock.id,
+         'unit': stock.unit,
+         'batch': stock.batch,
          } for stock in results]
     return JsonResponse(data, safe=False)
 
@@ -1222,8 +1227,8 @@ def add_searched_stock(request):
     if NewPurchaseData.objects.filter(drug_name=ins_stock, status=False).exists():
         pass
     else:
-        instance = NewPurchaseData.objects.create(drug_name=ins_stock, mrp_per_unit=0, buy_price_per_unit=0, quantity=0,
-                                                  sub_total=0, discount=0, total=0)
+        instance = NewPurchaseData.objects.create(drug_name=ins_stock, mrp_per_unit=ins_stock.price, buy_price_per_unit=ins_stock.price, quantity=1,
+                                                  sub_total=ins_stock.price, discount=0, total=ins_stock.price)
         messages.success(request, "Item has been added")
     return redirect("new_purchase")
 
