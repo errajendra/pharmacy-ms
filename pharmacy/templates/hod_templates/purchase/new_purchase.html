@@ -21,7 +21,7 @@
     </div>
     {% endif %}
     <div class="card card-primary">
-        <div class="card-header">
+        <div class="card-header" style="background:#14A2B8;">
             <h3 class="card-title">New Purchase</h3>
             <div class="card-tools">
                 <a class="btn btn-sm btn-info" href="{% url 'add_stock' %}" role="button">Back</a>
@@ -40,7 +40,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="invoice">Invoice</label>
-                            <input id="invoice" type="text" name="voice_num" value="INV133329" placeholder="INV133329" class="form-control" required>
+                            <input id="invoice" type="text" name="voice_num" value="{{invoice_no}}" placeholder="INV133329" class="form-control" required>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -49,7 +49,7 @@
                             <select id="manufacture" class="form-control" name="manufacture_name" required>
                                 <option>Select One</option>
                                 {% for manufacture in manufacture_list %}
-                                    <option value="{{manufacture.manufacture}}">{{ manufacture.manufacture }}</option>
+                                    <option value="{{manufacture.id}}">{{forloop.counter}} {{ manufacture.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -137,8 +137,6 @@
                                 <div class="col-sm-8">
                                     <select id="payment_method" class="form-control" name="payment_type">
                                         <option>Select One</option>
-                                        <option>G-Pay</option>
-                                        <option>PayTm</option>
                                         <option>Cash</option>
                                     </select>
                                 </div>

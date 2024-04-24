@@ -371,7 +371,7 @@ class NewPurchaseData(BaseModel):
 class PurchasedInvoice(BaseModel):
     medicine_data = models.ManyToManyField(NewPurchaseData)
     invoice_no = models.CharField(30)
-    manufacture = models.CharField(max_length=200)
+    manufacture = models.ForeignKey(Manufacturer, on_delete=models.CASCADE)
     date = models.DateField()
     quantity = models.IntegerField()
     sub_total = models.FloatField()
