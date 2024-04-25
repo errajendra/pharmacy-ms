@@ -1,0 +1,51 @@
+{% extends 'hod_templates/base_template.html'%} {% block page_title %}
+<h5>Profit & Loss Detail</h5>
+
+{% endblock page_title %} {% block main_content %}
+<section class="content">
+    
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="card manage sc">
+                <div class="card-header">
+                    <span>Profit Loas Detail</span>
+                    <div class="card-tools d-flex">
+                    </div>
+
+                </div>
+                <table class="table table-bordered table-hover dataTable" id="plist">
+                    <thead>
+
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th class="text-center">Avl Qnt</th>
+                            <th class="text-center">Purchese Qnt</th>
+                            <th class="text-center">Purchese Amt</th>
+                            <th class="text-center">Sell Qnt</th>
+                            <th class="text-center">Sell Amt</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for med in medicines %}
+                        <tr class="hov">
+                            <td>{{forloop.counter}}</td>
+                            <td>{{med.drug_name}}</td>
+                            <td class="text-center">{{med.quantity}}</td>
+                            <td class="text-center">{{med.purchese.quantity}} </td>
+                            <td class="text-center">{{med.purchese.amount}} </td>
+                            <td class="text-center">{{med.sell.sell_quantity}} </td>
+                            <td class="text-center">{{med.sell.sell_amount}} </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

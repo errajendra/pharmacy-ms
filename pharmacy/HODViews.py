@@ -1409,3 +1409,14 @@ def deleteAddmission(request, id):
     cat.delete()
     return redirect("manage_addmission")
 
+
+
+""" In this view user will to see the all stock avalabity, purchese and sell all information in the listing formate of stock. """
+@login_required
+def medicinesDetailView(request):
+    
+    context = {
+        "title": "Medicines",
+        "medicines": Stock.objects.filter(status=True)
+    }
+    return render(request, 'hod_templates/medicine_frofit_detail.html', context)

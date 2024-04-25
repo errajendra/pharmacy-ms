@@ -1,7 +1,7 @@
 {% for drug in drugs %}
     <div class="col-lg-3 col-6 col-xl-3 px-2 mb-3">
         <div class="position-relative">
-            <div class="product-card card shadow-sm pvl26 position-relative" onclick="ADD_TO_CART('17','https://api.cart.com')">
+            <div class="product-card card shadow-sm pvl26 position-relative" onclick="addToCart({{drug.id}})">
                 <div class="card-header inline_product clickable p-3 pvl27">
                     <div class="d-flex align-items-center justify-content-center d-block">
                         <img src="{{drug.drug_pic.url}}" onerror="this.src='https://demopharma.ayaantec.com/public/pos/img/160x160/imag.png'" class="pvl28">

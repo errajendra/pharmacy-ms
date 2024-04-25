@@ -287,7 +287,36 @@ class Stock(BaseModel):
 
     def __str__(self):
         return str(self.drug_name)
-
+    
+    @property
+    def sell(self):
+        data = BillingPOS.objects.filter(details__item_details__contains=[{"medicine_id":self.id}])
+        if not data:
+            return False
+        
+        sell_quantity = 0
+        sell_total = 0
+        for x in range(len(data)):
+            sell_quantity += sum([i['quantity'] for i in data[x].details["item_details"] if i["medicine_id"] == self.id])
+            sell_total += sum([i['total'] for i in data[x].details["item_details"] if i["medicine_id"] == self.id])
+        detail = {
+            'sell_quantity': sell_quantity,
+            'sell_amount': sell_total,
+        }
+        return detail
+    
+    @property
+    def purchese(self):
+        data = self.newpurchasedata_set.all()
+        total = data.aggregate(total=models.Sum('total'))['total']
+        quantity = data.aggregate(total=models.Sum('quantity'))['total']
+        data = {
+            'quantity' : quantity or "",
+            'amount' : total or "",
+        }
+        return data
+        
+    
 
 class Dispense(BaseModel):
     patient_id = models.ForeignKey(Patients, on_delete=models.DO_NOTHING, null=True)
@@ -413,3 +442,8 @@ class BillingPOS(BaseModel):
     
     def __str__(self) -> str:
         return str(self.pk)
+    
+    
+# class BillingPOSDetail(BaseModel):
+#     pos = models.ForeignKey(BillingPOS, on_delete=models.CASCADE, related_name="details")
+#     medicine = models.ForeignKey

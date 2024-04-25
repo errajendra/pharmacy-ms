@@ -101,6 +101,8 @@ urlpatterns=[
     path('admin_user/pos/', HODViews.billingPOS, name="pos"),
     path('admin_user/pos/billing/<int:id>/print/', HODViews.billingPrintPOS, name="pos-billing-print"),
     path('admin_user/pos-billing-history/', HODViews.billingHistory, name="pos_billing_history"),
+    
+    path('admin_user/medicine-detailed-history/', HODViews.medicinesDetailView, name="medicine_details_history"),
 
     # parched invoice list
     path('admin_user/parched_invoice/', HODViews.purchased_invoice_list, name="parched_invoice_list"),

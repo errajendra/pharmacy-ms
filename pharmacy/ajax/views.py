@@ -145,6 +145,7 @@ def place_order_poc_billing(request):
             
             custumer_cart_items = custumer.cart_items.all()
             order_details = []
+            medicins = []
             for cart in custumer_cart_items:
                 order_details.append(
                     {
@@ -157,6 +158,7 @@ def place_order_poc_billing(request):
                         "total": cart.total_price
                     }
                 )
+                medicins.append({"med":cart.medicine, "qty":cart.quantity})
             
             order_data = {
                 "sub_total": sub_total,
@@ -173,6 +175,10 @@ def place_order_poc_billing(request):
                 custumer = custumer,
                 details = order_data
             ) 
+            for i in medicins:
+                med = i['med']
+                med.quantity = med.quantity - i['qty']
+                med.save()
             
             bill_slip_url = f"billing/{order.id}/print/"
             data = {
