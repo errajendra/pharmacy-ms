@@ -52,6 +52,7 @@ admin.site.register(Prescription)
 admin.site.register(Dispense)
 admin.site.register(PatientFeedback)
 admin.site.register(SellInvoice)
+admin.site.register(PurchasedInvoice)
 
 class NameAdmin(admin.ModelAdmin):
     list_display = ("name", "created_at")

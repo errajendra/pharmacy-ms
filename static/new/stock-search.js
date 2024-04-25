@@ -33,8 +33,10 @@ $(document).ready(function(){
                 for (var i = 0; i < data.length; i++) {
                     var optionText = '<img src="' + data[i].image + '" class="option-image" style="height:50px;width:50px;"> ' +
                                      '<strong>' + data[i].drug_name + '</strong> - ' +
-                                     data[i].generic_name + ' (' +
-                                     data[i].manufacure_name + ') - $' +
+                                     data[i].category + ' (' +
+                                     data[i].category + ') ' + ' unit-' +
+                                     data[i].unit + ' batch- ' +
+                                     data[i].batch + ' Rs ' +
                                      data[i].price;
                     // Change appending option to li
                     $('#search-results').append('<li data-value="' + data[i].id + '">' + optionText + '</li>');
