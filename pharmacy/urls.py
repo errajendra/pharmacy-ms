@@ -25,6 +25,8 @@ urlpatterns=[
     path('admin_user/add_stock/',HODViews.addStock,name='add_stock'),
     path('admin_user/manage_stock/',HODViews.manageStock,name='manage_stock'),  
     path('admin_user/manage-stock-expired/',HODViews.manageStockExpirerd, name='manage_stock_expired'), 
+    path('admin_user/manage-inactive-stocks/',HODViews.manageStockPendingForApproval,name='manage_inactive_stock'), 
+    path('admin_user/approve-inactive-stocks/<int:id>/',HODViews.approveMedicine,name='approve_inactive_stock'),   
     
     path('admin_user/add_category/',HODViews.addCategory,name='add_category'), 
     path('admin_user/manage_category/',HODViews.manageCategory,name='manage_category'), 
@@ -119,7 +121,8 @@ urlpatterns=[
     # path('manage_stock_form/<str:pk>/',pharmacistViews.dispense,name='pharm_disp2'),
     path('staff_profile/',pharmacistViews.userProfile,name='pharmacist_profile'),
 
-    path('manage_stock2/',pharmacistViews.manageStock,name='manage_stock2'),    
+    path('manage_stock2/',pharmacistViews.manageStock,name='manage_stock2'),   
+    path('edit-stock2/<int:id>/',pharmacistViews.editStock,name='edit_stock2'),    
     path('manage_prescrip/',pharmacistViews.managePrescription,name='pharmacist_prescription'),
     path('pharmacist_user/drug_details/<str:pk>/', pharmacistViews.drugDetails, name="drug_detail2"),
     path('sell_slip/<str:pk>/', pharmacistViews.sell_slip, name="sell_slip"),

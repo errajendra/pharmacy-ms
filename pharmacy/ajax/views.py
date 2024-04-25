@@ -9,7 +9,7 @@ from ..models import Stock, CustomUser as User, Cart, BillingPOS
 def search_product(request):
     """ Search Product from POS Billing page. """
     if request.method == 'POST':
-        stocks = Stock.objects.select_related()
+        stocks = Stock.objects.select_related().filter(status=True)
     
         category_id = request.POST.get("category_id", "")
         try:

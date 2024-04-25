@@ -28,7 +28,7 @@ class Department(BaseModel):
 class CustomUser(AbstractUser):
     user_type_data = (
         ("AdminHOD", "AdminHOD"), #1
-        ("Pharmacist", "Pharmacist"), #2 Custumer
+        ("Pharmacist", "Pharmacist"),
         ("Doctor", "Doctor"),
         ("Supplier", "Supplier"),
         ("Vender", "Vender"),
@@ -117,17 +117,17 @@ class Patients(BaseModel):
         ("Female", "Female"),
     )
     admin = models.OneToOneField(CustomUser, null=True, on_delete=models.CASCADE)
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=True, blank=True)
+    doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True)
     gender = models.CharField(
         max_length=7, null=True, blank=True, choices=gender_category
     )
-    first_name = models.CharField(max_length=20, null=True, blank=True)
-    last_name = models.CharField(max_length=20, null=True, blank=True)
+    first_name = models.CharField(max_length=36, null=True, blank=True)
+    last_name = models.CharField(max_length=36, null=True, blank=True)
     age = models.CharField(
         max_length=2,
         choices=[(i, i) for i in range(100)], null=True, blank=True
     )
-    phone_number = models.CharField(max_length=10, null=True, blank=True)
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
     profile_pic = models.ImageField(default="patient.jpg", null=True, blank=True)
     age = models.PositiveIntegerField(default="0", blank=True, null=True)
     address = models.CharField(max_length=300, null=True, blank=True)

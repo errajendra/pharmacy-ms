@@ -14,6 +14,7 @@ from .models import *
 from django.views.decorators.csrf import csrf_exempt
 
 
+@for_admin
 def adminDashboard(request):
     patients_total = Patients.objects.all().count()
 
@@ -53,6 +54,7 @@ def adminDashboard(request):
     return render(request, "hod_templates/admin_dashboard.html", context)
 
 
+@login_required
 def createPatient(request):
     form = PatientForm()
 
@@ -82,6 +84,7 @@ def createPatient(request):
                 username=username,
                 email=email,
                 password=password,
+                first_name=first_name,
                 last_name=last_name,
                 user_type="Patients",
             )
@@ -96,6 +99,10 @@ def createPatient(request):
             user.save()
             messages.success(request, username + " was Successfully Added")
 
+            pos = request.POST.get('pos', None)
+            if pos == "pos":
+                return redirect("pos")
+            
             return redirect("patient_form")
 
     context = {"form": form, "title": "Add Patient"}
@@ -103,6 +110,7 @@ def createPatient(request):
     return render(request, "hod_templates/patient_form.html", context)
 
 
+@login_required
 def allPatients(request):
     form = PatientSearchForm1(request.POST or None)
     patients = Patients.objects.all()
@@ -116,6 +124,7 @@ def allPatients(request):
     return render(request, "hod_templates/admited_patients.html", context) 
 
 
+@for_admin
 def confirmDelete(request, pk):
     try:
         patient = Patients.objects.get(id=pk)
@@ -136,7 +145,7 @@ def confirmDelete(request, pk):
     return render(request, "hod_templates/sure_delete.html", context)
 
 
-@login_required
+@for_admin
 def createPharmacist(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -169,6 +178,7 @@ def createPharmacist(request):
     return render(request, "hod_templates/pharmacist_form.html", context)
 
 
+@login_required
 def managePharmacist(request):
     staffs = Pharmacist.objects.all()
     context = {"staffs": staffs, "title": "Manage Pharmacist"}
@@ -176,6 +186,7 @@ def managePharmacist(request):
     return render(request, "hod_templates/all_pharmacist.html", context)
 
 
+@login_required
 def createDoctor(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -217,6 +228,7 @@ def createDoctor(request):
     return render(request, "hod_templates/add_doctor.html", context)
 
 
+@login_required
 def manageDoctor(request):
     staffs = Doctor.objects.all()
 
@@ -225,6 +237,7 @@ def manageDoctor(request):
     return render(request, "hod_templates/manage_doctor.html", context)
 
 
+@login_required
 def createPharmacyClerk(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -259,6 +272,7 @@ def createPharmacyClerk(request):
     return render(request, "hod_templates/add_pharmacyClerk.html", context)
 
 
+@login_required
 def managePharmacyClerk(request):
     staffs = PharmacyClerk.objects.all()
     context = {"staffs": staffs, "title": "Manage PharmacyClerk"}
@@ -266,7 +280,9 @@ def managePharmacyClerk(request):
     return render(request, "hod_templates/manage_pharmacyClerk.html", context)
 
 
+
 """ Upload medicine in bulk through csv. """
+@for_admin
 def upload_medicine_bulk_by_csv(request):
     if request.method == "POST":
         
@@ -312,6 +328,7 @@ def upload_medicine_bulk_by_csv(request):
     return render(request, "hod_templates/upload_medicines_by_csv.html", context)
 
 
+@login_required
 def addStock(request):
     form = StockForm(request.POST, request.FILES)
     if form.is_valid():
@@ -335,6 +352,7 @@ def addStock(request):
     return render(request, "hod_templates/add_stock.html", context)
 
 
+@login_required
 def manageStock(request):
     # stocks = Stock.objects.all().order_by("-id")
     # ex = Stock.objects.annotate(
@@ -342,7 +360,7 @@ def manageStock(request):
     # ).filter(expired=True)
     eo = Stock.objects.annotate(
         expired=ExpressionWrapper(Q(valid_to__lt=Now()), output_field=BooleanField())
-    ).filter(expired=False)
+    ).filter(expired=False, status=True)
 
     context = {
         "stocks": eo,
@@ -354,6 +372,7 @@ def manageStock(request):
     return render(request, "hod_templates/manage_stock.html", context)
 
 
+@login_required
 def manageStockExpirerd(request):
     # stocks = Stock.objects.all().order_by("-id")
     ex = Stock.objects.annotate(
@@ -370,8 +389,26 @@ def manageStockExpirerd(request):
     return render(request, "hod_templates/manage_stock.html", context)
 
 
+@login_required
+def manageStockPendingForApproval(request):
+    ex = Stock.objects.select_related().filter(status=False)
+    context = {
+        "title": "Medicines for Approval",
+        "stocks": ex,
+    }
+    return render(request, "hod_templates/manage_stock_for_approval.html", context)
+
+
+@for_admin
+def approveMedicine(request, id):
+    med = get_object_or_404(Stock, id=id)
+    med.status = True
+    med.save()
+    return redirect("manage_inactive_stock")
+
 
 # Category View
+@login_required
 def manageCategory(request):
     categories = Category.objects.all().order_by("-id")
     context = {
@@ -381,6 +418,7 @@ def manageCategory(request):
     return render(request, "hod_templates/manage_categories.html", context)
 
 
+@login_required
 def addCategory(request):
     form = CategoryForm(request.POST or None)
     if request.method == "POST":
@@ -393,6 +431,7 @@ def addCategory(request):
     return render(request, "hod_templates/add_category.html", context)
 
 
+@login_required
 def editCategory(request, id):
     cat = get_object_or_404(Category, id=id)
     form = CategoryForm(instance=cat, data=request.POST or None)
@@ -406,6 +445,7 @@ def editCategory(request, id):
     return render(request, "hod_templates/add_category.html", context)
 
 
+@for_admin
 def deleteCategory(request, id):
     cat = get_object_or_404(Category, id=id)
     cat.delete()
@@ -413,6 +453,7 @@ def deleteCategory(request, id):
 
 
 # Department View
+@login_required
 def manageDepartment(request):
     departments = Department.objects.all().order_by("-id")
     context = {
@@ -422,6 +463,7 @@ def manageDepartment(request):
     return render(request, "hod_templates/manage_department.html", context)
 
 
+@login_required
 def addDepartment(request):
     form = DepartmentForm(request.POST or None)
     if request.method == "POST":
@@ -434,6 +476,7 @@ def addDepartment(request):
     return render(request, "hod_templates/add_category.html", context)
 
 
+@login_required
 def editDepartment(request, id):
     cat = get_object_or_404(Department, id=id)
     form = DepartmentForm(instance=cat, data=request.POST or None)
@@ -447,6 +490,7 @@ def editDepartment(request, id):
     return render(request, "hod_templates/add_category.html", context)
 
 
+@for_admin
 def deleteDepartment(request, id):
     cat = get_object_or_404(Department, id=id)
     cat.delete()
@@ -455,6 +499,7 @@ def deleteDepartment(request, id):
 
 
 # Manufacturer
+@login_required
 def manageManufacturer(request):
     manufacturers = Manufacturer.objects.all().order_by("-id")
     context = {
@@ -464,6 +509,8 @@ def manageManufacturer(request):
     return render(request, "hod_templates/manage_manufacturer.html", context)
 
 
+
+@login_required
 def addManufacturer(request):
     form = ManufacturerForm(request.POST or None)
     if request.method == "POST":
@@ -476,6 +523,7 @@ def addManufacturer(request):
     return render(request, "hod_templates/add_category.html", context)
 
 
+@login_required
 def editManufacturer(request, id):
     cat = get_object_or_404(Manufacturer, id=id)
     form = ManufacturerForm(instance=cat, data=request.POST or None)
@@ -489,6 +537,7 @@ def editManufacturer(request, id):
     return render(request, "hod_templates/add_category.html", context)
 
 
+@login_required
 def deleteManufacturer(request, id):
     cat = get_object_or_404(Manufacturer, id=id)
     cat.delete()
@@ -496,6 +545,7 @@ def deleteManufacturer(request, id):
 
 
 # Drug Type
+@login_required
 def manageDrugType(request):
     drug_Types = DrugType.objects.all().order_by("-id")
     context = {
@@ -505,6 +555,7 @@ def manageDrugType(request):
     return render(request, "hod_templates/manage_drug_type.html", context)
 
 
+@login_required
 def addDrugType(request):
     form = DrugTypeForm(request.POST or None)
     if request.method == "POST":
@@ -517,6 +568,8 @@ def addDrugType(request):
     return render(request, "hod_templates/add_category.html", context)
 
 
+
+@login_required
 def editDrugType(request, id):
     cat = get_object_or_404(DrugType, id=id)
     form = DrugTypeForm(instance=cat, data=request.POST or None)
@@ -530,6 +583,8 @@ def editDrugType(request, id):
     return render(request, "hod_templates/add_category.html", context)
 
 
+
+@login_required
 def deleteDrugType(request, id):
     cat = get_object_or_404(DrugType, id=id)
     cat.delete()
@@ -537,6 +592,7 @@ def deleteDrugType(request, id):
 
 
 # Drug Unit
+@login_required
 def manageDrugUnit(request):
     drug_units = DrugUnit.objects.all().order_by("-id")
     context = {
@@ -546,6 +602,7 @@ def manageDrugUnit(request):
     return render(request, "hod_templates/manage_drug_unit.html", context)
 
 
+@login_required
 def addDrugUnit(request):
     form = DrugUnitForm(request.POST or None)
     if request.method == "POST":
@@ -558,6 +615,7 @@ def addDrugUnit(request):
     return render(request, "hod_templates/add_category.html", context)
 
 
+@login_required
 def editDrugUnit(request, id):
     cat = get_object_or_404(DrugUnit, id=id)
     form = DrugUnitForm(instance=cat, data=request.POST or None)
@@ -571,6 +629,7 @@ def editDrugUnit(request, id):
     return render(request, "hod_templates/add_category.html", context)
 
 
+@login_required
 def deleteDrugUnit(request, id):
     cat = get_object_or_404(DrugUnit, id=id)
     cat.delete()
@@ -588,6 +647,7 @@ def addPrescription(request):
     return render(request, "hod_templates/prescribe.html", context)
 
 
+@login_required
 def editPatient(request, patient_id):
     # adds patient id into session variable
     request.session["patient_id"] = patient_id
@@ -653,6 +713,7 @@ def editPatient(request, patient_id):
     return render(request, "hod_templates/edit_patient.html", context)
 
 
+@login_required
 def patient_personalRecords(request, pk):
     patient = Patients.objects.get(id=pk)
     prescrip = patient.prescription_set.all()
@@ -662,6 +723,7 @@ def patient_personalRecords(request, pk):
     return render(request, "hod_templates/patient_personalRecords.html", context)
 
 
+@login_required
 def deletePrescription(request, pk):
     prescribe = Prescription.objects.get(id=pk)
     if request.method == "POST":
@@ -673,6 +735,7 @@ def deletePrescription(request, pk):
     return render(request, "hod_templates/sure_delete.html", context)
 
 
+@login_required
 def hodProfile(request):
     customuser = CustomUser.objects.get(id=request.user.id)
     staff = AdminHOD.objects.get(admin=customuser.id)
@@ -705,6 +768,7 @@ def hodProfile(request):
     return render(request, "hod_templates/hod_profile.html", context)
 
 
+@login_required
 def deleteDoctor(request, pk):
     try:
         doctor = Doctor.objects.get(id=pk)
@@ -721,6 +785,7 @@ def deleteDoctor(request, pk):
     return render(request, "hod_templates/sure_delete.html")
 
 
+@login_required
 def deletePharmacist(request, pk):
     try:
         pharmacist = Pharmacist.objects.get(id=pk)
@@ -737,6 +802,7 @@ def deletePharmacist(request, pk):
     return render(request, "hod_templates/sure_delete.html")
 
 
+@login_required
 def deletePharmacyClerk(request, pk):
     try:
         clerk = PharmacyClerk.objects.get(id=pk)
@@ -753,6 +819,7 @@ def deletePharmacyClerk(request, pk):
     return render(request, "hod_templates/sure_delete.html")
 
 
+@login_required
 def editPharmacist(request, staff_id):
     staff = Pharmacist.objects.get(admin=staff_id)
     if request.method == "POST":
@@ -781,6 +848,7 @@ def editPharmacist(request, staff_id):
     return render(request, "hod_templates/edit_pharmacist.html", context)
 
 
+@login_required
 def editDoctor(request, doctor_id):
     staff = Doctor.objects.get(admin=doctor_id)
     if request.method == "POST":
@@ -817,6 +885,7 @@ def editDoctor(request, doctor_id):
     return render(request, "hod_templates/edit_doctor.html", context)
 
 
+@login_required
 def editPharmacyClerk(request, clerk_id):
     clerk = PharmacyClerk.objects.get(admin=clerk_id)
     if request.method == "POST":
@@ -852,6 +921,7 @@ def editPharmacyClerk(request, clerk_id):
     return render(request, "hod_templates/edit_clerk.html", context)
 
 
+@login_required
 def editAdmin(request):
     customuser = CustomUser.objects.get(id=request.user.id)
     staff = AdminHOD.objects.get(admin=customuser.id)
@@ -884,6 +954,7 @@ def editAdmin(request):
     return render(request, "hod_templates/edit-profile.html", context)
 
 
+@login_required
 def editStock(request, pk):
     drugs = Stock.objects.get(id=pk)
     form = StockForm(data=request.POST or None, files=request.FILES or None, instance=drugs)
@@ -915,6 +986,7 @@ def editStock(request, pk):
     return render(request, "hod_templates/edit_drug.html", context)
 
 
+@login_required
 def deleteDrug(request, pk):
     try:
         drugs = Stock.objects.get(id=pk)
@@ -931,6 +1003,7 @@ def deleteDrug(request, pk):
     return render(request, "hod_templates/sure_delete.html")
 
 
+@login_required
 def receiveDrug(request, pk):
     receive = Stock.objects.get(id=pk)
     form = ReceiveStockForm()
@@ -964,6 +1037,7 @@ def receiveDrug(request, pk):
     return render(request, "hod_templates/modal_form.html", context)
 
 
+@login_required
 def reorder_level(request, pk):
     queryset = Stock.objects.get(id=pk)
     form = ReorderLevelForm(request.POST or None, instance=queryset)
@@ -997,6 +1071,7 @@ def drugDetails(request, pk):
     return render(request, "hod_templates/view_drug.html", context)
 
 
+@login_required
 def purchased_invoice_list(request):
     all_invoice = PurchasedInvoice.objects.all()
     context = {
@@ -1014,7 +1089,6 @@ def purchased_invoice_detail(request, pk):
     medicine_list = NewPurchaseData.objects.filter(id__in=get_invoice.medicine_data.all())
     p = inflect.engine()
     grand_total_str = p.number_to_words(get_invoice.total)
-    print(medicine_list, "medicine_list")
     context = {
         "medicine_list": medicine_list,
         "get_invoice": get_invoice,
@@ -1028,8 +1102,9 @@ def purchased_invoice_detail(request, pk):
 
 
 # Billing POS
+@login_required
 def billingPOS(request):
-    drugs = Stock.objects.prefetch_related().all()
+    drugs = Stock.objects.prefetch_related().filter(status=True)
     # categories = drugs.values_list('category', flat=True)
     categories = Category.objects.all()
     venders = Vender.objects.all()
@@ -1053,6 +1128,7 @@ def billingPrintPOS(request, id, action=None):
 
 
 # Billing POS History
+@login_required
 def billingHistory(request):
     context = {
         "title": "Billing POS History",
@@ -1063,6 +1139,7 @@ def billingHistory(request):
 
 
 # Manage Vender
+@login_required
 def manageVender(request):
     venders = Vender.objects.all()
     context = {
@@ -1072,6 +1149,7 @@ def manageVender(request):
     return render(request, "hod_templates/manage_venders.html", context)
 
 
+@login_required
 def addVender(request):
     form = VenderForm(request.POST or None)
     if request.method == "POST":
@@ -1085,6 +1163,7 @@ def addVender(request):
     return render(request, "hod_templates/add_category.html", context)
 
 
+@login_required
 def editVender(request, id):
     cat = get_object_or_404(Vender, id=id)
     form = VenderForm(instance=cat, data=request.POST or None)
@@ -1098,6 +1177,7 @@ def editVender(request, id):
     return render(request, "hod_templates/add_category.html", context)
 
 
+@login_required
 def deleteVender(request, id):
     cat = get_object_or_404(Vender, id=id)
     cat.delete()
@@ -1105,6 +1185,7 @@ def deleteVender(request, id):
 
 
 # Manage Supplier
+@login_required
 def manageSupplier(request):
     suppliers = CustomUser.objects.filter(user_type="Supplier").order_by("-id")
     context = {
@@ -1114,6 +1195,7 @@ def manageSupplier(request):
     return render(request, "hod_templates/manage_suppliers.html", context)
 
 
+@login_required
 def addSupplier(request):
     form = AddUserForm(request.POST or None)
     if request.method == "POST":
@@ -1127,6 +1209,8 @@ def addSupplier(request):
     return render(request, "hod_templates/add_category.html", context)
 
 
+
+@login_required
 def editSupplier(request, id):
     supplier = get_object_or_404(CustomUser, id=id)
     form = AddUserForm(instance=supplier, data=request.POST or None)
@@ -1140,12 +1224,15 @@ def editSupplier(request, id):
     return render(request, "hod_templates/add_category.html", context)
 
 
+
+@login_required
 def deleteSupplier(request, id):
     supplier = get_object_or_404(CustomUser, id=id)
     supplier.delete()
     return redirect("manage_supplier")
 
 
+@login_required
 def new_purchase_fun(request):
     manufacture_list = Stock.objects.all()
     purchased_list = NewPurchaseData.objects.filter(status=False)
@@ -1261,6 +1348,8 @@ def update_added_stock_detail(request):
     return redirect("new_purchase")
 
 
+
+@login_required
 def purchase_history(request):
     all_history = PurchasedInvoice.objects.all()
     context = {
@@ -1272,6 +1361,7 @@ def purchase_history(request):
 
 
 # Patient Addmission
+@login_required
 def manageAddmission(request):
     addmissions = Addmission.objects.all().order_by("-id")
     context = {
@@ -1281,6 +1371,7 @@ def manageAddmission(request):
     return render(request, "hod_templates/manage_addmission.html", context)
 
 
+@login_required
 def addAddmission(request):
     form = AddmissionForm(request.POST or None)
     if request.method == "POST":
@@ -1293,6 +1384,7 @@ def addAddmission(request):
     return render(request, "hod_templates/add_category.html", context)
 
 
+@login_required
 def editAddmission(request, id):
     cat = get_object_or_404(Addmission, id=id)
     form = AddmissionForm(instance=cat, data=request.POST or None)
@@ -1306,6 +1398,7 @@ def editAddmission(request, id):
     return render(request, "hod_templates/add_category.html", context)
 
 
+@for_admin
 def deleteAddmission(request, id):
     cat = get_object_or_404(Addmission, id=id)
     cat.delete()

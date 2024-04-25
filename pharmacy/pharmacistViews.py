@@ -1,19 +1,17 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
 from .decorators import *
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import get_object_or_404
 
-from django.http import HttpResponseRedirect
 from .forms import *
 from .models import *
 from django.db.models import Sum
 import inflect
 
 
-@login_required
+@for_pharmacist
 def pharmacistHome(request):
     patients_total = Patients.objects.all().count()
     exipred = (
@@ -69,12 +67,14 @@ def userProfile(request):
     return render(request, "pharmacist_templates/staff_profile.html", context)
 
 
+@for_pharmacist
 def managePatientsPharmacist(request):
     patient = Patients.objects.all()
     context = {"patients": patient}
     return render(request, "pharmacist_templates/manage_patients.html", context)
 
 
+@for_pharmacist
 def managePrescription(request):
     precrip = Dispense.objects.all()
     invoices = SellInvoice.objects.all()
@@ -86,14 +86,15 @@ def managePrescription(request):
     return render(request, "pharmacist_templates/patient_prescrip.html", context)
 
 
+@for_pharmacist
 def manageStock(request):
     stocks = Stock.objects.all().order_by("-id")
     ex = Stock.objects.annotate(
         expired=ExpressionWrapper(Q(valid_to__lt=Now()), output_field=BooleanField())
     ).filter(expired=True)
-    eo = Stock.objects.annotate(
-        expired=ExpressionWrapper(Q(valid_to__lt=Now()), output_field=BooleanField())
-    ).filter(expired=False)
+    # eo = Stock.objects.annotate(
+    #     expired=ExpressionWrapper(Q(valid_to__lt=Now()), output_field=BooleanField())
+    # ).filter(expired=False)
     context = {
         "title": "Manage Medicines",
         "stocks": stocks,
@@ -102,6 +103,24 @@ def manageStock(request):
     return render(request, "pharmacist_templates/manage_stock.html", context)
 
 
+@for_pharmacist
+def editStock(request, id):
+    stock = get_object_or_404(Stock, id=id)
+    form = StockFormPharmacist(instance=stock)
+    if request.method == "POST":
+        form = StockFormPharmacist(data=request.POST, files=request.FILES, instance=stock)
+        if form.is_valid():
+            form.instance.status = False
+            form.save()
+            return redirect("manage_stock2")
+    context = {
+        "title": "Edit Medicine",
+        "form": form,
+    }
+    return render(request, "pharmacist_templates/form.html", context)
+
+
+@for_pharmacist
 def manageDispense(request, pk):
     queryset = Patients.objects.get(id=pk)
     prescrips = queryset.prescription_set.all()
@@ -177,6 +196,7 @@ def manageDispense(request, pk):
     return render(request, "pharmacist_templates/manage_dispense.html", context)
 
 
+@for_pharmacist
 def patient_feedback_message(request):
     feedbacks = PatientFeedback.objects.all()
     context = {"feedbacks": feedbacks}
@@ -212,6 +232,7 @@ def deletefeedback(request, pk):
     return render(request, "pharmacist_templates/sure_delete.html")
 
 
+@for_pharmacist
 def drugDetails(request, pk):
     stocks = Stock.objects.get(id=pk)
     context = {
@@ -220,6 +241,7 @@ def drugDetails(request, pk):
     return render(request, "pharmacist_templates/view_drug.html", context)
 
 
+@for_pharmacist
 def deleteDispense4(request, pk):
     try:
         fed = Dispense.objects.get(id=pk)
@@ -279,6 +301,7 @@ def sell_slip(request, pk):
     return render(request, "pharmacist_templates/sell_slip.html", context=context)
 
 
+@for_pharmacist
 def createPatientPharmacist(request):
     form = PatientForm()
     if request.method == "POST":
@@ -292,16 +315,16 @@ def createPatientPharmacist(request):
             password = form.cleaned_data['password']
             address = form.cleaned_data['address']
             phone_number = form.cleaned_data['phone_number']
-            dob = form.cleaned_data['dob']
+            # dob = form.cleaned_data['dob']
             gender = form.cleaned_data['gender']
-            reg_no = form.cleaned_data['reg_no']
+            # reg_no = form.cleaned_data['reg_no']
 
             user = CustomUser.objects.create_user(username=username, email=email, password=password,
-                                                  last_name=last_name, user_type=5)
+                                                  last_name=last_name, user_type="Patients")
             user.patients.address = address
             user.patients.phone_number = phone_number
-            user.patients.dob = dob
-            user.patients.reg_no = reg_no
+            # user.patients.dob = dob
+            # user.patients.reg_no = reg_no
             user.patients.first_name = first_name
             user.patients.last_name = last_name
             user.patients.gender = gender

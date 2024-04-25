@@ -31,10 +31,16 @@
 		#customer-details {
 			float: left;
 			width: 30%;
+			margin: 0 50px;
 		}
 		#purchase-details {
 			clear: both;
 		}
+		
+		.text-left {
+			text-align: left;
+		}
+
 		@media print {
 			@page {
 				size: A4;
@@ -69,10 +75,10 @@
 		<p>Contact: +91 9876451236</p>
 	</div> {% endcomment %}
 	<div id="customer-details">
-		<h2>Customer Details</h2>
-		<p>Name: {{bill.custumer.get_full_name}} </p>
+		<h2 class="text-left">Customer Details</h2>
+		<p class="text-left">Name: {{bill.custumer.get_full_name}} </p>
 		{% comment %} <p>Address: 456 Elm Street, Anytown, USA</p> {% endcomment %}
-		<p>Contact: {{bill.custumer.phone_number}} </p>
+		<p class="text-left">Contact: {{bill.custumer.phone_number}} </p>
 	</div>
 	<div id="purchase-details">
 		<h2>Purchase Details</h2>

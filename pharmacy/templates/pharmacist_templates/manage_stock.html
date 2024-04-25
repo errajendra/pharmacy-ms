@@ -22,6 +22,7 @@
                             <th>Category</th>
                             <th>Quantiy</th>
                             <th>Expiry Date</th>
+                            <th>Status</th>
                             <th class="text-center">Action</th>
 
                         </tr>
@@ -34,33 +35,37 @@
                             <td>{{stock.category}}</td>
                             <td>
                                 <span class="d-flex justify-content-center">
-                             {% if stock.quantity <= stock.reorder_level %}
-                            <div  class="d-flex justify-content-center px-2 mt-2"style="background-color:#a00b80;;border-radius: 10px;font-size: 11px; width:70px;font-weight: 600;color: white;">{{stock.quantity}}</div>
-                            {% else %}{{stock.quantity}}
-                            {% endif %}</span>
+                                    {% if stock.quantity <= 0 %}
+                                    <div  class="d-flex justify-content-center px-2 mt-2"style="background-color:#a00b80;;border-radius: 10px;font-size: 11px; width:70px;font-weight: 600;color: white;">{{stock.quantity}}</div>
+                                    {% else %}{{stock.quantity}}
+                                    {% endif %}
+                                </span>
 
                             </td>
                             <!-- start expire -->
-                            {% if expired %}
+                            {% comment %} {% if expired %} {% endcomment %}
                             <!-- Checks expired drugs -->
 
-                            {% for expire in expired %} {% if stock.drug_name == expire.drug_name %}
-                            <td class="">
-                                <div style="background-color: rgb(48, 58, 92);border-radius: 10px;font-size: 11px; width:120px;font-weight: 600;color: white;" class="d-flex justify-content-center ml-2 mt-2 px-1 "> EXPIRED </div>
+                            {% for expire in expired %} 
+                            {% if expire.id == stock.id %}
+                                <td class="">
+                                    <div style="background-color: rgb(48, 58, 92);border-radius: 10px;font-size: 11px; width:120px;font-weight: 600;color: white;" class="d-flex justify-content-center ml-2 mt-2 px-1 "> EXPIRED </div>
+                                </td>
+                            {% else %}
+                                <td>{{stock.valid_to}}</td>
+                            {% endif %} 
+                            {% endfor %}
+
+                            <td>
+                                {% if stock.status %}
+                                Active
+                                {% else %}
+                                Inactive
+                                {% endif %}
                             </td>
 
-                            {% endif %} {% endfor %}
-                            <!-- Checks Not expired drugs -->
-
-                            {% for expire in expa %} {% if stock.drug_name == expire.drug_name %}
-                            <td>{{stock.valid_to}}</td>
-                            {% endif %} {% endfor %} {% endif %}
-                            <!-- End Expire -->
-                            <td></td>
-
-
-
                             <td class="d-flex justify-content-center">
+                                <a href="{%url 'edit_stock2' stock.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
 
                                 <a href="{% url 'drug_detail2' stock.id %}" class="btn btn-sm btn-success">View</a>
                             </td>

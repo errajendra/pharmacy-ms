@@ -39,6 +39,7 @@ class PatientForm(forms.Form):
     email = forms.EmailField(
         label="Email",
         max_length=50,
+        required=False,
         widget=forms.EmailInput(attrs={"class": "form-control"}),
     )
     password = forms.CharField(
@@ -59,6 +60,7 @@ class PatientForm(forms.Form):
     last_name = forms.CharField(
         label="Last Name",
         max_length=50,
+        required=False,
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
     address = forms.CharField(
@@ -71,6 +73,7 @@ class PatientForm(forms.Form):
     gender = forms.ChoiceField(
         label="Gender",
         choices=gender_list,
+        required=False,
         widget=forms.Select(attrs={"class": "form-control"}),
     )
     # dob = forms.DateField(
@@ -79,6 +82,7 @@ class PatientForm(forms.Form):
     age = forms.ChoiceField(
         choices=[(i, i) for i in range(100)],
         label="Age",
+        required=False,
         widget=forms.Select(attrs={"class": "form-control"})
     )
 
@@ -185,11 +189,9 @@ class StockForm(forms.ModelForm):
         model = Stock
         fields = "__all__"
         exclude = [
-            "valid_from",
-            "reorder_level",
-            "receive_quantity",
-            "prescrip_drug_acess",
+            "valid_from"
         ]
+        
         widgets = {
             "category": forms.Select(attrs={"class":"form-control w-auto"}),
             "type": forms.Select(attrs={"class":"form-control w-auto"}),
@@ -198,6 +200,37 @@ class StockForm(forms.ModelForm):
             "vender": forms.Select(attrs={"class":"form-control w-auto"}),
             "gst": forms.Select(attrs={"class":"form-control w-auto"}),
         }
+
+
+
+class StockFormPharmacist(forms.ModelForm):
+
+    class Meta:
+        model = Stock
+        fields = "__all__"
+        exclude = [
+            "status",
+            "valid_from"
+        ]
+        widgets = {
+            "category": forms.Select(attrs={"class":"form-control w-auto"}),
+            "type": forms.Select(attrs={"class":"form-control w-auto"}),
+            "manufacture": forms.Select(attrs={"class":"form-control w-auto"}),
+            "vender": forms.Select(attrs={"class":"form-control w-auto"}),
+            "gst": forms.Select(attrs={"class":"form-control w-auto"}),
+            "drug_name": forms.TextInput(attrs={"class":"form-control"}),
+            "generic_drug_name": forms.TextInput(attrs={"class":"form-control"}),
+            "drug_description": forms.Textarea(attrs={"class":"form-control"}),
+            "unit": forms.NumberInput(attrs={"class":"form-control"}),
+            "vat": forms.NumberInput(attrs={"class":"form-control"}),
+            "quantity": forms.NumberInput(attrs={"class":"form-control"}),
+            "batch": forms.TextInput(attrs={"class":"form-control"}),
+            "price": forms.NumberInput(attrs={"class":"form-control"}),
+            "actual_price": forms.NumberInput(attrs={"class":"form-control"}),
+            "discount": forms.NumberInput(attrs={"class":"form-control"}),
+            "valid_to": DateInput(attrs={"class": "form-control"}),
+        }
+
 
 
 class CategoryForm(forms.ModelForm):
