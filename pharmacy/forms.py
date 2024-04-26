@@ -402,3 +402,18 @@ class AddmissionForm(ModelForm):
             "department": forms.Select(attrs={"class":"form-control"}),
             "purpose": forms.Select(attrs={"class":"form-control"}),
         }
+
+
+
+class HospitalItemForm(ModelForm):
+    class Meta:
+        model = HospitalItem
+        fields = "__all__"
+        
+        widgets = {
+            "name": forms.TextInput(attrs={"class":"form-control"}),
+            "unit": forms.NumberInput(attrs={"class":"form-control"}),
+            "actual_price": forms.NumberInput(attrs={"class":"form-control"}),
+            "price": forms.NumberInput(attrs={"class":"form-control"}),
+            "discount": forms.NumberInput(attrs={"class":"form-control"}),
+        }

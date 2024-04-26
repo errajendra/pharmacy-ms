@@ -144,12 +144,16 @@ class Category(BaseModel):
         return str(self.name)
 
 
-# class DrugLeaf(BaseModel):
-#     leaf_type = models.CharField(max_length=50)
-#     number_per_box = models.PositiveIntegerField()
+class HospitalItem(BaseModel):
+    name = models.CharField(max_length=50)
+    unit = models.PositiveIntegerField()
+    actual_price = models.FloatField(default="0", verbose_name="Actual Price")
+    price = models.FloatField(default="0", verbose_name="M.R.P")
+    discount = models.FloatField(default=0, verbose_name="Discount (%)")
+    status = models.BooleanField(default=True)
 
-#     def __str__(self):
-#         return str(self.leaf_type)
+    def __str__(self):
+        return str(self.name)
 
 
 class DrugType(BaseModel):
@@ -175,6 +179,11 @@ class Manufacturer(BaseModel):
 
 class Vender(BaseModel):
     name = models.CharField(max_length=50, unique=True)
+    phone_number = models.CharField(max_length=15)
+    email = models.EmailField(max_length=15, null=True, blank=True)
+    dl = models.CharField(max_length=50, verbose_name="DL No.", null=True, blank=True)
+    gst = models.CharField(max_length=50, verbose_name="GST", null=True, blank=True)
+    address = models.CharField(max_length=50, verbose_name="Address", null=True, blank=True)
 
     def __str__(self):
         return str(self.name)
@@ -253,7 +262,7 @@ class Stock(BaseModel):
     unit = models.PositiveIntegerField(
         default=1, null=True, blank=True,
     )
-    vat = models.PositiveIntegerField(verbose_name="VAT", blank=True, null=True)
+    # vat = models.PositiveIntegerField(verbose_name="VAT", blank=True, null=True)
     quantity = models.IntegerField(default="0", blank=True, null=True)
     batch = models.CharField(max_length=50, blank=True, null=True)
     actual_price = models.FloatField(default="0", blank=True, null=True, verbose_name="Actual Price")
@@ -416,7 +425,8 @@ class PurchasedInvoice(BaseModel):
 
 class Cart(BaseModel):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="cart_items")
-    medicine = models.ForeignKey(Stock, on_delete=models.CASCADE, related_name="carts")
+    medicine = models.ForeignKey(Stock, on_delete=models.CASCADE, null=True, blank=True, related_name="carts")
+    hospital_item = models.ForeignKey(HospitalItem, on_delete=models.CASCADE, null=True, blank=True, related_name='carts')
     quantity = models.PositiveIntegerField(default=1)
     discount = models.PositiveIntegerField(default=0)
     
@@ -430,7 +440,11 @@ class Cart(BaseModel):
     @property
     def total_price(self):
         try:
-            return round((self.medicine.price * self.quantity) - (self.medicine.price * self.quantity * self.discount / 100), 2)
+            if self.medicine:
+                return round((self.medicine.price * self.quantity) - (self.medicine.price * self.quantity * self.discount / 100), 2)
+            elif self.hospital_item:
+                return round((self.hospital_item.price * self.quantity) - (self.hospital_item.price * self.quantity * self.discount / 100), 2)
+            return None
         except:
             return None
 

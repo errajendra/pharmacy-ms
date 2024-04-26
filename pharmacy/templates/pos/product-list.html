@@ -1,10 +1,10 @@
 {% for drug in drugs %}
     <div class="col-lg-3 col-6 col-xl-3 px-2 mb-3">
         <div class="position-relative">
-            <div class="product-card card shadow-sm pvl26 position-relative" onclick="addToCart({{drug.id}})">
+            <div class="product-card card shadow-sm pvl26 position-relative" onclick="addToCart({{drug.id}}, 'med')">
                 <div class="card-header inline_product clickable p-3 pvl27">
                     <div class="d-flex align-items-center justify-content-center d-block">
-                        <img src="{{drug.drug_pic.url}}" onerror="this.src='https://demopharma.ayaantec.com/public/pos/img/160x160/imag.png'" class="pvl28">
+                        <img src="{{drug.drug_pic.url}}" onerror="this.src='/static/demo-med.png'" class="pvl28">
                     </div>
                 </div>
                 <div class="card-body inline_product text-center p-1 py-2 clickable">
@@ -20,6 +20,28 @@
                 <span class="badge bg-danger text-white">Out of stock</span>
             </div>
             {% endif %} 
+        </div>
+    </div>
+{% endfor %}
+
+
+{% for item in items %}
+    <div class="col-lg-3 col-6 col-xl-3 px-2 mb-3">
+        <div class="position-relative">
+            <div class="product-card card shadow-sm pvl26 position-relative" onclick="addToCart({{item.id}}, 'item')">
+                <div class="card-header inline_product clickable p-3 pvl27">
+                    <div class="d-flex align-items-center justify-content-center d-block">
+                        <img src="/static/demo-item.png" onerror="this.src='/static/demo-item.png'" class="pvl28">
+                    </div>
+                </div>
+                <div class="card-body inline_product text-center p-1 py-2 clickable">
+                    <h5 class="product-title1 text-dark font-weight-bold pvl30">
+                        {{item.name}}
+                    </h5>
+                </div>
+            </div>
+            <span class="position-absolute top-0 end-0 badge bg-primary text-white m-1">Unit: {{item.unit}} </span>
+            
         </div>
     </div>
 {% endfor %}

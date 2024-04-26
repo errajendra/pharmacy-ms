@@ -74,3 +74,10 @@ class CartAdmin(admin.ModelAdmin):
 class AddmissionAdmin(admin.ModelAdmin):
     list_display = ("patient", "purpose", "department", "doctor", "reason", "created_at")
     list_filter = ("department", "purpose", "created_at")
+
+
+@admin.register(HospitalItem)
+class HospitalItemAdmin(admin.ModelAdmin):
+    list_display = ('name', 'unit', 'actual_price', 'price', 'discount', 'created_at')
+    search_fields = ('name', )
+    list_filter = ('unit', 'actual_price', 'price', 'discount', 'created_at')

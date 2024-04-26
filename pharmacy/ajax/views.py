@@ -2,7 +2,7 @@ from django.http.response import JsonResponse
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
-from ..models import Stock, CustomUser as User, Cart, BillingPOS
+from ..models import Stock, CustomUser as User, Cart, BillingPOS, HospitalItem
 
 
 
@@ -27,8 +27,16 @@ def search_product(request):
         
         keywords = request.POST.get("keywords", "")
         stocks = stocks.filter(Q(drug_name__icontains=keywords)|Q(generic_drug_name__icontains=keywords))
+        
+        h_items = HospitalItem.objects.filter(status=True, name__icontains=keywords)
+        
             
-        html = render_to_string("pos/product-list.html", {"drugs": stocks.distinct()[:16]})
+        html = render_to_string(
+            "pos/product-list.html",
+            {
+                "drugs": stocks.distinct()[:16],
+                "items": h_items,
+            })
         return JsonResponse(
             {
                 "status": 200,
@@ -52,12 +60,21 @@ def add_to_cart(request):
     if request.method == 'POST':
         user = get_object_or_404(User, id=request.POST.get('user_id', None))
         med = request.POST.get('product_id', None)
-        medicine = get_object_or_404(Stock, id=med)
-        Cart.objects.create(
-            user = user,
-            medicine = medicine,
-            discount = medicine.discount
-        )
+        item_type = request.POST.get('item', None)
+        if item_type == "med":
+            medicine = get_object_or_404(Stock, id=med)
+            Cart.objects.create(
+                user = user,
+                medicine = medicine,
+                discount = medicine.discount
+            )
+        elif item_type == "item":
+            item = get_object_or_404(HospitalItem, id=med)
+            Cart.objects.create(
+                user = user,
+                hospital_item = item,
+                discount = item.discount
+            )
         return JsonResponse(
             {
                 "status": 200,
@@ -145,20 +162,31 @@ def place_order_poc_billing(request):
             
             custumer_cart_items = custumer.cart_items.all()
             order_details = []
+            hospital_item_detail = []
             medicins = []
             for cart in custumer_cart_items:
-                order_details.append(
-                    {
-                        "medicine_id": cart.medicine.id,
-                        "medicine": cart.medicine.drug_name,
-                        "price": cart.medicine.price,
-                        "medicine_batch": cart.medicine.batch,
+                if cart.medicine:
+                    order_details.append(
+                        {
+                            "medicine_id": cart.medicine.id,
+                            "medicine": cart.medicine.drug_name,
+                            "price": cart.medicine.price,
+                            "medicine_batch": cart.medicine.batch,
+                            "quantity": cart.quantity,
+                            "discount": f"{cart.discount} %",
+                            "total": cart.total_price
+                        }
+                    )
+                    medicins.append({"med":cart.medicine, "qty":cart.quantity})
+                if cart.hospital_item:
+                    hospital_item_detail.append({
+                        "hospital_item_id": cart.hospital_item.id,
+                        "hospital_item": cart.hospital_item.name,
+                        "price": cart.hospital_item.price,
                         "quantity": cart.quantity,
                         "discount": f"{cart.discount} %",
                         "total": cart.total_price
-                    }
-                )
-                medicins.append({"med":cart.medicine, "qty":cart.quantity})
+                    })
             
             order_data = {
                 "sub_total": sub_total,
@@ -168,7 +196,8 @@ def place_order_poc_billing(request):
                 "tax_percent": tax_percent,
                 "tax": tax,
                 "grand_total": grand_total,
-                "item_details": order_details,            
+                "item_details": order_details,
+                "hospital_item_detail": hospital_item_detail,          
             }
             # Create order here
             order = BillingPOS.objects.create(

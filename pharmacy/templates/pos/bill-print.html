@@ -103,6 +103,19 @@
 				<td>{{medicine.total}} </td>
 			</tr>
             {% endfor %}
+			
+            {% for h_item in bill.details.hospital_item_detail %}
+			<tr>
+                <td> {{forloop.counter}} </td>
+				<td>{{h_item.hospital_item}} </td>
+				<td> </td>
+				<td>{{h_item.quantity}} </td>
+				<td>{{h_item.price}} </td>
+				<td>{{h_item.discount}} </td>
+				<td>{{h_item.total}} </td>
+			</tr>
+            {% endfor %}
+			
             <tr >
                 <td colspan="7"></td>
             </tr>

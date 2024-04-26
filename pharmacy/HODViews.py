@@ -1109,8 +1109,10 @@ def billingPOS(request):
     categories = Category.objects.all()
     venders = Vender.objects.all()
     custumers = CustomUser.objects.filter(user_type="Patients")
+    items = HospitalItem.objects.filter(status=True)
     context = {
         "drugs": drugs,
+        "items": items,
         'categories': categories,
         "venders": venders,
         "custumers": custumers
@@ -1132,7 +1134,7 @@ def billingPrintPOS(request, id, action=None):
 def billingHistory(request):
     context = {
         "title": "Billing POS History",
-        "billings": BillingPOS.objects.all()
+        "billings": BillingPOS.objects.all().order_by('-created_at')
     }
     return render(request, "pos/history.html", context)
 
@@ -1420,3 +1422,52 @@ def medicinesDetailView(request):
         "medicines": Stock.objects.filter(status=True)
     }
     return render(request, 'hod_templates/medicine_frofit_detail.html', context)
+
+
+
+
+
+# Hospital Items Viw
+@login_required
+def manageHospitalItem(request):
+    HospitalItems = HospitalItem.objects.all().order_by("-id")
+    context = {
+        "hospital_items": HospitalItems,
+        "title": "Manage Patient HospitalItem",
+    }
+    return render(request, "hod_templates/manage_hospital_items.html", context)
+
+
+@login_required
+def addHospitalItem(request):
+    form = HospitalItemForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Patient HospitalItem added Successfully!")
+
+            return redirect("manage_hospital_item")
+    context = {"form": form, "title": "New Patient HospitalItem"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+@login_required
+def editHospitalItem(request, id):
+    cat = get_object_or_404(HospitalItem, id=id)
+    form = HospitalItemForm(instance=cat, data=request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Patient HospitalItem Updated Successfully!")
+
+            return redirect("manage_hospital_item")
+    context = {"form": form, "title": "Update HospitalItem"}
+    return render(request, "hod_templates/add_category.html", context)
+
+
+@for_admin
+def deleteHospitalItem(request, id):
+    cat = get_object_or_404(HospitalItem, id=id)
+    cat.delete()
+    return redirect("manage_hospital_item")
+

@@ -33,6 +33,12 @@ urlpatterns=[
     path('admin_user/edit_category/<int:id>/',HODViews.editCategory,name='edit_category'), 
     path('admin_user/delete_category/<int:id>/',HODViews.deleteCategory,name='delete_category'), 
     
+    # Hospital Item
+    path('admin_user/add_hospital_item/',HODViews.addHospitalItem,name='add_hospital_item'), 
+    path('admin_user/manage_hospital_item/',HODViews.manageHospitalItem,name='manage_hospital_item'), 
+    path('admin_user/edit_hospital_item/<int:id>/',HODViews.editHospitalItem,name='edit_hospital_item'), 
+    path('admin_user/delete_hospital_item/<int:id>/',HODViews.deleteHospitalItem,name='delete_hospital_item'), 
+    
     
     path('admin_user/add_manufacturer/',HODViews.addManufacturer, name='add_manufacturer'), 
     path('admin_user/manage_manufacturer/',HODViews.manageManufacturer, name='manage_manufacturer'), 

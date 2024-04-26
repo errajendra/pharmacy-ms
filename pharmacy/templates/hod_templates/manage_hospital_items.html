@@ -1,5 +1,5 @@
 {% extends 'hod_templates/base_template.html'%} {% block page_title %}
-<h5>Manage Venders</h5>
+<h5>{{title}} </h5>
 
 {% endblock page_title %} {% block main_content %}
 <section class="content">
@@ -39,9 +39,19 @@
 
             <div class="card manage sc">
                 <div class="card-header">
-                    <span>Manage Venders</span>
+                    <span>Manage Items</span>
                     <div class="card-tools d-flex">
-                        <a class="btn btn-sm btn-info mr-2" href="{% url 'add_vender' %}" role="button">+ Add New Vender</a>
+                        <!--                
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                       
+                        <div class="input-group-append">
+                        <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div> -->
+                        <!-- <input type="search" name="search" id="filter" class="form-control float-right" placeholder="Search"> -->
+
+
+                        <a class="btn btn-sm btn-info mr-2" href="{% url 'add_hospital_item' %}" role="button">+ Add New</a>
 
                     </div>
 
@@ -50,32 +60,30 @@
                     <thead>
 
                         <tr>
-                            <th>SN</th>
+                            <th>No</th>
                             <th>Name</th>
-                            <th>Phone</th>
-                            <th>Email</th>
-                            <th>GST</th>
-                            <th>DL</th>
-                            <th>Address</th>
+                            <th>Unit</th>
+                            <th>Actual Cost</th>
+                            <th>MRP</th>
+                            <th>Discount</th>
                             <th class="text-center">Action</th>
 
                         </tr>
                     </thead>
                     <tbody>
-                        {% for vender in venders %}
+                        {% for hospital_item in hospital_items %}
                         <tr class="hov">
                             <td>{{forloop.counter}}</td>
-                            <td>{{vender.name}}</td>
-                            <td>{{vender.phone_number}}</td>
-                            <td>{{vender.email}}</td>
-                            <td>{{vender.gst}}</td>
-                            <td>{{vender.dl}}</td>
-                            <td>{{vender.address}}</td>
+                            <td>{{hospital_item.name}}</td>
+                            <td>{{hospital_item.unit}}</td>
+                            <td>{{hospital_item.actual_price}}</td>
+                            <td>{{hospital_item.price}}</td>
+                            <td>{{hospital_item.discount}}</td>
 
                             <!-- End Expire -->
                             <td class="d-flex justify-content-center">
-                                <a href="{%url 'edit_vender' vender.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
-                                <a href="{%url 'delete_vender' vender.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
+                                <a href="{%url 'edit_hospital_item' hospital_item.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
+                                <a href="{%url 'delete_hospital_item' hospital_item.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
                             </td>
 
                         </tr>

@@ -242,7 +242,7 @@
 
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link {% if request.path == '/admin_user/manage_stock/' or request.path == '/admin_user/add_stock/' or request.path == '/admin_user/add_category/' or request.path == '/admin_user/manage_category/' or request.path == '/admin_user/manage_manufacturer/' or request.path == '/admin_user/manage_vender/' or request.path == '/admin_user/manage_drug_type/' or request.path == '/admin_user/manage-stock-expired/' or request.path == '/admin_user/add-medines-bulk-by-csv/' or request.path == '/admin_user/manage-inactive-stocks/' %} active {% endif %}">
+                    <a href="#" class="nav-link {% if request.path == '/admin_user/manage_stock/' or request.path == '/admin_user/add_stock/' or request.path == '/admin_user/add_category/' or request.path == '/admin_user/manage_category/' or request.path == '/admin_user/manage_manufacturer/' or request.path == '/admin_user/manage_vender/' or request.path == '/admin_user/manage_drug_type/' or request.path == '/admin_user/manage-stock-expired/' or request.path == '/admin_user/add-medines-bulk-by-csv/' or request.path == '/admin_user/manage-inactive-stocks/' or request.path == '/admin_user/manage_hospital_item/' %} active {% endif %}">
                         <i class="fas fa-layer-group mr-2"></i>
                         <p>
                             Stocked Medicines
@@ -298,12 +298,34 @@
                                 <p class="pl-2">Type</p>
                             </a>
                         </li>
+                        
+                        <li class="nav-item pl-2 {% if request.path == '/admin_user/manage_hospital_item/' %}active{% endif %}">
+                            <a href="{% url 'manage_hospital_item'  %}" class="nav-link">
+                                <i class="fas fa-pills"></i>
+                                <p class="pl-2">Hospital Items</p>
+                            </a>
+                        </li>
                         <li class="nav-item pl-2 {% if request.path == '/admin_user/add-medines-bulk-by-csv/' %}active{% endif %}">
                             <a href="{% url 'upload_medicine_bulk_by_csv'  %}" class="nav-link">
                                 <i class="fas fa-upload"></i>
                                 <p class="pl-2">Bulk Upload</p>
                             </a>
                         </li>
+
+                    </ul>
+                </li>
+
+                
+                <li class="nav-item">
+                    <a href="#" class="nav-link {% if request.path == '/admin_user/medicine-detailed-history/' %} active {% endif %}">
+                        <i class="fas fa-layer-group mr-2"></i>
+                        <p>
+                            Report
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        
                         <li class="nav-item pl-2 {% if request.path == '/admin_user/medicine-detailed-history/' %}active{% endif %}">
                             <a href="{% url 'medicine_details_history'  %}" class="nav-link">
                                 <i class="fas fa-upload"></i>
@@ -311,8 +333,16 @@
                             </a>
                         </li>
 
+                        <li class="nav-item pl-2 {% if request.path == '/admin_user/medicine-detailed-history/' or request.path == '/manage_stock2/' %}active{% endif %}">
+                            <a href="{% url 'manage_stock2'  %}" class="nav-link">
+                                <i class="fas fa-upload"></i>
+                                <p class="pl-2">Sell Invoice</p>
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
+
 
                 <li class="nav-item">
                     <a href="#" class="nav-link {% if request.resolver_match.url_name == 'new_purchase' or request.resolver_match.url_name == 'purchase_history' %}active{% endif %}">
@@ -339,15 +369,6 @@
                     </ul>
                 </li>
 
-                <li class="nav-item">
-                    <a href="{% url 'manage_stock2' %}" class="nav-link {% if request.path == '/manage_stock2/' %}active{% endif %}">
-                        <i class="fas fa-layer-group mr-2"></i>
-                        <p>
-                            Sell Invoice
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                </li>
 
             </ul>
         </nav>
