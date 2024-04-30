@@ -1440,7 +1440,7 @@ def manageHospitalItem(request):
     HospitalItems = HospitalItem.objects.all().order_by("-id")
     context = {
         "hospital_items": HospitalItems,
-        "title": "Manage Patient HospitalItem",
+        "title": "Manage Hospital Item",
     }
     return render(request, "hod_templates/manage_hospital_items.html", context)
 
@@ -1451,10 +1451,10 @@ def addHospitalItem(request):
     if request.method == "POST":
         if form.is_valid():
             form.save()
-            messages.success(request, "Patient HospitalItem added Successfully!")
+            messages.success(request, "Hospital Item added Successfully!")
 
             return redirect("manage_hospital_item")
-    context = {"form": form, "title": "New Patient HospitalItem"}
+    context = {"form": form, "title": "New Hospital Item"}
     return render(request, "hod_templates/add_category.html", context)
 
 
@@ -1465,10 +1465,10 @@ def editHospitalItem(request, id):
     if request.method == "POST":
         if form.is_valid():
             form.save()
-            messages.success(request, "Patient HospitalItem Updated Successfully!")
+            messages.success(request, "Hospital Item Updated Successfully!")
 
             return redirect("manage_hospital_item")
-    context = {"form": form, "title": "Update HospitalItem"}
+    context = {"form": form, "title": "Update Hospital Item"}
     return render(request, "hod_templates/add_category.html", context)
 
 
