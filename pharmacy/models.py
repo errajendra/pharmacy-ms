@@ -129,7 +129,7 @@ class Patients(BaseModel):
     )
     phone_number = models.CharField(max_length=15, null=True, blank=True)
     profile_pic = models.ImageField(default="patient.jpg", null=True, blank=True)
-    age = models.PositiveIntegerField(default="0", blank=True, null=True)
+    # age = models.PositiveIntegerField(default="0", blank=True, null=True)
     address = models.CharField(max_length=300, null=True, blank=True)
 
     def __str__(self):
@@ -201,17 +201,54 @@ class Prescription(BaseModel):
 
 
 class Addmission(BaseModel):
-    patient = models.ForeignKey(Patients, on_delete=models.SET_NULL, null=True, blank=True)
+    patient = models.ForeignKey(Patients, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    reason = models.CharField(max_length=100, null=True, blank=True)
     purpose = models.CharField(
         choices=(
             ("OPD", "OPD"),
+            ("IPD", "IPD"),
             ("Bed Addmission", "Bed Addmission"),
         ),
         max_length=20, default="OPD"
     )
-    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
-    doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True)
-    reason = models.CharField(max_length=100, null=True, blank=True)
+    
+    # open these bellow fields on  form when choose purpose of IPD or Bed Addmission option
+    bht_no = models.CharField(verbose_name="BHT No", max_length=48, null=True, blank=True)
+    uid = models.CharField(max_length=15, verbose_name="Adhar Number", null=True, blank=True)
+    guardian = models.CharField(max_length=36, verbose_name="Duardian Name", null=True, blank=True)
+    addmission_time = models.DateTimeField(verbose_name="Date & Time of Addmission", null=True, blank=True)
+    discharge_time = models.DateTimeField(verbose_name="Date & Time of Discharge", null=True, blank=True)
+    ward_bed = models.CharField(verbose_name="Ward/Bed", max_length=48, null=True, blank=True)
+    operation_date = models.DateTimeField(verbose_name="Date & Time of Operation", null=True, blank=True)
+    addmission_type = models.CharField(
+        choices=(
+            ("Routine", "Routine"),
+            ("Emergency", "Emergency"),
+            ("MLC", "MLC"),
+            ("Accident", "Accident"),
+        ),
+        max_length=20, default="Routine"
+    )
+    mlc_no = models.CharField(verbose_name="MLC No", max_length=48, null=True, blank=True)
+    icd = models.CharField(verbose_name="ICD", max_length=48, null=True, blank=True)
+    provisonal_diagnosis = models.CharField(verbose_name="Provisonal Diagnosis", max_length=200, null=True, blank=True)
+    final_diagnosis = models.CharField(verbose_name="Final Diagnosis", max_length=200, null=True, blank=True)
+    summary_of_case = models.TextField(verbose_name="Summary of Case", null=True, blank=True)
+    result = models.CharField(
+        choices=(
+            ("Recovered", "Recovered"),
+            ("Dorp", "Dorp"),
+            ("Unchanged", "Unchanged"),
+            ("LAMA", "LAMA"),
+            ("Abscond", "Abscond"),
+            ("Died", "Died"),
+        ),
+        max_length=20, default="Recovered"
+    )
+    couse_of_death = models.CharField(verbose_name="Couse of Death", max_length=200, null=True, blank=True)
+    
     
     def __str__(self) -> str:
         return f"{self.patient}"
@@ -254,7 +291,7 @@ class Stock(BaseModel):
     )
     
     drug_name = models.CharField(max_length=50, verbose_name="Medicine Name")
-    generic_drug_name = models.CharField(max_length=50, blank=True, null=True, verbose_name="Medicine Generic Name")
+    generic_drug_name = models.CharField(max_length=150, blank=True, null=True, verbose_name="Medicine Generic Name")
     # strengh = models.CharField(max_length=50, blank=True, null=True, verbose_name="Strength")
     # shelf = models.CharField(max_length=50, blank=True, null=True, verbose_name="Shelf")
     drug_description = models.TextField(blank=True, max_length=1000, null=True)
@@ -270,7 +307,7 @@ class Stock(BaseModel):
     
     # drug_color = models.CharField(max_length=50, blank=True, null=True)
     # batch_number = models.CharField(max_length=50, blank=True, null=True)
-    discount = models.IntegerField(default=0)
+    discount = models.FloatField(default="0", blank=True, null=True,)
     gst = models.IntegerField(
         # 0, 5, 12, 18, 28
         choices=(
@@ -287,8 +324,8 @@ class Stock(BaseModel):
     # globle = models.IntegerField(verbose_name="Globel", default="0", blank=True, null=True)
     # tax = models.FloatField(default="0.0", blank=True, null=True)
     
-    valid_from = models.DateTimeField(blank=True, null=True, default=timezone.now)
-    valid_to = models.DateTimeField(blank=False, null=True)
+    valid_from = models.DateField(blank=True, null=True, default=timezone.now)
+    valid_to = models.DateField(blank=True, null=True)
     drug_pic = models.ImageField(default="images2.png", null=True, blank=True)
     
     status = models.BooleanField(default=True, help_text="Active Status, Uncheck If You Want To Delete This Drug Information.")

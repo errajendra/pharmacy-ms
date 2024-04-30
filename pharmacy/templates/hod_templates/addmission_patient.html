@@ -1,0 +1,92 @@
+{% extends 'hod_templates/base_template.html'%} {% load crispy_forms_tags %} {% block page_title %}
+<h5> {{title}} </h5>
+
+{% endblock page_title %} {% block main_content %}
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            {% include 'hod_templates/alert_messeges.html'%}
+
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title"> {{title}} </h3>
+                </div>
+
+                <form method="POST" style="font-size:13px;" class='px-3 py-2'>
+                    {% csrf_token %} {% if messages %}
+                    <div class="form-group">
+                        <div class="col-12">
+                            {% for message in messages %} {% if message.tags == "error" %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% elif message.tags == "success" %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endif %} {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+
+
+                        {{form|crispy}}
+
+                    </div>
+                    <input type="submit" class="btn btn-info">
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% comment %} Scripts {% endcomment %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+    // Get the purpose select element
+    const purposeSelect = document.querySelector('#id_purpose');
+
+    // Get the elements you want to show or hide
+    const ipdElements = document.querySelectorAll('[data-purpose="BedIPD"]');
+    const bedAdmissionElements = document.querySelectorAll('[data-purpose="BedIPD"]');
+
+    // Define a function to show or hide elements based on the selected purpose
+    function toggleElements() {
+
+        function hideElement(elementId) {
+            console.log(elementId);
+            $(`#${elementId}`).css('display', 'none');
+        }
+        function showElement(elementId) {
+            console.log(elementId);
+            $(`#${elementId}`).css('display', 'block');
+        }
+        // Hide all elements by default
+        ipdElements.forEach(element => hideElement(`div_id_${element.name}`));
+        bedAdmissionElements.forEach(element => hideElement(`div_id_${element.name}`));
+
+        // Show elements based on the selected purpose
+        if (purposeSelect.value === 'IPD') {
+            console.log("Showing IPD fields");
+            ipdElements.forEach(element => showElement(`div_id_${element.name}`));
+        } else if (purposeSelect.value === 'Bed Addmission') {
+            console.log("Showing Bed Admission fields");
+        bedAdmissionElements.forEach(element => showElement(`div_id_${element.name}`));
+        }
+    }
+
+    // Call the function when the page loads to set the initial visibility
+    toggleElements();
+
+    // Attach an event listener to the purpose select element to call the function whenever the value changes
+    purposeSelect.addEventListener('change', toggleElements);
+
+</script>
+{% endblock main_content %}

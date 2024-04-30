@@ -31,22 +31,6 @@ class ClientForm(forms.Form):
 
 
 class PatientForm(forms.Form):
-    username = forms.CharField(
-        label="Username",
-        max_length=50,
-        widget=forms.TextInput(attrs={"class": "form-control"}),
-    )
-    email = forms.EmailField(
-        label="Email",
-        max_length=50,
-        required=False,
-        widget=forms.EmailInput(attrs={"class": "form-control"}),
-    )
-    password = forms.CharField(
-        label="Password",
-        max_length=50,
-        widget=forms.PasswordInput(attrs={"class": "form-control"}),
-    )
     # doctor = forms.ModelChoiceField(
     #     label="Doctor",
     #     queryset=Doctor.objects.all(),
@@ -84,6 +68,22 @@ class PatientForm(forms.Form):
         label="Age",
         required=False,
         widget=forms.Select(attrs={"class": "form-control"})
+    )
+    username = forms.CharField(
+        label="Username",
+        max_length=50,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    email = forms.EmailField(
+        label="Email",
+        max_length=50,
+        required=False,
+        widget=forms.EmailInput(attrs={"class": "form-control"}),
+    )
+    password = forms.CharField(
+        label="Password",
+        max_length=50,
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
     )
 
     # Validations for patient
@@ -133,17 +133,6 @@ class PatientForm(forms.Form):
 
 
 class EditPatientForm(forms.Form):
-    username = forms.CharField(
-        label="Username",
-        max_length=50,
-        widget=forms.TextInput(attrs={"class": "form-control"}),
-    )
-    email = forms.EmailField(
-        label="Email",
-        max_length=50,
-        widget=forms.EmailInput(attrs={"class": "form-control"}),
-    )
-
     first_name = forms.CharField(
         label="First Name",
         max_length=50,
@@ -178,12 +167,20 @@ class EditPatientForm(forms.Form):
         label="Age",
         widget=forms.Select(attrs={"class": "form-control"})
     )
+    username = forms.CharField(
+        label="Username",
+        max_length=50,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    email = forms.EmailField(
+        label="Email",
+        max_length=50,
+        widget=forms.EmailInput(attrs={"class": "form-control"}),
+    )
+
 
 
 class StockForm(forms.ModelForm):
-    valid_to = forms.DateField(
-        label="Expiry Date", widget=DateInput(attrs={"class": "form-control"})
-    )
 
     class Meta:
         model = Stock
@@ -199,6 +196,7 @@ class StockForm(forms.ModelForm):
             "supplier": forms.Select(attrs={"class":"form-control w-auto"}),
             "vender": forms.Select(attrs={"class":"form-control w-auto"}),
             "gst": forms.Select(attrs={"class":"form-control w-auto"}),
+            "valid_to": forms.DateInput(attrs={"class":"form-control w-auto", "type": "date"}),
         }
 
 
@@ -397,10 +395,27 @@ class AddmissionForm(ModelForm):
         fields = "__all__"
         
         widgets = {
-            "patient": forms.Select(attrs={"class":"form-control"}),
-            "doctor": forms.Select(attrs={"class":"form-control"}),
-            "department": forms.Select(attrs={"class":"form-control"}),
-            "purpose": forms.Select(attrs={"class":"form-control"}),
+            "patient": forms.Select(attrs={"class":"form-control w-auto"}),
+            "doctor": forms.Select(attrs={"class":"form-control w-auto"}),
+            "department": forms.Select(attrs={"class":"form-control w-auto"}),
+            "purpose": forms.Select(attrs={"class":"form-control w-auto"}),
+            
+            # open these fields when purpose is IPD or Bed Addmission
+            "bht_no": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
+            "uid": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
+            "guardian": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
+            "addmission_time": forms.TextInput(attrs={"class":"form-control", 'type':'datetime-local', "data-purpose":"BedIPD"}),
+            "discharge_time": forms.TextInput(attrs={"class":"form-control", 'type':'datetime-local', "data-purpose":"BedIPD"}),
+            "ward_bed": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
+            "operation_date": forms.DateTimeInput(attrs={"class":"form-control", 'type':'datetime-local', "data-purpose":"BedIPD"}),
+            "addmission_type": forms.Select(attrs={"class":"form-control w-auto", "data-purpose":"BedIPD"}),
+            "mlc_no": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
+            "icd": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
+            "provisonal_diagnosis": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
+            "final_diagnosis": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
+            "summary_of_case": forms.Textarea(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
+            "result": forms.Select(attrs={"class":"form-control w-auto", "data-purpose":"BedIPD"}),
+            "couse_of_death": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
         }
 
 

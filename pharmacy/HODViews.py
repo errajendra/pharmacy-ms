@@ -345,6 +345,7 @@ def addStock(request):
         #     "packing": request.POST["packing"],
         # }
         # PurchasedInvoice.objects.create(invoice_data=context)
+        form.instance.status = True
         form.save()
         return redirect("manage_stock")
 
@@ -360,7 +361,7 @@ def manageStock(request):
     # ).filter(expired=True)
     eo = Stock.objects.annotate(
         expired=ExpressionWrapper(Q(valid_to__lt=Now()), output_field=BooleanField())
-    ).filter(expired=False, status=True)
+    ).filter(expired=False, status=True).order_by('-created_at')
 
     context = {
         "stocks": eo,
@@ -1388,7 +1389,7 @@ def addAddmission(request):
 
             return redirect("manage_addmission")
     context = {"form": form, "title": "New Patient Addmission"}
-    return render(request, "hod_templates/add_category.html", context)
+    return render(request, "hod_templates/addmission_patient.html", context)
 
 
 @login_required
@@ -1402,7 +1403,13 @@ def editAddmission(request, id):
 
             return redirect("manage_addmission")
     context = {"form": form, "title": "Update Addmission"}
-    return render(request, "hod_templates/add_category.html", context)
+    return render(request, "hod_templates/addmission_patient.html", context)
+
+
+def printAddmission(request, id):
+    ad = get_object_or_404(Addmission, id=id)
+    context = {"title": "Addmission Slip", "addmission": ad}
+    return render(request, "hod_templates/addmission_print.html", context)
 
 
 @for_admin
