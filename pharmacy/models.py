@@ -93,6 +93,7 @@ class Doctor(BaseModel):
         return str(self.admin)
 
 
+# Pathelogist
 class PharmacyClerk(BaseModel):
     gender_category = (
         ("Male", "Male"),
@@ -208,8 +209,7 @@ class Addmission(BaseModel):
     purpose = models.CharField(
         choices=(
             ("OPD", "OPD"),
-            ("IPD", "IPD"),
-            ("Bed Addmission", "Bed Addmission"),
+            ("IPD/Bed Addmission", "IPD/Bed Addmission"),
         ),
         max_length=20, default="OPD"
     )

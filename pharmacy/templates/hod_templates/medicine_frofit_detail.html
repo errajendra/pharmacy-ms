@@ -1,5 +1,5 @@
 {% extends 'hod_templates/base_template.html'%} {% block page_title %}
-<h5>Profit & Loss Detail</h5>
+<h5>{{title}} </h5>
 
 {% endblock page_title %} {% block main_content %}
 <section class="content">
@@ -9,7 +9,7 @@
 
             <div class="card manage sc">
                 <div class="card-header">
-                    <span>Profit Loas Detail</span>
+                    <span>{{title}} </span>
                     <div class="card-tools d-flex">
                     </div>
 
@@ -20,11 +20,11 @@
                         <tr>
                             <th>No</th>
                             <th>Name</th>
-                            <th class="text-center">Avl Qnt</th>
-                            <th class="text-center">Purchese Qnt</th>
-                            <th class="text-center">Purchese Amt</th>
-                            <th class="text-center">Sell Qnt</th>
-                            <th class="text-center">Sell Amt</th>
+                            <th class="text-center">Available Qty</th>
+                            <th class="text-center">Purchase Qty</th>
+                            <th class="text-center">Purchase Amt</th>
+                            <th class="text-center">Sold Qty</th>
+                            <th class="text-center">Sold Amt</th>
                         </tr>
                     </thead>
                     <tbody>

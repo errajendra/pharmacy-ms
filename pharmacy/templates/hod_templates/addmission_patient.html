@@ -73,12 +73,9 @@
         bedAdmissionElements.forEach(element => hideElement(`div_id_${element.name}`));
 
         // Show elements based on the selected purpose
-        if (purposeSelect.value === 'IPD') {
+        if (purposeSelect.value === 'IPD/Bed Addmission') {
             console.log("Showing IPD fields");
             ipdElements.forEach(element => showElement(`div_id_${element.name}`));
-        } else if (purposeSelect.value === 'Bed Addmission') {
-            console.log("Showing Bed Admission fields");
-        bedAdmissionElements.forEach(element => showElement(`div_id_${element.name}`));
         }
     }
 

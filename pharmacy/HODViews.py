@@ -25,7 +25,7 @@ def adminDashboard(request):
     total_stock = Stock.objects.all().count()
 
     today = datetime.today()
-    for_today = Patients.objects.filter(
+    for_today = Addmission.objects.filter(
         created_at__year=today.year,
         created_at__month=today.month,
         created_at__day=today.day,
@@ -104,7 +104,7 @@ def createPatient(request):
                 return redirect("pos")
             
             return redirect("patient_form")
-
+        
     context = {"form": form, "title": "Add Patient"}
 
     return render(request, "hod_templates/patient_form.html", context)
@@ -330,26 +330,27 @@ def upload_medicine_bulk_by_csv(request):
 
 @login_required
 def addStock(request):
-    form = StockForm(request.POST, request.FILES)
-    if form.is_valid():
-        # form = StockForm(request.POST, request.FILES)
-        # context = {
-        #     "medicine_name": request.POST["drug_name"],
-        #     "drug_description": request.POST["drug_description"],
-        #     "quantity": request.POST["quantity"],
-        #     "discount": request.POST["discount"],
-        #     "mrp": request.POST["price"],
-        #     "rate": request.POST["igst"],
-        #     "tax": request.POST["tax"],
-        #     "batch": request.POST["batch_number"],
-        #     "packing": request.POST["packing"],
-        # }
-        # PurchasedInvoice.objects.create(invoice_data=context)
-        form.instance.status = True
-        form.save()
-        return redirect("manage_stock")
-
-    context = {"form": form, "title": "Add New Drug"}
+    if request.method == "POST":
+        form = StockForm(request.POST, request.FILES)
+        if form.is_valid():
+            # form = StockForm(request.POST, request.FILES)
+            # context = {
+            #     "medicine_name": request.POST["drug_name"],
+            #     "drug_description": request.POST["drug_description"],
+            #     "quantity": request.POST["quantity"],
+            #     "discount": request.POST["discount"],
+            #     "mrp": request.POST["price"],
+            #     "rate": request.POST["igst"],
+            #     "tax": request.POST["tax"],
+            #     "batch": request.POST["batch_number"],
+            #     "packing": request.POST["packing"],
+            # }
+            # PurchasedInvoice.objects.create(invoice_data=context)
+            form.instance.status = True
+            form.save()
+            return redirect("manage_stock")
+    form = StockForm()
+    context = {"form": form, "title": "Add New Medicine"}
     return render(request, "hod_templates/add_stock.html", context)
 
 
@@ -1244,6 +1245,8 @@ def new_purchase_fun(request):
     sub_total = sum(purchase.sub_total for purchase in purchased_list)
     discount = sum(purchase.discount for purchase in purchased_list)
     total = sum(purchase.total for purchase in purchased_list)
+    
+    add_medicine_form = StockForm()
 
     context = {
         "manufacture_list": manufacture_list,
@@ -1252,6 +1255,7 @@ def new_purchase_fun(request):
         "discount": discount,
         "total": total,
         "invoice_no": invoice_no,
+        "add_medicine_form": add_medicine_form,
     }
 
     if request.method == "POST":
@@ -1292,6 +1296,16 @@ def new_purchase_fun(request):
         return redirect("new_purchase")
 
     return render(request, "hod_templates/purchase/new_purchase.html", context)
+
+
+@login_required
+def add_medicine_on_purchese_page(request):
+    if request.method == "POST":
+        form = StockForm(request.POST, request.FILES)
+        print("fkjbkjh")
+        if form.is_valid():
+            form.save()
+    return redirect(new_purchase_fun)
 
 
 @csrf_exempt
@@ -1425,7 +1439,7 @@ def deleteAddmission(request, id):
 def medicinesDetailView(request):
     
     context = {
-        "title": "Medicines",
+        "title": "Medicine Report",
         "medicines": Stock.objects.filter(status=True)
     }
     return render(request, 'hod_templates/medicine_frofit_detail.html', context)

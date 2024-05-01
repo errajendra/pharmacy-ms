@@ -180,6 +180,7 @@ urlpatterns=[
 
     # purchase url
     path("new-purchase/", HODViews.new_purchase_fun, name="new_purchase"),
+    path("add-medicine-purchese/", HODViews.add_medicine_on_purchese_page, name="add_medicine_on_purchese_page"),
     path('search-stock/', HODViews.search_stock, name="search_stock"),
     path('add-search-stock/', HODViews.add_searched_stock, name="add_searched_stock"),
     path('delete-search-stock/<int:id>/', HODViews.delete_searched_stock, name="delete_searched_stock"),

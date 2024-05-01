@@ -181,14 +181,18 @@ class EditPatientForm(forms.Form):
 
 
 class StockForm(forms.ModelForm):
-
+    total_price = forms.FloatField(
+        required=False,
+        widget=forms.NumberInput(attrs={'readonly': 'true', "class":"form-control w-auto"}),
+    )
     class Meta:
         model = Stock
-        fields = "__all__"
-        exclude = [
-            "valid_from"
-        ]
-        
+        fields = (
+            "category", "type", "manufacture", "vender",
+            "drug_name", "generic_drug_name", "drug_description",
+            "unit", "batch", "actual_price", "price", "quantity", "total_price",
+            "discount", "gst", "valid_to", "drug_pic")
+                
         widgets = {
             "category": forms.Select(attrs={"class":"form-control w-auto"}),
             "type": forms.Select(attrs={"class":"form-control w-auto"}),
@@ -196,7 +200,12 @@ class StockForm(forms.ModelForm):
             "supplier": forms.Select(attrs={"class":"form-control w-auto"}),
             "vender": forms.Select(attrs={"class":"form-control w-auto"}),
             "gst": forms.Select(attrs={"class":"form-control w-auto"}),
-            "valid_to": forms.DateInput(attrs={"class":"form-control w-auto", "type": "date"}),
+            "unit": forms.NumberInput(attrs={"class":"form-control w-auto"}),
+            "actual_price": forms.NumberInput(attrs={"class":"form-control w-auto"}),
+            "price": forms.NumberInput(attrs={"class":"form-control w-auto"}),
+            "quantity": forms.NumberInput(attrs={"class":"form-control w-auto"}),
+            "discount": forms.NumberInput(attrs={"class":"form-control w-auto"}),
+            "valid_to": forms.DateInput(attrs={"class":"form-control w-auto", "type": "date"}), 
         }
 
 
@@ -404,10 +413,10 @@ class AddmissionForm(ModelForm):
             "bht_no": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
             "uid": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
             "guardian": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
-            "addmission_time": forms.TextInput(attrs={"class":"form-control", 'type':'datetime-local', "data-purpose":"BedIPD"}),
-            "discharge_time": forms.TextInput(attrs={"class":"form-control", 'type':'datetime-local', "data-purpose":"BedIPD"}),
+            "addmission_time": forms.TextInput(attrs={"class":"form-control w-auto", 'type':'datetime-local', "data-purpose":"BedIPD"}),
+            "discharge_time": forms.TextInput(attrs={"class":"form-control w-auto", 'type':'datetime-local', "data-purpose":"BedIPD"}),
             "ward_bed": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
-            "operation_date": forms.DateTimeInput(attrs={"class":"form-control", 'type':'datetime-local', "data-purpose":"BedIPD"}),
+            "operation_date": forms.DateTimeInput(attrs={"class":"form-control w-auto", 'type':'datetime-local', "data-purpose":"BedIPD"}),
             "addmission_type": forms.Select(attrs={"class":"form-control w-auto", "data-purpose":"BedIPD"}),
             "mlc_no": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
             "icd": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),

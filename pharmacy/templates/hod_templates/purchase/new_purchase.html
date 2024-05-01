@@ -1,5 +1,5 @@
 {% extends 'hod_templates/base_template.html'%}
-
+{% load crispy_forms_tags %}
 {% block page_title %}
     <!-- Add title here if needed -->
 {% endblock page_title %}
@@ -54,14 +54,21 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-12">
+                </div>
+
+                <div class="row">
+                    <div class="col-10">
                         <div class="form-group">
                             <input id="search-input" type="text" placeholder="Search by name or generic" class="form-control">
                             <!-- Change select to ul -->
                             <ul id="search-results" class="list-group" style="display: none;"></ul>
                         </div>
                     </div>
+                    <div class="col-2">
+                        <button id="add-medicine-btn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addMedicineModal">Add Medicine</button>
+                    </div>
                 </div>
+
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover mb-0 small-table">
                         <thead>
@@ -150,7 +157,56 @@
             </div>
         </form>
     </div>
+    
+    <!-- Modal -->
+    <div class="modal fade mt-0" id="addMedicineModal" tabindex="-1" role="dialog" aria-labelledby="addMedicineModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <form method="post" action="{% url 'add_medicine_on_purchese_page' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addMedicineModalLabel">Add Medicine</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        {{add_medicine_form|crispy}}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </section>
+
+<script>
+    // Get the input fields for quantity, MRP, and total price
+    const quantityInput = document.getElementById('id_quantity');
+    const mrpInput = document.getElementById('id_price');
+    const totalPriceInput = document.getElementById('id_total_price');
+  
+    // Add an event listener to the quantity and MRP input fields
+    quantityInput.addEventListener('input', calculateTotalPrice);
+    mrpInput.addEventListener('input', calculateTotalPrice);
+  
+    // Define the function to calculate the total price
+    function calculateTotalPrice() {
+      // Get the current values of the quantity and MRP input fields
+      const quantity = parseFloat(quantityInput.value) || 0;
+      const mrp = parseFloat(mrpInput.value) || 0;
+  
+      // Calculate the total price
+      const totalPrice = quantity * mrp;
+  
+      // Set the value of the total price input field
+      totalPriceInput.value = totalPrice.toFixed(2);
+    }
+</script>
 
 {% endblock %}
 

@@ -107,7 +107,6 @@ def allPatients(request):
 
     context={
         "patients":patients,
-
     }
     return render(request,'clerk_templates/manage_patient.html',context)
 
