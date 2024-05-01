@@ -148,8 +148,8 @@ class Category(BaseModel):
 class HospitalItem(BaseModel):
     name = models.CharField(max_length=50)
     unit = models.PositiveIntegerField()
-    actual_price = models.FloatField(default="0", verbose_name="Actual Price")
-    price = models.FloatField(default="0", verbose_name="M.R.P")
+    actual_price = models.FloatField(default=0, verbose_name="Actual Price")
+    price = models.FloatField(default=0, verbose_name="M.R.P")
     discount = models.FloatField(default=0, verbose_name="Discount (%)")
     status = models.BooleanField(default=True)
 
@@ -217,10 +217,10 @@ class Addmission(BaseModel):
     # open these bellow fields on  form when choose purpose of IPD or Bed Addmission option
     bht_no = models.CharField(verbose_name="BHT No", max_length=48, null=True, blank=True)
     uid = models.CharField(max_length=15, verbose_name="Adhar Number", null=True, blank=True)
-    guardian = models.CharField(max_length=36, verbose_name="Duardian Name", null=True, blank=True)
+    guardian = models.CharField(max_length=36, verbose_name="Guardian Name", null=True, blank=True)
     addmission_time = models.DateTimeField(verbose_name="Date & Time of Addmission", null=True, blank=True)
     discharge_time = models.DateTimeField(verbose_name="Date & Time of Discharge", null=True, blank=True)
-    ward_bed = models.CharField(verbose_name="Ward/Bed", max_length=48, null=True, blank=True)
+    ward_bed = models.CharField(verbose_name="Ward/Bed No.", max_length=48, null=True, blank=True)
     operation_date = models.DateTimeField(verbose_name="Date & Time of Operation", null=True, blank=True)
     addmission_type = models.CharField(
         choices=(
@@ -247,7 +247,7 @@ class Addmission(BaseModel):
         ),
         max_length=20, default="Recovered"
     )
-    couse_of_death = models.CharField(verbose_name="Couse of Death", max_length=200, null=True, blank=True)
+    couse_of_death = models.CharField(verbose_name="Cause of Death", max_length=200, null=True, blank=True)
     
     
     def __str__(self) -> str:
@@ -300,14 +300,14 @@ class Stock(BaseModel):
         default=1, null=True, blank=True,
     )
     # vat = models.PositiveIntegerField(verbose_name="VAT", blank=True, null=True)
-    quantity = models.IntegerField(default="0", blank=True, null=True)
+    quantity = models.IntegerField(default=0, blank=True, null=True)
     batch = models.CharField(max_length=50, blank=True, null=True)
-    actual_price = models.FloatField(default="0", blank=True, null=True, verbose_name="Actual Price")
-    price = models.FloatField(default="0", blank=True, null=True, verbose_name="M.R.P")
+    actual_price = models.FloatField(default=0, blank=True, null=True, verbose_name="Actual Price")
+    price = models.FloatField(default=0, blank=True, null=True, verbose_name="M.R.P")
     
     # drug_color = models.CharField(max_length=50, blank=True, null=True)
     # batch_number = models.CharField(max_length=50, blank=True, null=True)
-    discount = models.FloatField(default="0", blank=True, null=True,)
+    discount = models.FloatField(default=0, blank=True, null=True,)
     gst = models.IntegerField(
         # 0, 5, 12, 18, 28
         choices=(

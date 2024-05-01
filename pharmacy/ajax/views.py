@@ -61,26 +61,34 @@ def add_to_cart(request):
         user = get_object_or_404(User, id=request.POST.get('user_id', None))
         med = request.POST.get('product_id', None)
         item_type = request.POST.get('item', None)
-        if item_type == "med":
-            medicine = get_object_or_404(Stock, id=med)
-            Cart.objects.create(
-                user = user,
-                medicine = medicine,
-                discount = float(medicine.discount)
+        try:
+            if item_type == "med":
+                medicine = get_object_or_404(Stock, id=med)
+                Cart.objects.create(
+                    user = user,
+                    medicine = medicine,
+                    discount = float(medicine.discount)
+                )
+            elif item_type == "item":
+                item = get_object_or_404(HospitalItem, id=med)
+                Cart.objects.create(
+                    user = user,
+                    hospital_item = item,
+                    discount = float(item.discount)
+                )
+            return JsonResponse(
+                {
+                    "status": 200,
+                },
+                safe=False
             )
-        elif item_type == "item":
-            item = get_object_or_404(HospitalItem, id=med)
-            Cart.objects.create(
-                user = user,
-                hospital_item = item,
-                discount = item.discount
+        except Exception as ex:
+            return JsonResponse(
+                {
+                    "status": 500,
+                    "msg": str(ex),
+                }
             )
-        return JsonResponse(
-            {
-                "status": 200,
-            },
-            safe=False
-        )
 
 
 def load_cart_items(request):
