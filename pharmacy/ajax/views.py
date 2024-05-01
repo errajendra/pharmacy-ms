@@ -66,7 +66,7 @@ def add_to_cart(request):
             Cart.objects.create(
                 user = user,
                 medicine = medicine,
-                discount = medicine.discount
+                discount = float(medicine.discount)
             )
         elif item_type == "item":
             item = get_object_or_404(HospitalItem, id=med)
