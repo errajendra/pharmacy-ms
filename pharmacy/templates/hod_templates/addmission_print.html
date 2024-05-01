@@ -24,7 +24,7 @@
 		h1, p {
 			text-align: center;
 		}
-		#company-details {
+		#custumer-details {
 			float: right;
 			width: 30%;
 		}
@@ -36,12 +36,18 @@
 		.p-8 {
 			padding: 8px;
 		}
+		.mr-8 {
+			margin-right: 8px;
+		}
 		
 		.text-left {
 			text-align: left;
 		}
 		.text-center {
 			text-align: center;
+		}
+		.text-right {
+			text-align: right;
 		}
 		.bold {
 			-webkit-text-stroke-width: thin;
@@ -72,9 +78,6 @@
 			}
 			h1, h2 {
 				page-break-after: avoid;
-			}
-			p, table {
-				page-break-inside: avoid;
 			}
 		}
 	</style>
@@ -119,6 +122,11 @@
 		<p class="text-left">
 			<span class="bold ml-10">Cause of Death : </span> {% if addmission.couse_of_death %} {{addmission.couse_of_death}} {% else %} ........... {% endif %}
 		</p>
+	</div>
+	<div class="text-right mr-8">
+		<h4>Attendant Signature </h4>
+		<h5>Name: __________________________</h5>
+		<h5>Relationship with Patient: __________________________</h5>
 	</div>
 	<div class="text-center">
 		<h4>-----***-----</h4>

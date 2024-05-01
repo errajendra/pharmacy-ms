@@ -180,7 +180,7 @@ class Manufacturer(BaseModel):
 class Vender(BaseModel):
     name = models.CharField(max_length=50, unique=True)
     phone_number = models.CharField(max_length=15)
-    email = models.EmailField(max_length=15, null=True, blank=True)
+    email = models.EmailField(max_length=100, null=True, blank=True)
     dl = models.CharField(max_length=50, verbose_name="DL No.", null=True, blank=True)
     gst = models.CharField(max_length=50, verbose_name="GST", null=True, blank=True)
     address = models.CharField(max_length=50, verbose_name="Address", null=True, blank=True)

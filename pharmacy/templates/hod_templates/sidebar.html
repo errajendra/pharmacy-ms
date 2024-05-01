@@ -55,7 +55,7 @@
                         <li class="nav-item pl-2 {% if request.path == '/admin_user/patient_form/' %}active{% endif %}">
                             <a href="{% url 'patient_form' %}" class="nav-link">
                                 <i class="fas fa-user-plus"></i>
-                                <p class="pl-2">add Patient</p>
+                                <p class="pl-2">Add Patient</p>
                             </a>
                         </li>
                         <li class="nav-item pl-2 {% if request.path == '/admin_user/all_patients/' %}active{% endif %}">
@@ -67,7 +67,7 @@
                         <li class="nav-item pl-2 {% if request.path == '/admin_user/add_addmission/' %}active{% endif %}">
                             <a href="{% url 'add_addmission' %}" class="nav-link">
                                 <i class="fas fa-user-plus"></i>
-                                <p class="pl-2">add Addmission</p>
+                                <p class="pl-2">Add Addmission</p>
                             </a>
                         </li>
                         <li class="nav-item pl-2 {% if request.path == '/admin_user/manage_addmission/' %}active{% endif %}">
@@ -92,7 +92,7 @@
                         <li class="nav-item pl-2">
                             <a href="{% url 'add_pharmacist' %}" class="nav-link">
                                 <i class="fas fa-user-plus"></i>
-                                <p class="pl-2">add Pharmacist</p>
+                                <p class="pl-2">Add Pharmacist</p>
                             </a>
                         </li>
                         <li class="nav-item pl-2">
@@ -173,7 +173,7 @@
                         <li class="nav-item pl-2">
                             <a href="{% url 'add_doctor' %}" class="nav-link">
                                 <i class="fas fa-user-plus"></i>
-                                <p class="pl-2">add Doctor</p>
+                                <p class="pl-2">Add Doctor</p>
                             </a>
                         </li>
                         <li class="nav-item pl-2">
@@ -200,7 +200,7 @@
                         <li class="nav-item pl-2">
                             <a href="{% url 'add_department' %}" class="nav-link">
                                 <i class="fas fa-user-plus"></i>
-                                <p class="pl-2">add Department</p>
+                                <p class="pl-2">Add Department</p>
                             </a>
                         </li>
                         <li class="nav-item pl-2">
@@ -226,7 +226,7 @@
                         <li class="nav-item pl-2">
                             <a href="{% url 'add_pharmacyClerk' %}" class="nav-link">
                                 <i class="fas fa-user-plus"></i>
-                                <p class="pl-2">add PharmacyClerk</p>
+                                <p class="pl-2">Add PharmacyClerk</p>
                             </a>
                         </li>
                         <li class="nav-item pl-2">
@@ -333,12 +333,12 @@
                             </a>
                         </li>
 
-                        <li class="nav-item pl-2 {% if request.path == '/admin_user/medicine-detailed-history/' or request.path == '/manage_stock2/' %}active{% endif %}">
+                        {% comment %} <li class="nav-item pl-2 {% if request.path == '/admin_user/medicine-detailed-history/' or request.path == '/manage_stock2/' %}active{% endif %}">
                             <a href="{% url 'manage_stock2'  %}" class="nav-link">
                                 <i class="fas fa-upload"></i>
                                 <p class="pl-2">Sell Invoice</p>
                             </a>
-                        </li>
+                        </li> {% endcomment %}
 
                     </ul>
                 </li>
