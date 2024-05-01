@@ -117,7 +117,7 @@ def cart_item_update(request):
         discount = request.POST.get("discount")
         
         cart.quantity = quantity
-        cart.discount = discount
+        cart.discount = float(discount)
         cart.save()
         
         cart = Cart.objects.get(id=cart.id)
