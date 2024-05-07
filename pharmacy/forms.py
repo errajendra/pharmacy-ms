@@ -53,6 +53,12 @@ class PatientForm(forms.Form):
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
     phone_number = forms.CharField(label="Mobile", max_length=50)
+    email = forms.EmailField(
+        label="Email",
+        max_length=50,
+        required=False,
+        widget=forms.EmailInput(attrs={"class": "form-control"}),
+    )
     gender_list = (("Male", "Male"), ("Female", "Female"))
     gender = forms.ChoiceField(
         label="Gender",
@@ -73,12 +79,6 @@ class PatientForm(forms.Form):
         label="Username",
         max_length=50,
         widget=forms.TextInput(attrs={"class": "form-control"}),
-    )
-    email = forms.EmailField(
-        label="Email",
-        max_length=50,
-        required=False,
-        widget=forms.EmailInput(attrs={"class": "form-control"}),
     )
     password = forms.CharField(
         label="Password",
@@ -408,6 +408,9 @@ class AddmissionForm(ModelForm):
             "doctor": forms.Select(attrs={"class":"form-control w-auto"}),
             "department": forms.Select(attrs={"class":"form-control w-auto"}),
             "purpose": forms.Select(attrs={"class":"form-control w-auto"}),
+            
+            # open these fields when purpose is OPD
+            "fees": forms.TextInput(attrs={"class":"form-control", "data-purpose":"FieldsOPD"}),
             
             # open these fields when purpose is IPD or Bed Addmission
             "bht_no": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),

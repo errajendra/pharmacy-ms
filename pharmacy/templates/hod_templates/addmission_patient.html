@@ -55,7 +55,7 @@
 
     // Get the elements you want to show or hide
     const ipdElements = document.querySelectorAll('[data-purpose="BedIPD"]');
-    const bedAdmissionElements = document.querySelectorAll('[data-purpose="BedIPD"]');
+    const opdElements = document.querySelectorAll('[data-purpose="FieldsOPD"]');
 
     // Define a function to show or hide elements based on the selected purpose
     function toggleElements() {
@@ -70,12 +70,16 @@
         }
         // Hide all elements by default
         ipdElements.forEach(element => hideElement(`div_id_${element.name}`));
-        bedAdmissionElements.forEach(element => hideElement(`div_id_${element.name}`));
+        opdElements.forEach(element => hideElement(`div_id_${element.name}`));
 
         // Show elements based on the selected purpose
         if (purposeSelect.value === 'IPD/Bed Addmission') {
             console.log("Showing IPD fields");
             ipdElements.forEach(element => showElement(`div_id_${element.name}`));
+        }
+        else if (purposeSelect.value === "OPD") {
+            console.log("Showing OPD fields");
+            opdElements.forEach(element => showElement(`div_id_${element.name}`));
         }
     }
 

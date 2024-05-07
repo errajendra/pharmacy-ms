@@ -214,6 +214,8 @@ class Addmission(BaseModel):
         max_length=20, default="OPD"
     )
     
+    fees = models.FloatField(verbose_name="Fees", default=0)
+    
     # open these bellow fields on  form when choose purpose of IPD or Bed Addmission option
     bht_no = models.CharField(verbose_name="BHT No", max_length=48, null=True, blank=True)
     uid = models.CharField(max_length=15, verbose_name="Adhar Number", null=True, blank=True)

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> {{title}} </title>
+	<link href='https://fonts.googleapis.com/css?family=Libre Barcode 128 Text' rel='stylesheet'>
+	
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			text-align: center;
+		}
+		
+		table, th, td {
+			border: 1px solid black;
+			border-collapse: collapse;
+			width: -webkit-fill-available;
+		}
+		th, td {
+			background-color: #fff;
+		}
+		th, td {
+			border: 1px solid #000;
+			padding: 8px;
+			text-align: left;
+		}
+		tr:nth-child(even) {
+			background-color: #dddddd;
+		}
+		.text-small {
+			font-size: smaller;
+		}
+		.text-grey {
+			color: #808080;
+		 }
+		h1 {
+			text-align: center;
+		}
+		.p-8 {
+			padding: 8px;
+		}
+		.m-0 {
+			margin: 0;
+		}
+		.mr-8 {
+			margin-right: 8px;
+		}
+		.mt-5 {
+			margin-top: 5px;
+		}
+		.mb-5 {
+			margin-bottom: 5px;
+		}
+		
+		.text-left {
+			text-align: left;
+		}
+		.text-center {
+			text-align: center;
+		}
+		.text-right {
+			text-align: right;
+		}
+		.bold {
+			-webkit-text-stroke-width: thin;
+		}
+		.ml-10 {
+			margin-left: 10px;
+		}
+		.float-right {
+			float: right;
+		}
+		.float-left {
+			float: left;
+		}
+		@media print {
+			@page {
+				size: A4;
+				margin: 0;
+			}
+			body {
+				margin: 1.6cm;
+				font-size: 8pt;
+				line-height: 1.2;
+			}
+			.print-hide {
+				display: none;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div>
+		<table>
+			<tr class="p-0">
+				<td colspan="2" class="text-center">
+					<h1 class="mt-5 mb-5">SDM Hospital & Trama Center</h1>
+					<h3 class="m-0">Multy Speciality Hospital</h3>
+					<p class="m-0">Address: Naini, Mahewa Patti Pashchim Kachh, Uttar Pradesh 211007</p>
+					<p class="m-0">Contact: +91 7080802045</p>
+					
+					<div class="text-center">
+						<h3 style="margin-bottom: auto;">OPD RECEIPT</h3>
+					</div>
+				</td>
+			</tr>
+
+			<tr>
+				<td><span class="bold ml-10">Patient UHID.: </span> {{addmission.id}} </td>
+				<td><span class="bold ml-10">Token No.: </span> <span style="font-size: x-large;"> {{addmission.id}} </span> </td>
+			</tr>
+
+			<tr>
+                <td> <span class="bold ml-10">Receipt ID.: </span> {{addmission.id}} </td>
+				<td> <span class="bold ml-10">OPD Date: </span>  {{addmission.created_at}} </td>
+			</tr>
+
+			<tr>
+                <td> <span class="bold ml-10">Patient/Guardian Name.: </span> {{addmission.patient}} / {{addmission.guardian}} </td>
+				<td> <span class="bold ml-10">Age/Sex: </span>  {{addmission.created_at}} </td>
+			</tr>
+			
+			<tr>
+                <td>
+					<span class="bold ml-10">Doctor Name: </span> {{addmission.doctor}} <span class="text-small text-grey"> ({{addmission.doctor.department}}) </span> 
+				</td>
+				<td>
+					<p> <span class="bold ml-10">Head: </span>  {{addmission.purpose}}  </p>
+					<p> <span class="bold ml-10">Fee: </span>  {{addmission.fees}}  </p>
+				</td>
+			</tr>
+
+			<tr>
+                <td> <span class="bold ml-10">Address: </span> {{addmission.patient.address}} </td>
+				<td> </td>
+			</tr>
+			
+			<tr>
+                <td colspan="2"> 
+					<p> 
+						<span class="bold ml-10">Printed On: </span> <span id="printedOn"> {{addmission.updated_at}} </span> 
+						<span class="float-right"> <span class="bold ml-10">Prepared By: </span> Admin </span>
+					</p>
+					<p> 
+						<span class="float-right"> <span class="bold ml-10">Payment Mode: </span> CASH </span>
+					</p>
+					<p> 
+						<span class="text-center text-small mt-5"> *** THIS IS COMPUTER GENARATED BILL SO NO NEED TO BE SIGNED. </span>
+					</p>
+					<p> 
+						<p class="float-right m-0" style="font-family: 'Libre Barcode 128 Text';font-size: 40px;" > {{addmission.purpose}}/{{addmission.id}} </p>
+					</p>
+				</td>
+			</tr>
+			
+		</table>
+	</div>
+
+	<div class="text-center">
+        <button class="print-hide mt-5" onclick="window.print()">Print</button>
+	</div>
+	
+	<script>
+		// Get the current date and time
+		const now = new Date();
+	  
+		// Format the date and time as a string
+		const datetimeString = now.toLocaleString();
+	  
+		// Get the paragraph element
+		const p = document.getElementById('printedOn');
+	  
+		// Set the innerHTML of the paragraph to the formatted date and time string
+		p.innerHTML = datetimeString;
+		
+	  </script>	  
+</body>
+</html>

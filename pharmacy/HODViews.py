@@ -1,6 +1,7 @@
 from pharmacy.clerkViews import receptionistProfile
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
+from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from .decorators import *
@@ -1400,7 +1401,9 @@ def addAddmission(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Patient Addmission added Successfully!")
-
+            purpose = request.POST.get('purpose', None)
+            if purpose in ["OPD", "X-Ray"]:
+                return redirect(reverse("opd_slip", args=[Addmission.objects.latest('id').id])) # return to perticular slip of id
             return redirect("manage_addmission")
     context = {"form": form, "title": "New Patient Addmission"}
     return render(request, "hod_templates/addmission_patient.html", context)
@@ -1422,8 +1425,12 @@ def editAddmission(request, id):
 
 def printAddmission(request, id):
     ad = get_object_or_404(Addmission, id=id)
-    context = {"title": "Addmission Slip", "addmission": ad}
-    return render(request, "hod_templates/addmission_print.html", context)
+    if ad.purpose == "IPD/Bed Addmission":
+        context = {"title": "IPD/Bed Addmission Slip", "addmission": ad}
+        return render(request, "hod_templates/addmission_print.html", context)
+
+    context = {"title": "OPD RECIEPT", "addmission": ad}
+    return render(request, "hod_templates/addmission_opd_print.html", context)
 
 
 @for_admin

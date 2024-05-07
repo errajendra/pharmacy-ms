@@ -69,6 +69,7 @@ urlpatterns=[
     path('admin_user/edit_addmission/<int:id>/',HODViews.editAddmission, name='edit_addmission'), 
     path('admin_user/print_addmission/<int:id>/',HODViews.printAddmission, name='print_addmission'), 
     path('admin_user/delete_addmission/<int:id>/',HODViews.deleteAddmission, name='delete_addmission'), 
+    path('admin_user/print_opd_addmission/<int:id>/',HODViews.printAddmission, name='opd_slip'), 
     
     # Department Urls
     path('admin_user/add_department/',HODViews.addDepartment, name='add_department'), 
