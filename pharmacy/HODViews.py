@@ -111,6 +111,51 @@ def createPatient(request):
     return render(request, "hod_templates/patient_form.html", context)
 
 
+
+@login_required
+def createPatientNext(request):
+    """ same as createPatient() additionaly it will redirected to Addmission form. """
+    form = PatientForm()
+
+    if request.method == "POST":
+        form = PatientForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            first_name = form.cleaned_data["first_name"]
+            last_name = form.cleaned_data["last_name"]
+            username = form.cleaned_data["username"]
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+            address = form.cleaned_data["address"]
+            phone_number = form.cleaned_data["phone_number"]
+            gender = form.cleaned_data["gender"]
+            
+            user = CustomUser.objects.create_user(
+                username=username,
+                email=email,
+                password=password,
+                first_name=first_name,
+                last_name=last_name,
+                user_type="Patients",
+            )
+            
+            user.patients.address = address
+            user.patients.phone_number = phone_number
+            user.patients.first_name = first_name
+            user.patients.last_name = last_name
+            user.patients.gender = gender
+            user.save()
+            
+            messages.success(request, username + " was Successfully Added")
+
+            return redirect(reverse("add_addmission") + '?patient='+f"{user.patients.id}")
+        
+    context = {"form": form, "title": "Add Patient"}
+
+    return render(request, "hod_templates/patient_form.html", context)
+
+
+
 @login_required
 def allPatients(request):
     form = PatientSearchForm1(request.POST or None)
@@ -1396,7 +1441,14 @@ def manageAddmission(request):
 
 @login_required
 def addAddmission(request):
-    form = AddmissionForm(request.POST or None)
+    patient = request.GET.get('patient', None)
+    
+    if patient:
+        patient = Patients.objects.get(id=patient)
+        form = AddmissionForm(request.POST or None, initial={'patient':patient})
+    else:
+        form = AddmissionForm(request.POST or None)
+    
     if request.method == "POST":
         if form.is_valid():
             form.save()

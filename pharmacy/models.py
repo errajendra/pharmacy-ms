@@ -36,6 +36,9 @@ class CustomUser(AbstractUser):
         ("Patients", "Patients"), # Custumer
     )
     user_type = models.CharField(default="AdminHOD", choices=user_type_data, max_length=20)
+    
+    def __str__(self) -> str:
+        return "{} {} - {}".format(self.first_name if self.first_name else '', self.last_name if self.last_name else '', self.username if self.username else '')
 
 
 class AdminHOD(BaseModel):
@@ -133,7 +136,7 @@ class Patients(BaseModel):
     address = models.CharField(max_length=300, null=True, blank=True)
 
     def __str__(self):
-        return str(self.admin)
+        return "{} {} - {}".format(self.first_name if self.first_name else '', self.last_name if self.last_name else '', self.phone_number if self.phone_number else '')
 
 
 

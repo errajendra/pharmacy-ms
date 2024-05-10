@@ -8,6 +8,7 @@ urlpatterns=[
     path("ajax/", include("pharmacy.ajax.urls")),
     path('',HODViews.adminDashboard,name='admin_dashboard'),
     path('admin_user/patient_form/',HODViews.createPatient,name='patient_form'),
+    path('admin_user/patient_form_and_addmit/',HODViews.createPatientNext,name='patient_form_and_next'),
     path('admin_user/all_patients/',HODViews.allPatients,name='all_patients'),
     path('login/',views.loginPage,name='login'),
     path('logout/',views.logoutUser,name='logout'), 

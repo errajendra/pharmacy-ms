@@ -265,7 +265,7 @@
                                             <select onchange="getCartDetails();" id="customer" name="customer" class="form-control selectpickerhg" data-live-search="true">
                                             {% comment %} <option value="0" selected> Walking Customer </option> {% endcomment %}
                                             {% for c in custumers %}
-                                            <option value="{{c.id}}"> {{c.get_full_name}} </option>
+                                            <option value="{{c.id}}"> {{c.get_full_name}} ({{c.username}})</option>
                                             {% endfor %}
                                         </select>
                                     </div>

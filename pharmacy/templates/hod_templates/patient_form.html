@@ -18,7 +18,7 @@
                     <!-- /.card-header -->
                     <!-- form start -->
 
-                    <form role="form" method="POST" action="" enctype="multipart/form-data" class="uniForm">
+                    <form id="myForm" role="form" method="POST" enctype="multipart/form-data" class="uniForm">
                         {% csrf_token %} {% if messages %}
                         <div class="form-group">
                             <div class="col-12">
@@ -70,7 +70,8 @@
                         <!-- /.card-body -->
 
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">submit</button>
+                            <button type="submit" name="action" class="btn btn-primary" value="submit1">Save</button>
+                            <button type="submit" name="action" class="btn btn-primary" value="submit2">Save & Next</button>
                         </div>
                     </form>
                 </div>
@@ -80,5 +81,22 @@
         </div>
 
     </div>
+
+    <script>
+        document.getElementById("myForm").addEventListener("submit", function(event) {
+            // Get the value of the clicked submit button
+            var action = event.submitter.getAttribute('value');
+    
+            // Dynamically set the form's action based on the clicked button
+            if (action === "submit1") {
+                this.action = "{% url 'patient_form' %}";
+            } else if (action === "submit2") {
+                this.action = "{% url 'patient_form_and_next' %}";
+            } else {
+                // Default action if no button was clicked
+                this.action = ""; // Or specify a default URL
+            }
+        });
+    </script>
 </section>
 {% endblock main_content %}
