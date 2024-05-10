@@ -17,8 +17,8 @@ urlpatterns=[
     path('admin_user/manage_pharmacist/',HODViews.managePharmacist,name='manage_pharmacist'),
     path('admin_user/add_doctor/',HODViews.createDoctor,name='add_doctor'),
     path('admin_user/manage_doctor/',HODViews.manageDoctor,name='manage_doctor'),
-    path('admin_user/add_pharmacyClerk/',HODViews.createPharmacyClerk,name='add_pharmacyClerk'),
-    path('admin_user/admin_user/manage_pharmacyClerk/',HODViews.managePharmacyClerk,name='manage_pharmacyClerk'),
+    path('admin_user/add_Pathologist/',HODViews.createPathologist,name='add_Pathologist'),
+    path('admin_user/admin_user/manage_Pathologist/',HODViews.managePathologist,name='manage_Pathologist'),
     
     path('admin_user/add-medines-bulk-by-csv/',HODViews.upload_medicine_bulk_by_csv,name='upload_medicine_bulk_by_csv'),
     
@@ -93,14 +93,14 @@ urlpatterns=[
     path('admin_user/hod_profile/',HODViews.hodProfile,name='hod_profile'),
     path('admin_user/delete_doctor/<str:pk>/',HODViews.deleteDoctor,name='delete_doctor'),
     path('admin_user/delete_pharmacist/<str:pk>/',HODViews.deletePharmacist,name='delete_pharmacist'),
-    path('admin_user/delete_receptionist/<str:pk>/',HODViews.deletePharmacyClerk,name='delete_clerk'),
+    path('admin_user/delete_receptionist/<str:pk>/',HODViews.deletePathologist,name='delete_clerk'),
     path('admin_user/hod_profile/editAdmin_profile/',HODViews.editAdmin,name='edit-admin'),
     path('admin_user/delete_drug/<str:pk>/',HODViews.deleteDrug,name='delete_drug'),
 
 
     path('admin_user/edit_pharmacist/<staff_id>/', HODViews.editPharmacist, name="edit_pharmacist"),
     path('admin_user/edit_doctor/<doctor_id>/', HODViews.editDoctor, name="edit_doctor"),
-    path('admin_user/edit_receptionist/<clerk_id>/', HODViews.editPharmacyClerk, name="edit_clerk"),
+    path('admin_user/edit_receptionist/<clerk_id>/', HODViews.editPathologist, name="edit_clerk"),
     path('admin_user/edit_drug/<pk>/', HODViews.editStock, name="edit_drug"),
     path('admin_user/receive_drug/<pk>/', HODViews.receiveDrug, name="receive_drug"),
     path('admin_user/reorder_level/<str:pk>/', HODViews.reorder_level, name="reorder_level"),

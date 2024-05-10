@@ -262,7 +262,7 @@
                                     </div>
                                     <div class="col-lg-4">
                                         {% comment %} <select onchange="customer_change(this.value);" id="customer" name="customer_id" data-placeholder="Walk In Customer" class="form-control"> {% endcomment %}
-                                            <select onchange="getCartDetails();" id="customer" name="customer" class="form-control">
+                                            <select onchange="getCartDetails();" id="customer" name="customer" class="form-control selectpickerhg" data-live-search="true">
                                             {% comment %} <option value="0" selected> Walking Customer </option> {% endcomment %}
                                             {% for c in custumers %}
                                             <option value="{{c.id}}"> {{c.get_full_name}} </option>
@@ -663,7 +663,7 @@
 
     </main>
     <audio id="audio" src="/static/pos/music/beep.mp3"></audio>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
     <!-- JS Front -->
     <script src="/static/pos/pos/js/vendor.min.js"></script>
     <script src="/static/pos/pos/js/theme.min.js"></script>

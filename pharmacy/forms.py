@@ -320,7 +320,7 @@ class DoctorForm(ModelForm):
 
 class ClerkForm(ModelForm):
     class Meta:
-        model = PharmacyClerk
+        model = Pathologist
         fields = "__all__"
         exclude = ["admin", "gender", "mobile", "address"]
 

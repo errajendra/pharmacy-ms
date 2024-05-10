@@ -32,7 +32,7 @@ class CustomUser(AbstractUser):
         ("Doctor", "Doctor"),
         ("Supplier", "Supplier"),
         ("Vender", "Vender"),
-        ("PharmacyClerk", "PharmacyClerk"),
+        ("Pathologist", "Pathologist"), # Pharmacy Clerk (old)
         ("Patients", "Patients"), # Custumer
     )
     user_type = models.CharField(default="AdminHOD", choices=user_type_data, max_length=20)
@@ -93,14 +93,13 @@ class Doctor(BaseModel):
         return str(self.admin)
 
 
-# Pathelogist
-class PharmacyClerk(BaseModel):
+# Pathologist
+class Pathologist(BaseModel):
     gender_category = (
         ("Male", "Male"),
         ("Female", "Female"),
     )
     admin = models.OneToOneField(CustomUser, null=True, on_delete=models.CASCADE)
-    emp_no = models.CharField(max_length=100, null=True, blank=True)
     gender = models.CharField(max_length=100, null=True, choices=gender_category)
     mobile = models.CharField(max_length=10, null=True, blank=True)
     address = models.CharField(max_length=300, null=True, blank=True)
@@ -399,8 +398,8 @@ def create_user_profile(sender, instance, created, **kwargs):
             Pharmacist.objects.create(admin=instance, address="")
         if instance.user_type == "Doctor":
             Doctor.objects.create(admin=instance, address="")
-        if instance.user_type == "PharmacyClerk":
-            PharmacyClerk.objects.create(admin=instance, address="")
+        if instance.user_type == "Pathologist":  # Pharmacy Clerk (old)
+            Pathologist.objects.create(admin=instance, address="")
         if instance.user_type == "Patients":
             Patients.objects.create(admin=instance, address="")
 
@@ -413,8 +412,8 @@ def save_user_profile(sender, instance, **kwargs):
         instance.pharmacist.save()
     if instance.user_type == "Doctor":
         instance.doctor.save()
-    if instance.user_type == "PharmacyClerk":
-        instance.pharmacyclerk.save()
+    if instance.user_type == "Pathologist": # Pharmacy Clerk (old)
+        instance.pathologist.save()
     if instance.user_type == "Patients":
         instance.patients.save()
 

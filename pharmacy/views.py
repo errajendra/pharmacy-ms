@@ -37,7 +37,7 @@ def loginPage(request):
 
             elif user_type == 'Doctor':
                 return redirect('doctor_home')
-            elif user_type == 'PharmacyClerk':
+            elif user_type == 'Pathologist':
                 return redirect('clerk_home')
             elif user_type == 'Patients':
                 return redirect('patient_home')

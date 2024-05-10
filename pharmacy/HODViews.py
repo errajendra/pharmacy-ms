@@ -21,7 +21,7 @@ def adminDashboard(request):
 
     doctors = Doctor.objects.all().count()
     pharmacist = Pharmacist.objects.all().count()
-    receptionist = PharmacyClerk.objects.all().count()
+    pathologist = Pathologist.objects.all().count()
     out_of_stock = Stock.objects.filter(quantity__lte=0).count()
     total_stock = Stock.objects.all().count()
 
@@ -49,7 +49,7 @@ def adminDashboard(request):
         "total_drugs": total_stock,
         "all_doctors": doctors,
         "all_pharmacists": pharmacist,
-        "all_clerks": receptionist,
+        "pathologist": pathologist,
         "for_today": for_today,
     }
     return render(request, "hod_templates/admin_dashboard.html", context)
@@ -239,7 +239,7 @@ def manageDoctor(request):
 
 
 @login_required
-def createPharmacyClerk(request):
+def createPathologist(request):
     if request.method == "POST":
         username = request.POST.get("username")
         email = request.POST.get("email")
@@ -250,33 +250,33 @@ def createPharmacyClerk(request):
         password = request.POST.get("password")
 
         try:
-            user = CustomUser.objects.create_user(
+            user = CustomUser.objects.create(
                 username=username,
                 email=email,
                 password=password,
                 first_name=first_name,
                 last_name=last_name,
-                user_type=4,
+                user_type="Pathologist",
             )
-            user.pharmacyclerk.address = address
-            user.pharmacyclerk.mobile = mobile
+            user.pathologist.address = address
+            user.pathologist.mobile = mobile
 
             user.save()
-            messages.success(request, "Staff Added Successfully!")
-            return redirect("add_pharmacyClerk")
-        except:
-            messages.error(request, "Failed to Add Staff!")
-            return redirect("add_pharmacyClerk")
+            messages.success(request, "Pathologist Added Successfully!")
+            return redirect("add_Pathologist")
+        except Exception as e:
+            messages.error(request, f"{e}!")
+            return redirect("add_Pathologist")
 
-    context = {"title": "Add Pharmacy Clerk"}
+    context = {"title": "Add Pathologist"}
 
     return render(request, "hod_templates/add_pharmacyClerk.html", context)
 
 
 @login_required
-def managePharmacyClerk(request):
-    staffs = PharmacyClerk.objects.all()
-    context = {"staffs": staffs, "title": "Manage PharmacyClerk"}
+def managePathologist(request):
+    staffs = Pathologist.objects.all()
+    context = {"staffs": staffs, "title": "Manage Pathologist"}
 
     return render(request, "hod_templates/manage_pharmacyClerk.html", context)
 
@@ -806,18 +806,18 @@ def deletePharmacist(request, pk):
 
 
 @login_required
-def deletePharmacyClerk(request, pk):
+def deletePathologist(request, pk):
     try:
-        clerk = PharmacyClerk.objects.get(id=pk)
+        clerk = Pathologist.objects.get(id=pk)
         if request.method == "POST":
             clerk.delete()
-            messages.success(request, "Pharmacy Clerk  deleted   successfully")
+            messages.success(request, "Pathologist deleted successfully")
 
-            return redirect("manage_pharmacyClerk")
+            return redirect("manage_Pathologist")
 
     except:
         messages.error(request, "Pharmacy  Clerk Not deleted")
-        return redirect("manage_pharmacyClerk")
+        return redirect("manage_Pathologist")
 
     return render(request, "hod_templates/sure_delete.html")
 
@@ -889,8 +889,8 @@ def editDoctor(request, doctor_id):
 
 
 @login_required
-def editPharmacyClerk(request, clerk_id):
-    clerk = PharmacyClerk.objects.get(admin=clerk_id)
+def editPathologist(request, clerk_id):
+    clerk = Pathologist.objects.get(admin=clerk_id)
     if request.method == "POST":
         username = request.POST.get("username")
         last_name = request.POST.get("last_name")
@@ -908,7 +908,7 @@ def editPharmacyClerk(request, clerk_id):
             user.last_name = last_name
             user.save()
 
-            clerk = PharmacyClerk.objects.get(admin=clerk_id)
+            clerk = Pathologist.objects.get(admin=clerk_id)
             clerk.address = address
             clerk.mobile = mobile
             clerk.gender = gender
@@ -920,7 +920,7 @@ def editPharmacyClerk(request, clerk_id):
                 request, "An Error Was Encounterd Receptionist Not Updated"
             )
 
-    context = {"staff": clerk, "title": "Edit PharmacyClerk"}
+    context = {"staff": clerk, "title": "Edit Pathologist"}
     return render(request, "hod_templates/edit_clerk.html", context)
 
 
