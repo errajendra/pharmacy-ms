@@ -55,7 +55,6 @@
                         <th>Last Name</th>
                         <th>Email</th>
                         <th>Mobile</th>
-                        <th>Doctor</th>
                         <th>Last Login</th>
                         <th class="text-center">Action</th>
 
@@ -68,13 +67,12 @@
                         <td>{{patient.admin.id}}</td>
                         <td><img src="{{patient.profile_pic.url}}" class="" width="35" height="35" alt=""></td>
 
-                        <td>{{patient.admin}}</td>
-                        <td>{{patient.first_name}}</td>
-                        <td>{{patient.last_name}}</td>
+                        <td>{{patient.admin.username}}</td>
+                        <td> {% if patient.first_name %} {{patient.first_name}} {% endif %} </td>
+                        <td> {% if patient.last_name %} {{patient.last_name}} {% endif %} </td>
 
-                        <td>{{patient.admin.email}}</td>
-                        <td>{{patient.phone_number}}</td>
-                        <td>{{patient.doctor.admin.get_full_name}}</td>
+                        <td> {% if patient.admin.email %} {{patient.admin.email}} {% endif %} </td>
+                        <td> {% if patient.phone_number %} {{patient.phone_number}} {% endif %} </td>
 
                         <td>{{patient.admin.last_login}}</td>
 

@@ -53,17 +53,28 @@
 
     <script>
         // Get the input fields for quantity, MRP, and total price
+        const unitInput = document.getElementById('id_unit');
+        const unitQuantityInput = document.getElementById('id_unit_quantity');
         const quantityInput = document.getElementById('id_quantity');
         const mrpInput = document.getElementById('id_price');
         const totalPriceInput = document.getElementById('id_total_price');
       
         // Add an event listener to the quantity and MRP input fields
+        unitInput.addEventListener('input', calculateTotalPrice);
+        unitQuantityInput.addEventListener('input', calculateTotalPrice);
         quantityInput.addEventListener('input', calculateTotalPrice);
         mrpInput.addEventListener('input', calculateTotalPrice);
       
         // Define the function to calculate the total price
         function calculateTotalPrice() {
           // Get the current values of the quantity and MRP input fields
+          const unitQuantity = parseFloat(unitQuantityInput.value) || 0;
+          const unit = parseFloat(unitInput.value) || 0;
+
+          const totalQty = unitQuantity * unit;
+
+          quantityInput.value = totalQty;
+
           const quantity = parseFloat(quantityInput.value) || 0;
           const mrp = parseFloat(mrpInput.value) || 0;
       

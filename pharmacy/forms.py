@@ -9,6 +9,8 @@ from django.core.exceptions import ValidationError
 from phonenumber_field.formfields import PhoneNumberField
 from django.core.validators import RegexValidator
 from phonenumber_field.formfields import PhoneNumberField
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Div, Field
 
 
 import json
@@ -75,16 +77,16 @@ class PatientForm(forms.Form):
         required=False,
         widget=forms.Select(attrs={"class": "form-control"})
     )
-    username = forms.CharField(
-        label="Username",
-        max_length=50,
-        widget=forms.TextInput(attrs={"class": "form-control"}),
-    )
-    password = forms.CharField(
-        label="Password",
-        max_length=50,
-        widget=forms.PasswordInput(attrs={"class": "form-control"}),
-    )
+    # username = forms.CharField(
+    #     label="Username",
+    #     max_length=50,
+    #     widget=forms.TextInput(attrs={"class": "form-control"}),
+    # )
+    # password = forms.CharField(
+    #     label="Password",
+    #     max_length=50,
+    #     widget=forms.PasswordInput(attrs={"class": "form-control"}),
+    # )
 
     # Validations for patient
     def clean_reg_no(self):
@@ -185,12 +187,13 @@ class StockForm(forms.ModelForm):
         required=False,
         widget=forms.NumberInput(attrs={'readonly': 'true', "class":"form-control w-auto"}),
     )
+    
     class Meta:
         model = Stock
         fields = (
             "category", "type", "manufacture", "vender",
             "drug_name", "generic_drug_name", "drug_description",
-            "unit", "batch", "actual_price", "price", "quantity", "total_price",
+            "batch", "actual_price", "price", "unit", "unit_quantity", "quantity", "total_price",
             "discount", "gst", "valid_to", "drug_pic")
                 
         widgets = {
@@ -201,6 +204,7 @@ class StockForm(forms.ModelForm):
             "vender": forms.Select(attrs={"class":"form-control w-auto"}),
             "gst": forms.Select(attrs={"class":"form-control w-auto"}),
             "unit": forms.NumberInput(attrs={"class":"form-control w-auto"}),
+            "unit_quantity": forms.NumberInput(attrs={"class":"form-control w-auto"}),
             "actual_price": forms.NumberInput(attrs={"class":"form-control w-auto"}),
             "price": forms.NumberInput(attrs={"class":"form-control w-auto"}),
             "quantity": forms.NumberInput(attrs={"class":"form-control w-auto"}),

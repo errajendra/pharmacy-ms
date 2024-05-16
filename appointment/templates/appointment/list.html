@@ -1,0 +1,98 @@
+{% extends 'hod_templates/base_template.html'%} {% block page_title %}
+<h5> {{title}} </h5>
+
+{% endblock page_title %} 
+
+{% block main_content %}
+<section class="content">
+    {% if messages %}
+    <div class="form-group">
+        <div class="col-12">
+            {% for message in messages %} {% if message.tags == "error" %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% elif message.tags == "success" %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %} {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="card card-primar sc">
+                <div class="card-header">
+                    <span> {{title}} </span>
+                    <div class="card-tools d-flex">
+
+                        <a class="btn btn-sm btn-info mr-2" href="{% url 'new_appointment_admin'  %}" role="button">+ New Appointment</a>
+
+                    </div>
+                </div>
+                <table class="table table-bordered table-hover dataTable" id="plist">
+                    <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th>Token</th>
+                            <th>Doctor</th>
+                            <th>Patient</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Shift</th>
+                            <th>Doctor Fees</th>
+                            <th>Payment Mode</th>
+                            <th>Priority</th>
+                            <th>Booking Mode</th>
+                            <th>Message</th>
+                            <th>Address</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for appointment in appointments %}
+
+                        <tr class="hov">
+                            <td> {{forloop.counter}} </td>
+                            <td> {{appointment.token}} </td>
+
+                            <td>{{appointment.doctor.admin.get_full_name}}</td>
+                            <td>{{appointment.patient.admin.get_full_name}}</td>
+                            <td>{{appointment.date}}</td>
+                            <td>{{appointment.status}}</td>
+                            <td>{{appointment.shift}}</td>
+                            <td>{{appointment.fee}}</td>
+                            <td>{{appointment.payment_mode}}</td>
+                            <td>{{appointment.priority}}</td>
+                            <td>{{appointment.booking_mode}}</td>
+                            <td>{{appointment.message}}</td>
+                            <td>{{appointment.address}}</td>
+
+                            <td>
+                                <a href="{% url 'edit_pharmacist' appointment.id %}" class="btn btn-sm btn-success">Edit</a>
+                                <a href="{% url 'delete_pharmacist' appointment.id %}" class="btn btn-sm btn-danger">Delete</a>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

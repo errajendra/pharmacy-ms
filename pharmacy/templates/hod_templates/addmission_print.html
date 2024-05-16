@@ -79,6 +79,9 @@
 			h1, h2 {
 				page-break-after: avoid;
 			}
+			.print-hide {
+				display: none;
+			}
 		}
 	</style>
 </head>
@@ -94,14 +97,14 @@
 	<div class="text-left">
 		<p class="text-left p-8 big">
 			<span class="bold ml-10">Addmit ID.: </span>  {% if addmission.id %} {{addmission.id}} {% else %} ........... {% endif %}
-			<span class="bold ml-10">BTH No.: </span>  {% if addmission.bth_no %} {{addmission.bth_no}} {% else %} ........... {% endif %}
+			<span class="bold ml-10">BHT No.: </span>  {% if addmission.bht_no %} {{addmission.bht_no}} {% else %} ........... {% endif %}
 			<span class="bold ml-10">Patient Name : </span>  {% if addmission.patient.admin.get_full_name %} {{addmission.patient.admin.get_full_name}} {% else %} ........... {% endif %}
-			<span class="bold ml-10">Age : </span> {% if addmission.patient.admin.age %} {{addmission.patient.admin.age}} {% else %} ........... {% endif %}
+			<span class="bold ml-10">Age : </span> {% if addmission.patient.age %} {{addmission.patient.age}} {% else %} ........... {% endif %}
 			<span class="bold ml-10">Sex : </span> {% if addmission.patient.gender %} {{addmission.patient.gender}} {% else %} ........... {% endif %}
 			<span class="bold ml-10">Address : </span> {% if addmission.patient.address %} {{addmission.patient.address}} {% else %} ........... {% endif %}
 			<span class="bold ml-10">Mobile : </span> {% if addmission.patient.phone_number %} {{addmission.patient.phone_number}} {% else %} ........... {% endif %}
-			<span class="bold ml-10">Adhar : </span> {% if addmission.patient.uid %} {{addmission.patient.uid}} {% else %} ........... {% endif %}
-			<span class="bold ml-10">Guardian : </span> {% if addmission.patient.guardian %} {{addmission.patient.guardian}} {% else %} ........... {% endif %}
+			<span class="bold ml-10">Adhar : </span> {% if addmission.uid %} {{addmission.uid}} {% else %} ........... {% endif %}
+			<span class="bold ml-10">Guardian : </span> {% if addmission.guardian %} {{addmission.guardian}} {% else %} ........... {% endif %}
 			<span class="bold ml-10">Cunsultant Doctor : </span> {% if addmission.doctor %} {{addmission.doctor}} {% else %} ........... {% endif %}
 			<span class="bold ml-10">Date & Time of Addmission : </span> {% if addmission.addmission_time %} {{addmission.addmission_time}} {% else %} ........... {% endif %}
 			<span class="bold ml-10">Date & Time of Discharge : </span> {% if addmission.discharge_time %} {{addmission.discharge_time}} {% else %} ........... {% endif %}
@@ -130,7 +133,7 @@
 	</div>
 	<div class="text-center">
 		<h4>-----***-----</h4>
-        <button onclick="window.print()">Print</button>
+        <button onclick="window.print()" class="print-hide">Print</button>
 	</div>
 </body>
 </html>

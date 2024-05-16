@@ -303,8 +303,8 @@ class Stock(BaseModel):
     unit = models.PositiveIntegerField(
         default=1, null=True, blank=True,
     )
-    # vat = models.PositiveIntegerField(verbose_name="VAT", blank=True, null=True)
-    quantity = models.IntegerField(default=0, blank=True, null=True)
+    unit_quantity = models.PositiveIntegerField(verbose_name="Per Unit Quantity", blank=True, null=True)
+    quantity = models.IntegerField(verbose_name="Total Quantity", default=0, blank=True, null=True)
     batch = models.CharField(max_length=50, blank=True, null=True)
     actual_price = models.FloatField(default=0, blank=True, null=True, verbose_name="Actual Price")
     price = models.FloatField(default=0, blank=True, null=True, verbose_name="M.R.P")
