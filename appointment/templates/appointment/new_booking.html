@@ -15,7 +15,8 @@
                 </div>
 
                 <form method="POST" style="font-size:13px;" class='px-3 py-2'>
-                    {% csrf_token %} {% if messages %}
+                    {% csrf_token %} 
+                    {% if messages %}
                     <div class="form-group">
                         <div class="col-12">
                             {% for message in messages %} {% if message.tags == "error" %}
@@ -45,9 +46,9 @@
                                     Patient<span class="asteriskField">*</span> 
                                 </label>
                                 <select name="patient" class="form-control select form-select" required="" id="id_patient">
-                                    <option value="" selected="">---------</option>
+                                    {% if instance %} {% else %} <option value="" selected="">---------</option> {% endif %}
                                     {% for p in patients %}
-                                    <option value="{{p.id}}"> {{p}} </option> 
+                                    <option value="{{p.id}}" {% if instance.patient.id == p.id %} selected="" {% endif %}> {{p}} </option> 
                                     {% endfor %}
                                 </select> 
                             </div> 
@@ -57,9 +58,9 @@
                                             Doctor<span class="asteriskField">*</span> 
                                 </label> 
                                 <select name="doctor" class="form-control select form-select" required="" id="id_doctor">
-                                    <option value="" selected="">---------</option> 
+                                    {% if instance %} {% else %} <option value="" selected="">---------</option> {% endif %}
                                     {% for d in doctors %}
-                                    <option value="{{i.id}}"> {{d}} </option>
+                                    <option value="{{d.id}}" {% if instance.doctor.id == d.id %} selected="" {% endif %}> {{d}} </option>
                                     {% endfor %}
 
                                 </select>
@@ -69,7 +70,7 @@
                                 <label for="id_date" class="form-label requiredField">
                                     Date<span class="asteriskField">*</span> 
                                 </label>
-                                <input type="date" name="date" class="form-control dateinput" required="" id="id_date"> 
+                                <input type="date" name="date" {% if instance.date %} value="{{instance.date}}" {% endif %} class="form-control dateinput" required="" id="id_date"> 
                             </div> 
                             
                             <div id="div_id_booking_mode" class="mb-3 col-md-6 col-sm-12">
@@ -77,8 +78,13 @@
                                     Booking Mode<span class="asteriskField">*</span>
                                 </label> 
                                 <select name="booking_mode" class="form-control select form-select" id="id_booking_mode"> 
+                                    {% if instance %}
+                                    <option value="Morning" {% if instance.booking_mode == "Morning" %} selected="" {% endif %}>Morning</option> 
+                                    <option value="Evening"  {% if instance.booking_mode == "Evening" %} selected="" {% endif %} >Evening</option>
+                                    {% else %}
                                     <option value="Morning" selected="">Morning</option> 
                                     <option value="Evening">Evening</option>
+                                    {% endif %}
 
                                 </select> 
                             </div> 
@@ -88,9 +94,15 @@
                                             Booking Status<span class="asteriskField">*</span> 
                                 </label> 
                                 <select name="status" class="form-control select form-select" id="id_status"> 
+                                    {% if instance %}
+                                    <option value="Pending" {% if instance.status == "Pending" %} selected="" {% endif %} >Pending</option> 
+                                    <option value="Booked" {% if instance.status == "Booked" %} selected="" {% endif %} >Booked</option> 
+                                    <option value="Seen" {% if instance.status == "Seen" %} selected="" {% endif %} >Seen</option>
+                                     {% else %}
                                     <option value="Pending">Pending</option> 
                                     <option value="Booked" selected="">Booked</option> 
                                     <option value="Seen">Seen</option>
+                                    {% endif %}
                                 </select> 
                             </div> 
                             
@@ -99,8 +111,13 @@
                                     Shift<span class="asteriskField">*</span>
                                 </label> 
                                 <select name="shift" class="form-control select form-select" id="id_shift"> 
+                                    {% if instance.shift %}
+                                    <option value="Morning" {% if instance.shift == "Morning" %} selected="" {% endif %}>Morning</option> 
+                                    <option value="Evening" {% if instance.shift == "Evening" %} selected="" {% endif %}>Evening</option>
+                                    {% else %}
                                     <option value="Morning" selected="">Morning</option> 
                                     <option value="Evening">Evening</option>
+                                    {% endif %}
 
                                 </select> 
                             </div> 
@@ -109,7 +126,7 @@
                                 <label for="id_fee" class="form-label requiredField">
                                             Doctor Fees<span class="asteriskField">*</span>
                                 </label> 
-                                <input type="number" name="fee" value="0" class="form-control numberinput" step="any" required="" id="id_fee"> 
+                                <input type="number" name="fee" {% if instance.fee %} value="{{instance.fee}}" {% else %} value="0" {% endif %} class="form-control numberinput" step="any" required="" id="id_fee"> 
                             </div> 
                             
                             <div id="div_id_payment_mode" class="mb-3 col-md-4 col-sm-6"> 
@@ -117,10 +134,19 @@
                                             Payment Mode<span class="asteriskField">*</span> 
                                 </label> 
                                 <select name="payment_mode" class="form-control select form-select" id="id_payment_mode"> 
+                                    {% if instance.payment_mode %}
+                                    
+                                    <option value="Cash" {% if instance.payment_mode == "Cash" %} selected="" {% endif %}>Cash</option> 
+                                    <option value="Upi" {% if instance.payment_mode == "Upi" %} selected="" {% endif %}>Upi</option> 
+                                    <option value="Bank Transfer" {% if instance.payment_mode == "Bank Transfer" %} selected="" {% endif %}>Bank Transfer</option> 
+                                    <option value="Other" {% if instance.payment_mode == "Other" %} selected="" {% endif %}>Other</option>
+                                    
+                                    {% else %}
                                     <option value="Cash" selected="">Cash</option> 
                                     <option value="Upi">Upi</option> 
                                     <option value="Bank Transfer">Bank Transfer</option> 
                                     <option value="Other">Other</option>
+                                    {% endif %}
 
                                 </select> 
                             </div> 
@@ -130,11 +156,17 @@
                                             Appointment Priority<span class="asteriskField">*</span> 
                                 </label> 
                                 <select name="priority" class="form-control select form-select" id="id_priority"> 
+                                    {% if instance.priority %}
+                                    <option value="Normal" {% if instance.priority == "Normal" %} selected=""{% endif %}>Normal</option> 
+                                    <option value="Urgent" {% if instance.priority == "Urgent" %} selected=""{% endif %}>Urgent</option> 
+                                    <option value="Very Urgent" {% if instance.priority == "Very Urgent" %} selected=""{% endif %}>Very Urgent</option> 
+                                    <option value="Low" {% if instance.priority == "Low" %} selected=""{% endif %}>Low</option>
+                                    {% else %}
                                     <option value="Normal" selected="">Normal</option> 
                                     <option value="Urgent">Urgent</option> 
                                     <option value="Very Urgent">Very Urgent</option> 
                                     <option value="Low">Low</option>
-
+                                    {% endif %}
                                 </select> 
                             </div> 
                             
@@ -142,13 +174,13 @@
                                 <label for="id_message" class="form-label">
                                             Message
                                 </label> 
-                                <textarea name="message" cols="40" rows="10" class="form-control textarea" id="id_message"></textarea> 
+                                <textarea name="message" {% if instance %} value="{{instance.message}}" {% endif %} cols="40" rows="10" class="form-control textarea" id="id_message"></textarea> 
                             </div> 
                             
                             <div id="div_id_address" class="mb-3 col-md-6 col-sm-12"> <label for="id_address" class="form-label">
                                             Address
                                         </label> 
-                                <textarea name="address" cols="40" rows="10" class="form-control textarea" id="id_address"></textarea> 
+                                <textarea name="address" {% if instance %} value="{{instance.address}}" {% endif %}  cols="40" rows="10" class="form-control textarea" id="id_address"></textarea> 
                             </div> 
                             
                             {% comment %} <div id="div_id_token" class="mb-3"> <label for="id_token" class="form-label">

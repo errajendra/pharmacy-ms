@@ -31,7 +31,7 @@
 
         <div class="col-md-12">
 
-            <div class="card card-primar sc">
+            <div class="card card-primar sc ">
                 <div class="card-header">
                     <span> {{title}} </span>
                     <div class="card-tools d-flex">
@@ -39,8 +39,60 @@
                         <a class="btn btn-sm btn-info mr-2" href="{% url 'new_appointment_admin'  %}" role="button">+ New Appointment</a>
 
                     </div>
+                    <div class="d-flex">
+                        <div id="div_id_priority" class="mb-3 col-md-3 col-sm-6"> 
+                            <label for="id_priority">
+                                Priority 
+                            </label> 
+                            <select name="priority" class="form-control select form-select" id="id_priority">
+                                <option value="">All</option>
+                                <option value="Normal">Normal</option> 
+                                <option value="Urgent">Urgent</option> 
+                                <option value="Very Urgent">Very Urgent</option> 
+                                <option value="Low">Low</option>
+                            </select> 
+                        </div>
+
+                        <div id="div_id_payment_mode" class="mb-3 col-md-3 col-sm-6"> 
+                            <label for="id_payment_mode">
+                                Payment Mode 
+                            </label> 
+                            <select name="payment_mode" class="form-control select form-select" id="id_payment_mode"> 
+                                
+                                <option value="" selected="">All</option> 
+                                <option value="Cash">Cash</option> 
+                                <option value="Upi">Upi</option> 
+                                <option value="Bank Transfer">Bank Transfer</option> 
+                                <option value="Other">Other</option>
+                               
+                            </select> 
+                        </div> 
+
+                        
+                        <div id="div_id_doctor" class="mb-3 col-md-3 col-sm-6"> 
+                            <label for="id_doctor" class="form-label">
+                                Doctor
+                            </label> 
+                            <select name="doctor" class="form-control select form-select" id="id_doctor">
+                                <option value="" selected="">---------</option>
+                                {% for d in doctors %}
+                                <option value="{{d.id}}"> {{d}} </option>
+                                {% endfor %}
+
+                            </select>
+                        </div>
+
+
+                        <div id="div_id_date" class="mb-3 col-md-3 col-sm-6">
+                            <label for="id_date">
+                                Date
+                            </label>
+                            <input type="date" name="date" class="form-control dateinput" required="" id="id_date"> 
+                        </div> 
+
+                    </div>
                 </div>
-                <table class="table table-bordered table-hover dataTable" id="plist">
+                <table class="table table-bordered table-hover dataTable table-responsive" id="plist">
                     <thead>
                         <tr>
                             <th>SN</th>
@@ -69,7 +121,7 @@
 
                             <td>{{appointment.doctor.admin.get_full_name}}</td>
                             <td>{{appointment.patient.admin.get_full_name}}</td>
-                            <td>{{appointment.date}}</td>
+                            <td>{{appointment.date|date}}</td>
                             <td>{{appointment.status}}</td>
                             <td>{{appointment.shift}}</td>
                             <td>{{appointment.fee}}</td>
@@ -80,11 +132,34 @@
                             <td>{{appointment.address}}</td>
 
                             <td>
-                                <a href="{% url 'edit_pharmacist' appointment.id %}" class="btn btn-sm btn-success">Edit</a>
-                                <a href="{% url 'delete_pharmacist' appointment.id %}" class="btn btn-sm btn-danger">Delete</a>
+                                <a href="{% url 'edit_appointment_admin' appointment.id %}" class="btn btn-sm btn-success">Edit</a>
+                                <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModalCenter{{appointment.id}}">Delete</button>
+                                  
                             </td>
 
                         </tr>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModalCenter{{appointment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter{{appointment.id}}Title" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle"> Confirm Delete </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                </div>
+                                <div class="modal-body">
+                                Are You Sure to Delete !
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <a href="{% url "delete_appointment_admin" appointment.id %}" type="button" class="btn btn-primary">Delete</a>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        
                         {% endfor %}
 
                     </tbody>
