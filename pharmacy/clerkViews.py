@@ -103,7 +103,7 @@ def createPatient(request):
 
 @login_required
 def allPatients(request):
-    patients=Patients.objects.all()
+    patients=Patients.objects.all().order_by('-created_at')
 
     context={
         "patients":patients,

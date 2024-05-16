@@ -1,0 +1,171 @@
+{% extends 'hod_templates/base_template.html'%} 
+{% load crispy_forms_tags %} 
+{% block page_title %}
+<h5> {{title}} </h5>
+
+{% endblock page_title %} {% block main_content %}
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            {% include 'hod_templates/alert_messeges.html'%}
+
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title"> {{title}} </h3>
+                </div>
+
+                <form method="POST" style="font-size:13px;" class='px-3 py-2'>
+                    {% csrf_token %} {% if messages %}
+                    <div class="form-group">
+                        <div class="col-12">
+                            {% for message in messages %} {% if message.tags == "error" %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% elif message.tags == "success" %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endif %} {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div id="div_id_patient" class="mb-3 col-md-6 col-sm-12">
+                                 <label for="id_patient" class="form-label requiredField">
+                                    Patient<span class="asteriskField">*</span> 
+                                </label>
+                                <select name="patient" class="form-control select form-select" required="" id="id_patient">
+                                    <option value="" selected="">---------</option>
+                                    {% for p in patients %}
+                                    <option value="{{p.id}}"> {{p}} </option> 
+                                    {% endfor %}
+                                </select> 
+                            </div> 
+
+                            <div id="div_id_doctor" class="mb-3 col-md-6 col-sm-12"> 
+                                <label for="id_doctor" class="form-label requiredField">
+                                            Doctor<span class="asteriskField">*</span> 
+                                </label> 
+                                <select name="doctor" class="form-control select form-select" required="" id="id_doctor">
+                                    <option value="" selected="">---------</option> 
+                                    {% for d in doctors %}
+                                    <option value="{{i.id}}"> {{d}} </option>
+                                    {% endfor %}
+
+                                </select>
+                            </div>
+                            
+                            <div id="div_id_date" class="mb-3 col-md-6 col-sm-12">
+                                <label for="id_date" class="form-label requiredField">
+                                    Date<span class="asteriskField">*</span> 
+                                </label>
+                                <input type="date" name="date" class="form-control dateinput" required="" id="id_date"> 
+                            </div> 
+                            
+                            <div id="div_id_booking_mode" class="mb-3 col-md-6 col-sm-12">
+                                <label for="id_booking_mode" class="form-label requiredField">
+                                    Booking Mode<span class="asteriskField">*</span>
+                                </label> 
+                                <select name="booking_mode" class="form-control select form-select" id="id_booking_mode"> 
+                                    <option value="Morning" selected="">Morning</option> 
+                                    <option value="Evening">Evening</option>
+
+                                </select> 
+                            </div> 
+                            
+                            <div id="div_id_status" class="mb-3 col-md-6 col-sm-12"> 
+                                <label for="id_status" class="form-label requiredField">
+                                            Booking Status<span class="asteriskField">*</span> 
+                                </label> 
+                                <select name="status" class="form-control select form-select" id="id_status"> 
+                                    <option value="Pending">Pending</option> 
+                                    <option value="Booked" selected="">Booked</option> 
+                                    <option value="Seen">Seen</option>
+                                </select> 
+                            </div> 
+                            
+                            <div id="div_id_shift" class="mb-3 col-md-6 col-sm-12"> 
+                                <label for="id_shift" class="form-label requiredField">
+                                    Shift<span class="asteriskField">*</span>
+                                </label> 
+                                <select name="shift" class="form-control select form-select" id="id_shift"> 
+                                    <option value="Morning" selected="">Morning</option> 
+                                    <option value="Evening">Evening</option>
+
+                                </select> 
+                            </div> 
+                            
+                            <div id="div_id_fee" class="mb-3 col-md-4 col-sm-6"> 
+                                <label for="id_fee" class="form-label requiredField">
+                                            Doctor Fees<span class="asteriskField">*</span>
+                                </label> 
+                                <input type="number" name="fee" value="0" class="form-control numberinput" step="any" required="" id="id_fee"> 
+                            </div> 
+                            
+                            <div id="div_id_payment_mode" class="mb-3 col-md-4 col-sm-6"> 
+                                <label for="id_payment_mode" class="form-label requiredField">
+                                            Payment Mode<span class="asteriskField">*</span> 
+                                </label> 
+                                <select name="payment_mode" class="form-control select form-select" id="id_payment_mode"> 
+                                    <option value="Cash" selected="">Cash</option> 
+                                    <option value="Upi">Upi</option> 
+                                    <option value="Bank Transfer">Bank Transfer</option> 
+                                    <option value="Other">Other</option>
+
+                                </select> 
+                            </div> 
+                            
+                            <div id="div_id_priority" class="mb-3 col-md-4 col-sm-6"> 
+                                <label for="id_priority" class="form-label requiredField">
+                                            Appointment Priority<span class="asteriskField">*</span> 
+                                </label> 
+                                <select name="priority" class="form-control select form-select" id="id_priority"> 
+                                    <option value="Normal" selected="">Normal</option> 
+                                    <option value="Urgent">Urgent</option> 
+                                    <option value="Very Urgent">Very Urgent</option> 
+                                    <option value="Low">Low</option>
+
+                                </select> 
+                            </div> 
+                            
+                            <div id="div_id_message" class="mb-3 col-md-6 col-sm-12"> 
+                                <label for="id_message" class="form-label">
+                                            Message
+                                </label> 
+                                <textarea name="message" cols="40" rows="10" class="form-control textarea" id="id_message"></textarea> 
+                            </div> 
+                            
+                            <div id="div_id_address" class="mb-3 col-md-6 col-sm-12"> <label for="id_address" class="form-label">
+                                            Address
+                                        </label> 
+                                <textarea name="address" cols="40" rows="10" class="form-control textarea" id="id_address"></textarea> 
+                            </div> 
+                            
+                            {% comment %} <div id="div_id_token" class="mb-3"> <label for="id_token" class="form-label">
+                                            Token Number
+                                        </label> 
+                                <input type="number" name="token" min="0" class="numberinput form-control" id="id_token"> 
+                            </div> {% endcomment %}
+
+
+                        </div>
+
+                    </div>
+                    <input type="submit" class="btn btn-info">
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock main_content %}

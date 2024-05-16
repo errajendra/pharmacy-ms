@@ -65,9 +65,9 @@ def createPatient(request):
         if form.is_valid():
             first_name = form.cleaned_data["first_name"]
             last_name = form.cleaned_data["last_name"]
-            username = form.cleaned_data["username"]
+            # username = form.cleaned_data["username"]
             email = form.cleaned_data["email"]
-            password = form.cleaned_data["password"]
+            # password = form.cleaned_data["password"]
             address = form.cleaned_data["address"]
             phone_number = form.cleaned_data["phone_number"]
             # dob = form.cleaned_data["dob"]
@@ -82,9 +82,9 @@ def createPatient(request):
             # print(doctor)
 
             user = CustomUser.objects.create_user(
-                username=username,
+                username=email,
                 email=email,
-                password=password,
+                password=email,
                 first_name=first_name,
                 last_name=last_name,
                 user_type="Patients",
@@ -98,7 +98,7 @@ def createPatient(request):
             user.patients.gender = gender
 
             user.save()
-            messages.success(request, username + " was Successfully Added")
+            messages.success(request, email + " was Successfully Added")
 
             pos = request.POST.get('pos', None)
             if pos == "pos":
@@ -123,17 +123,17 @@ def createPatientNext(request):
         if form.is_valid():
             first_name = form.cleaned_data["first_name"]
             last_name = form.cleaned_data["last_name"]
-            username = form.cleaned_data["username"]
+            # username = form.cleaned_data["username"]
             email = form.cleaned_data["email"]
-            password = form.cleaned_data["password"]
+            # password = form.cleaned_data["password"]
             address = form.cleaned_data["address"]
             phone_number = form.cleaned_data["phone_number"]
             gender = form.cleaned_data["gender"]
             
             user = CustomUser.objects.create_user(
-                username=username,
+                username=email,
                 email=email,
-                password=password,
+                password=email,
                 first_name=first_name,
                 last_name=last_name,
                 user_type="Patients",
@@ -146,7 +146,7 @@ def createPatientNext(request):
             user.patients.gender = gender
             user.save()
             
-            messages.success(request, username + " was Successfully Added")
+            messages.success(request, email + " was Successfully Added")
 
             return redirect(reverse("add_addmission") + '?patient='+f"{user.patients.id}")
         
@@ -159,12 +159,12 @@ def createPatientNext(request):
 @login_required
 def allPatients(request):
     form = PatientSearchForm1(request.POST or None)
-    patients = Patients.objects.all()
+    patients = Patients.objects.all().order_by('-created_at')
     context = {"patients": patients, "form": form, "title": "Admitted Patients"}
     if request.method == "POST":
         # admin=form['first_name'].value()
         name = request.POST.get("search")
-        patients = Patients.objects.filter(first_name__icontains=name)
+        patients = patients.filter(first_name__icontains=name)
 
         context = {"patients": patients, form: form}
     return render(request, "hod_templates/admited_patients.html", context) 
@@ -194,18 +194,18 @@ def confirmDelete(request, pk):
 @for_admin
 def createPharmacist(request):
     if request.method == "POST":
-        username = request.POST.get("username")
+        # username = request.POST.get("username")
         email = request.POST.get("email")
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
         address = request.POST.get("address")
         mobile = request.POST.get("mobile")
-        password = request.POST.get("password")
+        # password = request.POST.get("password")
 
         user = CustomUser.objects.create_user(
-            username=username,
+            username=email,
             email=email,
-            password=password,
+            password=email,
             first_name=first_name,
             last_name=last_name,
             user_type="Pharmacist",
@@ -235,20 +235,20 @@ def managePharmacist(request):
 @login_required
 def createDoctor(request):
     if request.method == "POST":
-        username = request.POST.get("username")
+        # username = request.POST.get("username")
         email = request.POST.get("email")
         first_name = request.POST.get("first_name")
         last_name = request.POST.get("last_name")
         address = request.POST.get("address")
         mobile = request.POST.get("mobile")
-        password = request.POST.get("password")
+        # password = request.POST.get("password")
         department = request.POST.get("department")
 
         try:
             user = CustomUser.objects.create_user(
-                username=username,
+                username=email,
                 email=email,
-                password=password,
+                password=email,
                 first_name=first_name,
                 last_name=last_name,
                 user_type="Doctor",

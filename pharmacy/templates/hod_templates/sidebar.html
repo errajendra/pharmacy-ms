@@ -79,6 +79,34 @@
                     </ul>
 
                 </li>
+
+                {% comment %} Appointment {% endcomment %}
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-calendar mr-2"></i>
+                        <p>
+                            Appointment
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item pl-2">
+                            <a href="{% url 'new_appointment_admin' %}" class="nav-link">
+                                <i class="fas fa-user-plus"></i>
+                                <p class="pl-2">Book Appointment</p>
+                            </a>
+                        </li>
+                        <li class="nav-item pl-2">
+                            <a href="{% url 'appointment_list_admin'  %}" class="nav-link">
+                                <i class="fas fa-th"></i>
+                                <p class="pl-2">Manage Appointment</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-address-book mr-2"></i>
@@ -104,7 +132,7 @@
 
                     </ul>
                 </li>
-                
+
                 {% comment %} Vender {% endcomment %}
                 {% comment %} <li class="nav-item">
                     <a href="#" class="nav-link">
