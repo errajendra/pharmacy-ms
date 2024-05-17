@@ -1,7 +1,7 @@
 {% extends 'hod_templates/base_template.html'%}
 {% load crispy_forms_tags %}
 {% block page_title %}
-<h5>Add patient</h5>
+<h5>{{title}} </h5>
 
 {% endblock page_title %}
 {% block main_content %}
@@ -13,7 +13,7 @@
                 <!-- general form elements -->
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Add Patient</h3>
+                        <h3 class="card-title">{{title}} </h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
@@ -75,7 +75,7 @@
                             </div>
                             <div id="div_id_dob" class="mb-3 col-md-3 col-sm-6 col-xs-12"> <label for="id_dob" class="form-label">
                                 Age(DOB)
-                                </label> <input type="date" name="dob" class="dateinput form-control" id="id_dob"> 
+                                </label> <input type="date" name="dob" {% if instance.dob %} value="{{instance.dob|date:'Y-m-d'}}" {% endif %} class="dateinput form-control" id="id_dob"> 
                             </div>
                             <div id="div_id_marital_status" class="mb-3 col-md-3 col-sm-6 col-xs-12">
                                 <label for="id_marital_status" class="form-label requiredField">
@@ -151,7 +151,7 @@
                             </div>
                             <div id="div_id_pm_jay" class="mb-3 col-md-3 col-sm-6 col-xs-12"> <label for="id_pm_jay" class="form-label">
                                 PM Jay
-                                </label> <input type="text" name="pm_jay" {% if instance.pm_jaypm_jay %} value="{{instance.pm_jaypm_jay}}" {% endif %} maxlength="100" class="textinput form-control" id="id_pm_jay"> 
+                                </label> <input type="text" name="pm_jay" {% if instance.pm_jay %} value="{{instance.pm_jay}}" {% endif %} maxlength="100" class="textinput form-control" id="id_pm_jay"> 
                             </div>
                             <div id="div_id_adhar" class="mb-3 col-md-3 col-sm-6 col-xs-12"> <label for="id_adhar" class="form-label">
                                 Adhar Number
@@ -259,7 +259,7 @@
 
                         <div class="card-footer">
                             <button type="submit" name="action" class="btn btn-primary" value="submit1">Save</button>
-                            <button type="submit" name="action" class="btn btn-primary" value="submit2">Save & Next</button>
+                            {% comment %} <button type="submit" name="action" class="btn btn-primary" value="submit2">Save & Next</button> {% endcomment %}
                         </div>
                     </form>
                 </div>
@@ -270,21 +270,5 @@
 
     </div>
 
-    <script>
-        document.getElementById("myForm").addEventListener("submit", function(event) {
-            // Get the value of the clicked submit button
-            var action = event.submitter.getAttribute('value');
-    
-            // Dynamically set the form's action based on the clicked button
-            if (action === "submit1") {
-                this.action = "{% url 'patient_form' %}";
-            } else if (action === "submit2") {
-                this.action = "{% url 'patient_form_and_next' %}";
-            } else {
-                // Default action if no button was clicked
-                this.action = ""; // Or specify a default URL
-            }
-        });
-    </script>
 </section>
 {% endblock main_content %}

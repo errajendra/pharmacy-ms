@@ -10,6 +10,7 @@ urlpatterns=[
     path('admin_user/patient_form/',HODViews.createPatient,name='patient_form'),
     path('admin_user/patient_form_and_addmit/',HODViews.createPatientNext,name='patient_form_and_next'),
     path('admin_user/all_patients/',HODViews.allPatients,name='all_patients'),
+    path('admin_user/edit_patient/<patient_id>/',HODViews.editPatient,name='edit_patient'),
     path('login/',views.loginPage,name='login'),
     path('logout/',views.logoutUser,name='logout'), 
     # path('get_user_details/', views.get_user_details, name="get_user_details"),
@@ -84,7 +85,6 @@ urlpatterns=[
     path('admin_user/delete_drug_unit/<int:id>/',HODViews.deleteDrugUnit, name='delete_drug_unit'), 
       
     path('admin_user/prescribe_drug/',HODViews.addPrescription,name='prescribe'),
-    path('admin_user/edit_patient/<patient_id>/',HODViews.editPatient,name='edit_patient'),
     # path('add_patient_save/',HODViews.editPatientSave,name='edit_patient_save'),
 
     path('admin_user/delete_patient/<str:pk>/',HODViews.confirmDelete,name='delete_patient'),

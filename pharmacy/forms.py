@@ -32,6 +32,37 @@ class ClientForm(forms.Form):
     mobile = PhoneNumberField()
 
 
+
+class PatientModelForm(ModelForm):
+    email = forms.EmailField(
+        label="Email",
+        max_length=50,
+        required=False,
+        widget=forms.EmailInput(attrs={"class": "form-control"}),
+    )
+    
+    class Meta:
+        model = Patients
+        fields = (
+            "first_name", "last_name", "gender", "dob", "marital_status", "bg", "language",
+            "phone_number", "phone_number2", "address", "city", "pin_code",
+            "abha_no", "pm_jay", "adhar", "passport", "pan", "dl", "cat", "cast", "religion",
+            "nationality", "education", "occupation", "activity", "food_preference", "smooking", "alcohol"
+        )
+        widgets = {
+            "marital_status": forms.Select(attrs={"class":"form-control"}),
+            "bg": forms.Select(attrs={"class":"form-control"}),
+            "language": forms.Select(attrs={"class":"form-control"}),
+            "activity": forms.Select(attrs={"class":"form-control"}),
+            "gender": forms.Select(attrs={"class":"form-control"}),
+            "food_preference": forms.Select(attrs={"class":"form-control"}),
+            "smooking": forms.Select(attrs={"class":"form-control"}),
+            "alcohol": forms.Select(attrs={"class":"form-control"}),
+        }
+        
+        
+
+
 class PatientForm(forms.Form):
     # doctor = forms.ModelChoiceField(
     #     label="Doctor",

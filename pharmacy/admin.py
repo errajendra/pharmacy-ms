@@ -63,6 +63,11 @@ admin.site.register(Category, NameAdmin)
 admin.site.register(DrugType, NameAdmin)
 admin.site.register(DrugUnit, NameAdmin)
 
+@admin.register(Language)
+class LamguageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    search_fields = ('name', )
+
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
     list_display = ('user', 'medicine', 'quantity', 'updated_at')

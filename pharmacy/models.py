@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.db.models import BooleanField, ExpressionWrapper, Q
 from django.db.models.functions import Now
+from django.utils.translation import gettext_lazy as _
 
 
 class BaseModel(models.Model):
@@ -25,7 +26,18 @@ class Department(BaseModel):
 
 
 
+class Language(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return str(self.name)
+
+
+
 class CustomUser(AbstractUser):
+    
+    first_name = models.CharField(_("first name"), max_length=150, null=True, blank=True)
+    last_name = models.CharField(_("last name"), max_length=150, null=True, blank=True)
     user_type_data = (
         ("AdminHOD", "AdminHOD"), #1
         ("Pharmacist", "Pharmacist"),
@@ -131,9 +143,94 @@ class Patients(BaseModel):
         choices=[(i, i) for i in range(100)], null=True, blank=True
     )
     phone_number = models.CharField(max_length=15, null=True, blank=True)
-    profile_pic = models.ImageField(default="patient.jpg", null=True, blank=True)
-    # age = models.PositiveIntegerField(default="0", blank=True, null=True)
-    address = models.CharField(max_length=300, null=True, blank=True)
+    phone_number2 = models.CharField(max_length=15, null=True, blank=True)
+    profile_pic = models.ImageField(default="patient.jpg", upload_to="patient-profile", null=True, blank=True)
+    dob = models.DateField(verbose_name="Age(DOB)", blank=True, null=True)
+    bg = models.CharField(
+        verbose_name="Blood Group",
+        max_length=10,
+        default="Not Known",
+        choices=[
+            ("Not Known", "Not Known"),
+            ("A+", "A+"),
+            ("A-", "A-"),
+            ("B+", "B+"),
+            ("B-", "B-"),
+            ("O+", "O+"),
+            ("O-", "O-"),
+            ("AB+", "AB+"),
+            ("AB-", "AB-")
+        ]
+    )
+    marital_status = models.CharField(
+        verbose_name="Marital Status",
+        max_length=15,
+        choices=[
+            ("Single", "Single"),
+            ("Married ", "Married "),
+            ("Separated", "Separated"),
+            ("Widow", "Widow"),
+        ],
+        default="Single"
+    )
+    language = models.ForeignKey(
+        Language, on_delete=models.CASCADE,
+        verbose_name="Language Preference",
+        null=True, blank=True
+    )
+    
+    address = models.CharField(max_length=100, null=True, blank=True)
+    city = models.CharField(max_length=36, null=True, blank=True)
+    pin_code = models.PositiveIntegerField(max_length=6, null=True, blank=True)
+    
+    # Life Style
+    
+    abha_no = models.CharField(verbose_name="Abha Number", max_length=100, null=True, blank=True)
+    pm_jay = models.CharField(verbose_name="PM Jay", max_length=100, null=True, blank=True)
+    adhar = models.CharField(verbose_name="Adhar Number",max_length=15, null=True, blank=True)
+    passport = models.CharField(verbose_name="Passport Number",max_length=100, null=True, blank=True)
+    pan = models.CharField(verbose_name="PAN Number", max_length=100, null=True, blank=True)
+    dl = models.CharField(verbose_name="Driving Licence Number", max_length=100, null=True, blank=True)
+    cat = models.CharField(verbose_name="Govt. Reservation Category", max_length=100, null=True, blank=True)
+    cast = models.CharField(verbose_name="Cast", max_length=100, null=True, blank=True)
+    religion = models.CharField(verbose_name="Religion", max_length=100, null=True, blank=True)
+    nationality = models.CharField(verbose_name="Nationality", max_length=100, null=True, blank=True)
+    education = models.CharField(verbose_name="Education", max_length=100, null=True, blank=True)
+    occupation = models.CharField(verbose_name="Occupation", max_length=100, null=True, blank=True)
+    
+    activity = models.CharField(
+        verbose_name="Activity Level",
+        choices=(
+            ("High", "High"),
+            ("Low", "Low"),
+            ("Medium", "Medium"),
+        ), null=True, blank=True
+    )
+    food_preference = models.CharField(
+        verbose_name="Food Preference",
+        choices=(
+            ("Veg", "Veg"),
+            ("Non Veg", "Non Veg"),
+        ), null=True, blank=True
+    )
+    smooking = models.CharField(
+        verbose_name="Smoking Habits",
+        choices=(
+            ("Frequent", "Frequent"),
+            ("Daily", "Daily"),
+            ("Sometime", "Sometime"),
+            ("Never", "Never"),
+        ), null=True, blank=True
+    )
+    alcohol = models.CharField(
+        verbose_name="Alcohol Consumption",
+        choices=(
+            ("Frequent", "Frequent"),
+            ("Daily", "Daily"),
+            ("Sometime", "Sometime"),
+            ("Never", "Never"),
+        ), null=True, blank=True
+    )
 
     def __str__(self):
         return "{} {} - {}".format(self.first_name if self.first_name else '', self.last_name if self.last_name else '', self.phone_number if self.phone_number else '')

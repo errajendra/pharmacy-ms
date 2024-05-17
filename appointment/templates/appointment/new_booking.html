@@ -41,8 +41,8 @@
                     <div class="card-body">
                         <div class="row">
 
-                            <div id="div_id_patient" class="mb-3 col-md-6 col-sm-12">
-                                 <label for="id_patient" class="form-label requiredField">
+                            <div id="div_id_patient" class="mb-3 col-md-4 col-sm-8">
+                                <label for="id_patient" class="form-label requiredField">
                                     Patient<span class="asteriskField">*</span> 
                                 </label>
                                 <select name="patient" class="form-control select form-select" required="" id="id_patient">
@@ -51,6 +51,11 @@
                                     <option value="{{p.id}}" {% if instance.patient.id == p.id %} selected="" {% endif %}> {{p}} </option> 
                                     {% endfor %}
                                 </select> 
+                            </div> 
+                            <div class="mb-3 col-md-2 col-sm-4 pt-4">
+                                <a href="{% url "patient_form" %}" type="button" class="btn btn-default">
+                                    Add New
+                                </a>
                             </div> 
 
                             <div id="div_id_doctor" class="mb-3 col-md-6 col-sm-12"> 
@@ -79,11 +84,11 @@
                                 </label> 
                                 <select name="booking_mode" class="form-control select form-select" id="id_booking_mode"> 
                                     {% if instance %}
-                                    <option value="Morning" {% if instance.booking_mode == "Morning" %} selected="" {% endif %}>Morning</option> 
-                                    <option value="Evening"  {% if instance.booking_mode == "Evening" %} selected="" {% endif %} >Evening</option>
+                                    <option value="Offline" {% if instance.booking_mode == "Offline" %} selected="" {% endif %}>Offline</option> 
+                                    <option value="Online"  {% if instance.booking_mode == "Online" %} selected="" {% endif %} >Online</option>
                                     {% else %}
-                                    <option value="Morning" selected="">Morning</option> 
-                                    <option value="Evening">Evening</option>
+                                    <option value="Offline" selected="">Offline</option> 
+                                    <option value="Online">Online</option>
                                     {% endif %}
 
                                 </select> 
