@@ -24,18 +24,19 @@
         </div>
     </div>
     {% endif %}
-
     <div class="row">
-
         <div class="col-md-12">
+
 
             <div class="card card-primar sc">
                 <div class="card-header">
-                    <span>Pharmacist details</span>
+                    <span>Doctors Details</span>
                     <div class="card-tools d-flex">
 
 
-                        <a class="btn btn-sm btn-info mr-2" href="{% url 'add_pharmacist'  %}" role="button">+ Add Pharmacist</a>
+
+
+                        <a class="btn btn-sm btn-info mr-2" href="{% url 'add_doctor' %}" role="button">+ Add Doctor</a>
 
                     </div>
                 </div>
@@ -48,13 +49,11 @@
                             <th>FirstName</th>
                             <th>LastName</th>
                             <th>Email</th>
-
                             <th>Mobile</th>
-
+                            <th>Department</th>
                             <th>Address</th>
                             <th>Last Login</th>
-                            <th>Action</th>
-
+                            <th class="text-center">Action</th>
 
                         </tr>
                     </thead>
@@ -63,7 +62,7 @@
                         {% for staff in staffs %}
 
                         <tr class="hov">
-                            <td>{{staff.admin.id}}</td>
+                            <td>{{forloop.counter}}</td>
                             <td> <img src="{{staff.profile_pic.url}}" class="" width="35" height="35" alt=""></td>
 
                             <td>{{staff.admin.username}}</td>
@@ -72,23 +71,26 @@
 
                             <td>{{staff.admin.email}}</td>
                             <td>{{staff.mobile}}</td>
+                            <td>{{staff.department}}</td>
 
                             <td>{{staff.address}}</td>
                             <td>{{staff.admin.last_login}}</td>
 
-                            <td><a href="{% url 'edit_pharmacist' staff.admin.id %}" class="btn btn-sm btn-success">Edit</a>
-                                <a href="{% url 'delete_pharmacist' staff.id %}" class="btn btn-sm btn-danger">Delete</a>
-                            </td>
 
+                            <td>
+                                <a href="{% url 'edit_doctor' staff.admin.id %}" class="btn btn-sm btn-success">Edit</a>
+
+                                <a href="{% url 'delete_doctor' staff.id %}" class="btn btn-sm btn-danger">Delete</a>
+                            </td>
                             <!-- <td>{{patient.dob|date:"F   d, Y"}}</td>
                                     <td>{{patient.mobile}}</td> -->
                             <!-- <td>{{patient.date_admitted}}</td> -->
 
                         </tr>
+
+
                         {% endfor %}
-
                     </tbody>
-
                 </table>
             </div>
         </div>
