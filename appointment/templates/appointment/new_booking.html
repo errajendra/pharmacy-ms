@@ -13,31 +13,34 @@
                 <div class="card-header">
                     <h3 class="card-title"> {{title}} </h3>
                 </div>
-
-                <form method="POST" style="font-size:13px;" class='px-3 py-2'>
-                    {% csrf_token %} 
-                    {% if messages %}
+                
+                {% if messages %}
                     <div class="form-group">
                         <div class="col-12">
-                            {% for message in messages %} {% if message.tags == "error" %}
+                            {% for message in messages %} 
+                            {% comment %} {{message.tag}} {% if message.tags == "error" %} {% endcomment %}
                             <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
                                 {{ message }}
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            {% elif message.tags == "success" %}
+                            {% comment %} {% elif message.tags == "success" %}
                             <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
                                 {{ message }}
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            {% endif %} {% endfor %}
+                            {% endif %}  {% endcomment %}
+                            {% endfor %}
                         </div>
                     </div>
-                    {% endif %}
-
+                {% endif %}
+                
+                <form method="POST" style="font-size:13px;" class='px-3 py-2'>
+                    {% csrf_token %} 
+                    
                     <div class="card-body">
                         <div class="row">
 
@@ -198,11 +201,35 @@
                         </div>
 
                     </div>
-                    <input type="submit" class="btn btn-info">
+                    <input type="submit" class="btn btn-info"/>
                 </form>
             </div>
 
         </div>
     </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    {% comment %} Write Onchange envent for id_doctor and load fees of doctor using ajax {% endcomment %}
+    <script type="text/javascript">
+        
+        // Use a consistent indentation of 4 spaces
+        $(document).ready(function() {
+            // Use a more specific selector to avoid conflicts
+            $('#id_doctor').on('change', function(event) {
+                const doctorId = $(this).val();
+
+                // Use a URL resolver to avoid hardcoding URLs
+                const url = `{% url 'load_doctor_fees' %}`;
+                $.ajax({
+                    type: 'GET',
+                    url,
+                    data: { doctor_id: doctorId },
+                    success: function(data) {
+                        // Use a more specific selector to avoid conflicts
+                        $('#id_fee').val(data.fees);
+                    }
+                });
+            });
+        });
+    </script>
 </section>
 {% endblock main_content %}

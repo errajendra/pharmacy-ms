@@ -39,58 +39,72 @@
                         <a class="btn btn-sm btn-info mr-2" href="{% url 'new_appointment_admin'  %}" role="button">+ New Appointment</a>
 
                     </div>
-                    <div class="d-flex">
-                        <div id="div_id_priority" class="mb-3 col-md-3 col-sm-6"> 
-                            <label for="id_priority">
-                                Priority 
-                            </label> 
-                            <select name="priority" class="form-control select form-select" id="id_priority">
-                                <option value="">All</option>
-                                <option value="Normal">Normal</option> 
-                                <option value="Urgent">Urgent</option> 
-                                <option value="Very Urgent">Very Urgent</option> 
-                                <option value="Low">Low</option>
-                            </select> 
-                        </div>
+                    <form method="GET">
+                        <div class="d-flex">
+                            <div id="div_id_priority" class="mb-3 col-md-3 col-sm-6"> 
+                                <label for="id_priority">
+                                    Priority 
+                                </label> 
+                                <select name="priority" class="form-control select form-select" id="id_priority">
+                                    <option value="">All</option>
+                                    <option value="Normal" {% if request.GET.priority == "Normal" %} selected="" {% endif %}>Normal</option> 
+                                    <option value="Urgent" {% if request.GET.priority == "Urgent" %} selected="" {% endif %}>Urgent</option> 
+                                    <option value="Very Urgent" {% if request.GET.priority == "Very Urgent" %} selected="" {% endif %}>Very Urgent</option> 
+                                    <option value="Low" {% if request.GET.priority == "Low" %} selected="" {% endif %}>Low</option>
+                                </select> 
+                            </div>
 
-                        <div id="div_id_payment_mode" class="mb-3 col-md-3 col-sm-6"> 
-                            <label for="id_payment_mode">
-                                Payment Mode 
-                            </label> 
-                            <select name="payment_mode" class="form-control select form-select" id="id_payment_mode"> 
+                            <div id="div_id_status" class="mb-3 col-md-2 col-sm-6"> 
+                                <label for="id_status">
+                                    Status 
+                                </label> 
+                                <select name="status" class="form-control select form-select" id="id_status">
+                                    <option value="">All</option>
+                                    <option value="Pending" {% if request.GET.status == "Pending" %} selected="" {% endif %}>Pending</option> 
+                                    <option value="Booked" {% if request.GET.status == "Booked" %} selected="" {% endif %}>Booked</option> 
+                                    <option value="Seen" {% if request.GET.status == "Seen" %} selected="" {% endif %}>Seen</option>
+                                </select> 
+                            </div>
+
+                            <div id="div_id_payment_mode" class="mb-3 col-md-3 col-sm-6"> 
+                                <label for="id_payment_mode">
+                                    Payment Mode 
+                                </label> 
+                                <select name="payment_mode" class="form-control select form-select" id="id_payment_mode"> 
+                                    
+                                    <option value="" selected="">All</option> 
+                                    <option value="Cash" {% if request.GET.payment_mode == "Cash" %} selected="" {% endif %}>Cash</option> 
+                                    <option value="Upi" {% if request.GET.payment_mode == "Upi" %} selected="" {% endif %}>Upi</option> 
+                                    <option value="Bank Transfer" {% if request.GET.payment_mode == "Bank Transfer" %} selected="" {% endif %}>Bank Transfer</option> 
+                                    <option value="Other" {% if request.GET.payment_mode == "Other" %} selected="" {% endif %}>Other</option>
                                 
-                                <option value="" selected="">All</option> 
-                                <option value="Cash">Cash</option> 
-                                <option value="Upi">Upi</option> 
-                                <option value="Bank Transfer">Bank Transfer</option> 
-                                <option value="Other">Other</option>
-                               
-                            </select> 
-                        </div> 
+                                </select> 
+                            </div> 
 
-                        
-                        <div id="div_id_doctor" class="mb-3 col-md-3 col-sm-6"> 
-                            <label for="id_doctor" class="form-label">
-                                Doctor
-                            </label> 
-                            <select name="doctor" class="form-control select form-select" id="id_doctor">
-                                <option value="" selected="">---------</option>
-                                {% for d in doctors %}
-                                <option value="{{d.id}}"> {{d}} </option>
-                                {% endfor %}
+                            
+                            <div id="div_id_doctor" class="mb-3 col-md-3 col-sm-6"> 
+                                <label for="id_doctor" class="form-label">
+                                    Doctor {{request.GET.doctor}}
+                                </label> 
+                                <select name="doctor" class="form-control select form-select" id="id_doctor">
+                                    <option value="">All</option>
+                                    {% for d in doctors %}
+                                        <option value="{{d.id}}"  {% if request.GET.doctor == d.id %} selected="" {% endif %}> {{d}} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
 
-                            </select>
+
+                            <div id="div_id_date" class="mb-3 col-md-2 col-sm-4 ">
+                                <label for="id_date">
+                                    Date
+                                </label>
+                                <input type="date" name="date" {% if request.GET.date %} value="{{request.GET.date}}" {% endif %} class="form-control dateinput" id="id_date"> 
+                            </div> 
+
                         </div>
-
-
-                        <div id="div_id_date" class="mb-3 col-md-3 col-sm-6">
-                            <label for="id_date">
-                                Date
-                            </label>
-                            <input type="date" name="date" class="form-control dateinput" required="" id="id_date"> 
-                        </div> 
-
-                    </div>
+                        <button type="submit" class="btn bg-gray mb-3 col-md-1 col-sm-1">Apply</button>
+                    </form>
                 </div>
                 <table class="table table-bordered table-hover dataTable table-responsive" id="plist">
                     <thead>

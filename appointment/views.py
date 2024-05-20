@@ -7,6 +7,28 @@ from .forms import AppointmentForm
 
 def appointment_list(request):
     appointments = Appointment.objects.all().order_by('-date')
+    
+    priority = request.GET.get('priority', None)
+    payment_mode = request.GET.get('payment_mode', None)
+    status = request.GET.get('status', None)
+    doctor = request.GET.get('doctor', None)
+    date = request.GET.get('date', None)
+    
+    if priority:
+        appointments = appointments.filter(priority=priority)
+    
+    if payment_mode:
+        appointments = appointments.filter(payment_mode=payment_mode)
+
+    if doctor:
+        appointments = appointments.filter(doctor__id=doctor)
+        
+    if status:
+        appointments = appointments.filter(status=status)
+    
+    if date:
+        appointments = appointments.filter(date__date=date)
+    
     context = {
         "title": "Appointments",
         "appointments": appointments,

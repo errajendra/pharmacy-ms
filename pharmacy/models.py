@@ -46,6 +46,8 @@ class CustomUser(AbstractUser):
         ("Vender", "Vender"),
         ("Pathologist", "Pathologist"), # Pharmacy Clerk (old)
         ("Patients", "Patients"), # Custumer
+        ("Nurse", "Nurse"), # Pharmacy Clerk (old)
+        ("Reception", "Reception"),
     )
     user_type = models.CharField(default="AdminHOD", choices=user_type_data, max_length=20)
     
@@ -87,6 +89,10 @@ class Pharmacist(BaseModel):
 
     def __str__(self):
         return str(self.admin)
+    
+    class Meta:
+        verbose_name = "Pharmasist"
+    
 
 
 class Doctor(BaseModel):
@@ -96,6 +102,46 @@ class Doctor(BaseModel):
     )
     admin = models.OneToOneField(CustomUser, null=True, on_delete=models.CASCADE)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
+    fees = models.PositiveIntegerField(verbose_name="Doctor Fees", default=0)
+    emp_no = models.CharField(max_length=100, null=True, blank=True)
+    age = models.IntegerField(default="0", blank=True, null=True)
+    gender = models.CharField(max_length=100, null=True, choices=gender_category)
+    mobile = models.CharField(max_length=10, null=True, blank=True)
+    address = models.CharField(max_length=300, null=True, blank=True)
+    profile_pic = models.ImageField(default="doctor.png", null=True, blank=True)
+    objects = models.Manager()
+
+    def __str__(self):
+        return str(self.admin)
+
+
+
+class Nurse(BaseModel):
+    gender_category = (
+        ("Male", "Male"),
+        ("Female", "Female"),
+    )
+    admin = models.OneToOneField(CustomUser, null=True, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
+    emp_no = models.CharField(max_length=100, null=True, blank=True)
+    age = models.IntegerField(default="0", blank=True, null=True)
+    gender = models.CharField(max_length=100, default="Female", choices=gender_category)
+    mobile = models.CharField(max_length=10, null=True, blank=True)
+    address = models.CharField(max_length=300, null=True, blank=True)
+    profile_pic = models.ImageField(default="doctor.png", null=True, blank=True)
+    objects = models.Manager()
+
+    def __str__(self):
+        return str(self.admin)
+
+
+
+class Reception(BaseModel):
+    gender_category = (
+        ("Male", "Male"),
+        ("Female", "Female"),
+    )
+    admin = models.OneToOneField(CustomUser, null=True, on_delete=models.CASCADE)
     emp_no = models.CharField(max_length=100, null=True, blank=True)
     age = models.IntegerField(default="0", blank=True, null=True)
     gender = models.CharField(max_length=100, null=True, choices=gender_category)
@@ -502,6 +548,10 @@ def create_user_profile(sender, instance, created, **kwargs):
             Pathologist.objects.create(admin=instance, address="")
         if instance.user_type == "Patients":
             Patients.objects.create(admin=instance, address="")
+        if instance.user_type == "Nurse":
+            Nurse.objects.create(admin=instance, address="")
+        if instance.user_type == "Reception":
+            Reception.objects.create(admin=instance, address="")
 
 
 @receiver(post_save, sender=CustomUser)
@@ -516,6 +566,10 @@ def save_user_profile(sender, instance, **kwargs):
         instance.pathologist.save()
     if instance.user_type == "Patients":
         instance.patients.save()
+    if instance.user_type == "Nurse":
+        instance.nurse.save()
+    if instance.user_type == "Reception":
+        instance.reception.save()
 
 
 """ patient invoice save model """

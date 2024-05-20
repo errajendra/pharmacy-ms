@@ -11,10 +11,10 @@ class Appointment(BaseModel):
         verbose_name="Booking Mode",
         max_length=15,
         choices=[
-            ("Morning", "Morning"),
-            ("Evening", "Evening")
+            ("Offline", "Offline"),
+            ("Online", "Online")
         ],
-        default="Morning"
+        default="Offline"
     )
     status = models.CharField(
         verbose_name="Booking Status",

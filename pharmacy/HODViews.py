@@ -911,6 +911,7 @@ def editDoctor(request, doctor_id):
         last_name = request.POST.get("last_name")
         address = request.POST.get("address")
         department = request.POST.get("department", None)
+        fees = request.POST.get("fees", staff.fees)
 
         # INSERTING into Customuser Model
         user = CustomUser.objects.get(id=doctor_id)
@@ -923,6 +924,7 @@ def editDoctor(request, doctor_id):
         # INSERTING into Staff Model
         staff = Doctor.objects.get(admin=doctor_id)
         staff.address = address
+        staff.fees = fees
         if department:
             department = Department.objects.get(id=department)
             staff.department = department
