@@ -91,7 +91,7 @@
                                     <option value="Offline" {% if instance.booking_mode == "Offline" %} selected="" {% endif %}>Offline</option> 
                                     <option value="Online"  {% if instance.booking_mode == "Online" %} selected="" {% endif %} >Online</option>
                                     {% else %}
-                                    <option value="Offline" selected="">Offline</option> 
+                                    <option value="Offline">Offline</option> 
                                     <option value="Online">Online</option>
                                     {% endif %}
 
@@ -234,6 +234,20 @@
                     }
                 });
             });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+          $('#id_patient').select2({
+            allowClear: true,
+          });
+      
+
+          $('#id_doctor').select2({
+            allowClear: true,
+          });
+      
         });
     </script>
 </section>

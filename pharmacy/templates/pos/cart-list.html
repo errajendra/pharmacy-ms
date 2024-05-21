@@ -5,7 +5,7 @@
         <td> {% if cart.medicine.batch %} {{cart.medicine.batch}} {% endif %} </td>
         <td>{{cart.medicine.valid_to|date}} </td>
         <td> <input id="id_cart_quantity_{{cart.id}}" type="number" min="1" max="1000" value="{{cart.quantity}}" onchange="cartUpdate({{cart.id}});" > </td>
-        <td> <span id="id_cart_medicine_price_{{cart.id}}"> {% if cart.medicine.price %} {{cart.medicine.price}} {% endif %} </span> </td>
+        <td> <span id="id_cart_medicine_price_{{cart.id}}"> {% if cart.medicine.quantity_price %} {{cart.medicine.quantity_price}} {% endif %} </span> </td>
         <td> <input id="id_cart_discount_{{cart.id}}" type="number" min="0" max="90" value="{% if cart.discount %}{{cart.discount}}{% else %}{{cart.medicine.discount}}{% endif %}" onchange="cartUpdate({{cart.id}});" > </td>
         <td> <input id="id_cart_price_{{cart.id}}" class="w-100" {% if cart.total_price %} value="{{cart.total_price}}" {% endif %} readonly > </td>
         <td> <span type="button" class="text-danger fa fa-trash" onclick="deleteFromCart({{cart.id}});"> </span> </td>
