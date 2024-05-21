@@ -425,7 +425,7 @@ class Stock(BaseModel):
     #     DrugLeaf, null=True, on_delete=models.SET_NULL, blank=True
     # )
     type = models.ForeignKey(
-        DrugType, null=True, on_delete=models.SET_NULL, blank=True
+        DrugType, null=True, on_delete=models.SET_NULL, blank=True, verbose_name="Product Type"
     )
     manufacture = models.ForeignKey(
         Manufacturer,

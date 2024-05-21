@@ -504,12 +504,4 @@ class NurseForm(ModelForm):
     class Meta:
         model = Nurse
         fields = (
-            "first_name", "last_name", "gender", "department",
-            "mobile", "address", )
-        # widgets = {
-        #     "marital_status": forms.Select(attrs={"class":"form-control"}),
-        #     "gender": forms.Select(attrs={"class":"form-control"}),
-        #     # "bg": forms.Select(attrs={"class":"form-control"}),
-        #     "age": forms.DateInput(attrs={"class":"form-control", "type": "date"}),
-        #     "department": forms.Select(attrs={"class":"form-control"}),
-        # }
+            "gender", "department", "mobile", "address", )

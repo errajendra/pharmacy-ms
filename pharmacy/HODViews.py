@@ -1577,10 +1577,25 @@ def addNurse(request):
     form = NurseForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
-            form.save()
-            messages.success(request, "Nurse added successfully!")
-
-            return redirect("manage_nurse")
+            email = request.POST.get("email")
+            if not CustomUser.objects.filter(username=email).exists():
+                first_name = request.POST.get("first_name")
+                last_name = request.POST.get("last_name")
+                
+                user = CustomUser.objects.create_user(
+                    username=email,
+                    email=email,
+                    password=email,
+                    first_name=first_name,
+                    last_name=last_name,
+                    user_type="Nurse",
+                )
+                form = NurseForm(data=request.POST, instance=user.nurse)
+                form.save()
+                messages.success(request, "Nurse added successfully!")
+                return redirect("nurse_list")
+            else:
+                messages.warning(request, "User already exists with this email id.")
     context = {
         "form": form,
         "departments": Department.objects.all(),
@@ -1591,15 +1606,19 @@ def addNurse(request):
 
 @login_required
 def editNurse(request, id):
-    cat = get_object_or_404(Nurse, id=id)
-    form = NurseForm(instance=cat, data=request.POST or None)
+    ins = get_object_or_404(Nurse, id=id)
+    form = NurseForm(instance=ins, data=request.POST or None)
     if request.method == "POST":
         if form.is_valid():
             form.save()
             messages.success(request, "Nurse Updated Successfully!")
 
             return redirect("nurse_list")
-    context = {"form": form, "title": "Update Nurse"}
+    context = {
+        "form": form,
+        "ins": ins,
+        "departments": Department.objects.all(),
+        "title": "Update Nurse"}
     return render(request, "nurse/add_nurse.html", context)
 
 
