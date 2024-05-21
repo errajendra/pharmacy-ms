@@ -90,11 +90,11 @@ class HospitalItemAdmin(admin.ModelAdmin):
 
 @admin.register(Nurse)
 class NurseAdmin(admin.ModelAdmin):
-    list_display = ("admin", "department", "emp_no", "gender", "age", "address", "created_at")
+    list_display = ("admin", "department", "emp_no", "gender", "address", "created_at")
     list_filter = ("created_at", )
 
 
 @admin.register(Reception)
 class NurseAdmin(admin.ModelAdmin):
-    list_display = ("admin", "emp_no", "gender", "age", "address", "created_at")
+    list_display = ("admin", "emp_no", "gender", "address", "created_at")
     list_filter = ("created_at", )

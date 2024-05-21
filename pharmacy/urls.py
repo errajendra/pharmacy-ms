@@ -42,6 +42,12 @@ urlpatterns=[
     path('admin_user/delete_hospital_item/<int:id>/',HODViews.deleteHospitalItem,name='delete_hospital_item'), 
     
     
+    # Nurse View urls
+    path('admin_user/add_nurse/',HODViews.addNurse, name='add_nurse'), 
+    path('admin_user/nurse-list/',HODViews.manageNurse,name='nurse_list'), 
+    path('admin_user/edit-nurse/<int:id>/',HODViews.editNurse,name='edit_nurse'), 
+    path('admin_user/delete-nurse/<int:id>/',HODViews.deleteNurse,name='delete_nurse'),     
+    
     path('admin_user/add_manufacturer/',HODViews.addManufacturer, name='add_manufacturer'), 
     path('admin_user/manage_manufacturer/',HODViews.manageManufacturer, name='manage_manufacturer'), 
     path('admin_user/edit_manufacturer/<int:id>/',HODViews.editManufacturer, name='edit_manufacturer'), 

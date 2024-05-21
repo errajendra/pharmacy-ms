@@ -1558,3 +1558,54 @@ def deleteHospitalItem(request, id):
     cat.delete()
     return redirect("manage_hospital_item")
 
+
+
+
+# Nurse View
+@login_required
+def manageNurse(request):
+    Nurses = Nurse.objects.all().order_by("-id")
+    context = {
+        "nurses": Nurses,
+        "title": "Manage Nurse",
+    }
+    return render(request, "nurse/nurse_list.html", context)
+
+
+@login_required
+def addNurse(request):
+    form = NurseForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Nurse added successfully!")
+
+            return redirect("manage_nurse")
+    context = {
+        "form": form,
+        "departments": Department.objects.all(),
+        "title": "Add Nurse"
+        }
+    return render(request, "nurse/add_nurse.html", context)
+
+
+@login_required
+def editNurse(request, id):
+    cat = get_object_or_404(Nurse, id=id)
+    form = NurseForm(instance=cat, data=request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Nurse Updated Successfully!")
+
+            return redirect("nurse_list")
+    context = {"form": form, "title": "Update Nurse"}
+    return render(request, "nurse/add_nurse.html", context)
+
+
+@for_admin
+def deleteNurse(request, id):
+    cat = get_object_or_404(Nurse, id=id)
+    cat.delete()
+    return redirect("nurse_list")
+

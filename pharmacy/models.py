@@ -124,7 +124,6 @@ class Nurse(BaseModel):
     admin = models.OneToOneField(CustomUser, null=True, on_delete=models.CASCADE)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True, blank=True)
     emp_no = models.CharField(max_length=100, null=True, blank=True)
-    age = models.IntegerField(default="0", blank=True, null=True)
     gender = models.CharField(max_length=100, default="Female", choices=gender_category)
     mobile = models.CharField(max_length=10, null=True, blank=True)
     address = models.CharField(max_length=300, null=True, blank=True)
@@ -227,7 +226,7 @@ class Patients(BaseModel):
     
     address = models.CharField(max_length=100, null=True, blank=True)
     city = models.CharField(max_length=36, null=True, blank=True)
-    pin_code = models.PositiveIntegerField(max_length=6, null=True, blank=True)
+    pin_code = models.PositiveIntegerField(null=True, blank=True)
     
     # Life Style
     

@@ -479,3 +479,37 @@ class HospitalItemForm(ModelForm):
             "price": forms.NumberInput(attrs={"class":"form-control"}),
             "discount": forms.NumberInput(attrs={"class":"form-control"}),
         }
+
+
+
+class NurseForm(ModelForm):
+    email = forms.EmailField(
+        label="Email",
+        max_length=50,
+        required=False,
+        widget=forms.EmailInput(attrs={"class": "form-control"}),
+    )
+    first_name = forms.CharField(
+        label="First Name",
+        max_length=50,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    last_name = forms.CharField(
+        label="Last Name",
+        max_length=50,
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    
+    class Meta:
+        model = Nurse
+        fields = (
+            "first_name", "last_name", "gender", "department",
+            "mobile", "address", )
+        # widgets = {
+        #     "marital_status": forms.Select(attrs={"class":"form-control"}),
+        #     "gender": forms.Select(attrs={"class":"form-control"}),
+        #     # "bg": forms.Select(attrs={"class":"form-control"}),
+        #     "age": forms.DateInput(attrs={"class":"form-control", "type": "date"}),
+        #     "department": forms.Select(attrs={"class":"form-control"}),
+        # }
