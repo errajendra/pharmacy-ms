@@ -425,7 +425,7 @@ class Stock(BaseModel):
     #     DrugLeaf, null=True, on_delete=models.SET_NULL, blank=True
     # )
     type = models.ForeignKey(
-        DrugType, null=True, on_delete=models.SET_NULL, blank=True
+        DrugType, null=True, on_delete=models.SET_NULL, blank=True, verbose_name="Product Type"
     )
     manufacture = models.ForeignKey(
         Manufacturer,
@@ -507,6 +507,15 @@ class Stock(BaseModel):
             'amount' : total or "",
         }
         return data
+    
+    @property
+    def quantity_price(self):
+        if self.price:
+            try:
+                return self.price/self.unit
+            except:
+                pass
+        return 0
         
     
 
@@ -632,7 +641,7 @@ class Cart(BaseModel):
     def total_price(self):
         try:
             if self.medicine:
-                return round((self.medicine.price * self.quantity) - (self.medicine.price * self.quantity * self.discount / 100), 2)
+                return round((self.medicine.quantity_price * self.quantity) - (self.medicine.quantity_price * self.quantity * self.discount / 100), 2)
             elif self.hospital_item:
                 return round((self.hospital_item.price * self.quantity) - (self.hospital_item.price * self.quantity * self.discount / 100), 2)
             return None

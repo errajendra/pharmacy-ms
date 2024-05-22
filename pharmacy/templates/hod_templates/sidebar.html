@@ -341,7 +341,7 @@
                         <li class="nav-item pl-2 {% if request.path == '/admin_user/manage_drug_type/' %}active{% endif %}">
                             <a href="{% url 'manage_drug_type'  %}" class="nav-link">
                                 <i class="fas fa-pills"></i>
-                                <p class="pl-2">Type</p>
+                                <p class="pl-2">Product Type</p>
                             </a>
                         </li>
                         
@@ -351,6 +351,7 @@
                                 <p class="pl-2">Hospital Items</p>
                             </a>
                         </li>
+                        
                         <li class="nav-item pl-2 {% if request.path == '/admin_user/add-medines-bulk-by-csv/' %}active{% endif %}">
                             <a href="{% url 'upload_medicine_bulk_by_csv'  %}" class="nav-link">
                                 <i class="fas fa-upload"></i>

@@ -55,6 +55,7 @@
                                     {% endfor %}
                                 </select> 
                             </div> 
+
                             <div class="mb-3 col-md-2 col-sm-4 pt-4">
                                 <a href="{% url "patient_form" %}" type="button" class="btn btn-default">
                                     Add New
@@ -78,7 +79,7 @@
                                 <label for="id_date" class="form-label requiredField">
                                     Date<span class="asteriskField">*</span> 
                                 </label>
-                                <input type="date" name="date" {% if instance.date %} value="{{instance.date}}" {% endif %} class="form-control dateinput" required="" id="id_date"> 
+                                <input type="date" name="date" {% if instance.date %} value="{{instance.date|date:'Y-m-d'}}" {% endif %} class="form-control dateinput" required="" id="id_date"> 
                             </div> 
                             
                             <div id="div_id_booking_mode" class="mb-3 col-md-6 col-sm-12">
@@ -90,7 +91,7 @@
                                     <option value="Offline" {% if instance.booking_mode == "Offline" %} selected="" {% endif %}>Offline</option> 
                                     <option value="Online"  {% if instance.booking_mode == "Online" %} selected="" {% endif %} >Online</option>
                                     {% else %}
-                                    <option value="Offline" selected="">Offline</option> 
+                                    <option value="Offline">Offline</option> 
                                     <option value="Online">Online</option>
                                     {% endif %}
 
@@ -104,12 +105,16 @@
                                 <select name="status" class="form-control select form-select" id="id_status"> 
                                     {% if instance %}
                                     <option value="Pending" {% if instance.status == "Pending" %} selected="" {% endif %} >Pending</option> 
-                                    <option value="Booked" {% if instance.status == "Booked" %} selected="" {% endif %} >Booked</option> 
-                                    <option value="Seen" {% if instance.status == "Seen" %} selected="" {% endif %} >Seen</option>
+                                    <option value="Scheduled" {% if instance.status == "Scheduled" %} selected="" {% endif %} >Scheduled</option> 
+                                    <option value="Confirmed" {% if instance.status == "Confirmed" %} selected="" {% endif %} >Confirmed</option> 
+                                    <option value="Rescheduled" {% if instance.status == "Rescheduled" %} selected="" {% endif %} >Rescheduled</option>
+                                    <option value="Cancel" {% if instance.status == "Cancel" %} selected="" {% endif %} >Cancel</option>
                                      {% else %}
                                     <option value="Pending">Pending</option> 
-                                    <option value="Booked" selected="">Booked</option> 
-                                    <option value="Seen">Seen</option>
+                                    <option value="Scheduled">Scheduled</option> 
+                                    <option value="Confirmed" selected="">Confirmed</option> 
+                                    <option value="Rescheduled">Rescheduled</option>
+                                    <option value="Cancel">Cancel</option>
                                     {% endif %}
                                 </select> 
                             </div> 
@@ -229,6 +234,20 @@
                     }
                 });
             });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+          $('#id_patient').select2({
+            allowClear: true,
+          });
+      
+
+          $('#id_doctor').select2({
+            allowClear: true,
+          });
+      
         });
     </script>
 </section>

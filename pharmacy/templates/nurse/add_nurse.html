@@ -52,7 +52,7 @@
                                                 <i class="fas fa-user"></i>
                                             </span>
                                         </span>
-                                        <input type="text" class="form-control" name="first_name" placeholder="First Name">
+                                        <input type="text" class="form-control" name="first_name" {% if ins.admin.first_name %} value="{{ins.admin.first_name}}" {% endif %} placeholder="First Name">
                                     </div>
                                 </div>
                             </div>
@@ -65,11 +65,12 @@
                                         <i class="fas fa-user"></i>
                                         </span>
                                         </span>
-                                        <input type="text" class="form-control" name="last_name" placeholder=" Last Name">
+                                        <input type="text" class="form-control" name="last_name" {% if ins.admin.last_name %} value="{{ins.admin.last_name}}" {% endif %} placeholder=" Last Name">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+
+                            {% comment %} <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Fees</label>
                                     <div class="input-group">
@@ -78,10 +79,10 @@
                                         <i class="fas fa-coin"></i>
                                         </span>
                                         </span>
-                                        <input type="number" class="form-control" name="fees" placeholder=" Fees">
+                                        <input type="number"  class="form-control" name="fees" placeholder=" Fees">
                                     </div>
                                 </div>
-                            </div>
+                            </div> {% endcomment %}
                             
                             <div class="col-md-4">
                                 <div class="form-group">
@@ -92,7 +93,7 @@
                                         <i class="fas fa-envelope"></i>
                                         </span>
                                         </span>
-                                        <input type="email" class="form-control" name="email" placeholder=" Enter email" id="id_email">
+                                        <input type="email" class="form-control" name="email" {% if ins.admin.email %} value="{{ins.admin.email}}" readonly {% endif %} placeholder=" Enter email" id="id_email">
                                     </div>
                                 </div>
                             </div>
@@ -103,12 +104,12 @@
                                     <div class="input-group">
                                         <span class="input-group-prepend">
                                             <span class="input-group-text">
-                                                <i class="fas fa-envelope"></i>
+                                                <i class="fas fa-user"></i>
                                             </span>
                                         </span>
-                                        <select name="department" class="form-control select form-select" id="id_department">
-                                            <option value="Female">Female</option>
-                                            <option value="Male">Male</option>
+                                        <select name="gender" class="form-control select form-select" id="id_gender">
+                                            <option value="Female" {% if ins.gender == "Female" %} selected="" {% endif %}>Female</option>
+                                            <option value="Male" {% if ins.gender == "Male" %} selected="" {% endif %}>Male</option>
                                         </select>
                                     </div>
                                 </div>
@@ -124,9 +125,9 @@
                                             </span>
                                         </span>
                                         <select name="department" class="form-control select form-select" id="id_department">
-                                            <option value="" selected >--Select-- </option>
+                                            <option value=""  {% if ins.department %} {% else %} selected="" {% endif %} >--Select-- </option>
                                             {% for d in departments %}
-                                            <option value="{{d.id}}">{{d}} </option>
+                                            <option value="{{d.id}}" {% if ins.department.id == d.id %} selected="" {% endif %}>{{d}} </option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -146,14 +147,14 @@
 								<i class="fas fa-phone"></i>
 								</span>
                                         </span>
-                                        <input type="text" class="form-control" name="mobile" placeholder="Phone Number">
+                                        <input type="text" class="form-control" name="mobile" {% if ins.mobile %} value="{{ins.mobile}}" {% endif %} placeholder="Phone Number">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Address</label>
-                                    <input type="text" class="form-control" name="address" placeholder="Address">
+                                    <input type="text" class="form-control" name="address" {% if ins.address %} value="{{ins.address}}" {% endif %} placeholder="Address">
                                 </div>
                             </div>
                         </div>

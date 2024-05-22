@@ -503,9 +503,7 @@ class NurseForm(ModelForm):
     
     class Meta:
         model = Nurse
-        fields = (
-            "first_name", "last_name", "gender", "department",
-            "mobile", "address", )
+        fields = ("gender", "department", "mobile", "address", )
         # widgets = {
         #     "marital_status": forms.Select(attrs={"class":"form-control"}),
         #     "gender": forms.Select(attrs={"class":"form-control"}),
@@ -513,6 +511,7 @@ class NurseForm(ModelForm):
         #     "age": forms.DateInput(attrs={"class":"form-control", "type": "date"}),
         #     "department": forms.Select(attrs={"class":"form-control"}),
         # }
+
 
 class ReceptionistForm(forms.ModelForm):
     email = forms.EmailField(
@@ -565,3 +564,4 @@ class ReceptionistForm(forms.ModelForm):
         model = Reception
         fields = "__all__"
         exclude = [ "admin"]
+

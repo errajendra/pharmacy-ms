@@ -673,7 +673,7 @@
     {% comment %} <script src="/static/pos/pos/js/cart.js"></script> {% endcomment %}
     <script src="/static/pos/slick/slick.js" type="text/javascript" charset="utf-8"></script>
 
-
+    
     {% comment %} Filering the Products {% endcomment %}
     <script type="text/javascript">
         
@@ -1334,12 +1334,7 @@
 
         };
 
-        // INITIALIZATION OF SELECT2
-        // =======================================================
-        $('.js-select2-custom').each(function() {
-            var select2 = $.HSCore.components.HSSelect2.init($(this));
-        });
-
+        
         $('#order_place').submit(function(eventObj) {
             if ($('#customer').val()) {
                 $(this).append('<input type="hidden" name="user_id" value="' + $('#customer').val() + '" /> ');

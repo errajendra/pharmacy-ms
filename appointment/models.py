@@ -1,6 +1,8 @@
-from typing import Iterable
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.db import models
-from pharmacy.models import BaseModel, Doctor, Patients
+from pharmacy.models import BaseModel, Doctor, Patients, Addmission
+from django.utils.timezone import datetime
 
 
 class Appointment(BaseModel):
@@ -21,8 +23,10 @@ class Appointment(BaseModel):
         max_length=15,
         choices=[
             ("Pending", "Pending"),
-            ("Booked", "Booked"),
-            ("Seen", "Seen")
+            ("Scheduled", "Scheduled"),
+            ("Confirmed", "Confirmed"),
+            ("Rescheduled", "Rescheduled"),
+            ("Cancel", "Cancel")
         ],
         default="Pending"
     )
@@ -72,3 +76,14 @@ class Appointment(BaseModel):
         ordering = ("-created_at",)
         unique_together = ("doctor", "date", "token")
         verbose_name = "Appointment"
+
+
+@receiver(post_save, sender=Appointment)
+def save_user_profile(sender, instance, **kwargs):
+    if instance.status == "Confirmed":
+        Addmission.objects.create(
+            patient=instance.patient,
+            doctor=instance.doctor,
+            department=instance.doctor.department,
+            addmission_time = datetime.now()
+        )
