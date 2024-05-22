@@ -445,7 +445,7 @@ class Stock(BaseModel):
     unit = models.PositiveIntegerField(
         default=1, null=True, blank=True,
     )
-    unit_quantity = models.PositiveIntegerField(verbose_name="Per Unit Quantity", blank=True, null=True)
+    unit_quantity = models.PositiveIntegerField(verbose_name="Per Unit Quantity", default=10)
     quantity = models.IntegerField(verbose_name="Total Quantity", default=0, blank=True, null=True)
     batch = models.CharField(max_length=50, blank=True, null=True)
     actual_price = models.FloatField(default=0, blank=True, null=True, verbose_name="Actual Price")
@@ -596,7 +596,7 @@ class NewPurchaseData(BaseModel):
     batches = models.CharField(max_length=10, null=True, blank=True)
     mrp_per_unit = models.FloatField()
     buy_price_per_unit = models.FloatField()
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(default=1) # Number of Unit 
     sub_total = models.FloatField()
     discount = models.FloatField()
     total = models.FloatField()
@@ -604,6 +604,10 @@ class NewPurchaseData(BaseModel):
 
     class Meta:
         ordering = ("-created_at",)
+        
+    @property
+    def get_total_quanity(self):
+        return self.quantity * self.drug_name.unit_quantity
 
 
 class PurchasedInvoice(BaseModel):

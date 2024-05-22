@@ -13,7 +13,8 @@
                 </div>
 
                 <form method="POST" style="font-size:13px;" class='px-3 py-2'>
-                    {% csrf_token %} {% if messages %}
+                    {% csrf_token %} 
+                    {% if messages %}
                     <div class="form-group">
                         <div class="col-12">
                             {% for message in messages %} {% if message.tags == "error" %}
@@ -90,5 +91,13 @@
     // Attach an event listener to the purpose select element to call the function whenever the value changes
     purposeSelect.addEventListener('change', toggleElements);
 
+</script>
+
+<script>
+    $(document).ready(function() {
+      $('#id_patient').select2({
+        allowClear: true,
+      });
+    });
 </script>
 {% endblock main_content %}

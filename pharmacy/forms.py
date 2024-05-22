@@ -83,13 +83,13 @@ class PatientForm(forms.Form):
     address = forms.CharField(
         label="Address",
         max_length=50,
+        required=False,
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
-    phone_number = forms.CharField(label="Mobile", max_length=50)
+    phone_number = forms.CharField(label="Mobile", required=False, max_length=50)
     email = forms.EmailField(
         label="Email",
         max_length=50,
-        required=False,
         widget=forms.EmailInput(attrs={"class": "form-control"}),
     )
     gender_list = (("Male", "Male"), ("Female", "Female"))
@@ -102,12 +102,12 @@ class PatientForm(forms.Form):
     # dob = forms.DateField(
     #     label="dob", widget=DateInput(attrs={"class": "form-control"})
     # )
-    age = forms.ChoiceField(
-        choices=[(i, i) for i in range(100)],
-        label="Age",
-        required=False,
-        widget=forms.Select(attrs={"class": "form-control"})
-    )
+    # age = forms.ChoiceField(
+    #     choices=[(i, i) for i in range(100)],
+    #     label="Age",
+    #     required=False,
+    #     widget=forms.Select(attrs={"class": "form-control"})
+    # )
     # username = forms.CharField(
     #     label="Username",
     #     max_length=50,
@@ -133,24 +133,19 @@ class PatientForm(forms.Form):
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get("phone_number")
         if not phone_number:
-            raise forms.ValidationError("This field is requied")
+            pass
         elif len(phone_number) < 10:
             raise forms.ValidationError("Invalid Number")
-        for instance in Patients.objects.all():
-            if instance.phone_number == phone_number:
-                raise ValidationError("PhoneNumber aready exist")
-
         return phone_number
+    
 
-    def clean_username(self):
-        username = self.cleaned_data["username"]
-        if not username:
-            raise ValidationError("This field is required")
-        for instance in CustomUser.objects.all():
-            if instance.username == username:
-                raise ValidationError("Username aready exist")
-
-        return username
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        if not email:
+            raise ValidationError("Email field is required")
+        if CustomUser.objects.filter(email=email).exists():
+            raise ValidationError("Email already exist")
+        return email
 
     def clean_firstName(self):
         first_name = self.cleaned_data["first_name"]

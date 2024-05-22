@@ -130,39 +130,41 @@ def createPatientNext(request):
 
     if request.method == "POST":
         form = PatientForm(request.POST, request.FILES)
-
         if form.is_valid():
-            first_name = form.cleaned_data["first_name"]
-            last_name = form.cleaned_data["last_name"]
-            # username = form.cleaned_data["username"]
-            email = form.cleaned_data["email"]
-            # password = form.cleaned_data["password"]
-            address = form.cleaned_data["address"]
-            phone_number = form.cleaned_data["phone_number"]
-            gender = form.cleaned_data["gender"]
+            try:
+                first_name = form.cleaned_data["first_name"]
+                last_name = form.cleaned_data["last_name"]
+                email = form.cleaned_data["email"]
+                
+                if CustomUser.objects.filter(username=email).exists():
+                    messages.warning(request, "Email already exists")
+                    
+                else:
+                    user = CustomUser.objects.create_user(
+                        username=email,
+                        email=email,
+                        password=email,
+                        first_name=first_name,
+                        last_name=last_name,
+                        user_type="Patients",
+                    )
+                    form_instance = user.patients
+                    forms_ins = PatientModelForm(data=request.POST, instance=form_instance)
+                    forms_ins.save()
+                
+                    messages.success(request, email + " was Successfully Added")
+                    return redirect(reverse("add_addmission") + '?patient='+f"{user.patients.id}")
             
-            user = CustomUser.objects.create_user(
-                username=email,
-                email=email,
-                password=email,
-                first_name=first_name,
-                last_name=last_name,
-                user_type="Patients",
-            )
-            
-            user.patients.address = address
-            user.patients.phone_number = phone_number
-            user.patients.first_name = first_name
-            user.patients.last_name = last_name
-            user.patients.gender = gender
-            user.save()
-            
-            messages.success(request, email + " was Successfully Added")
-
-            return redirect(reverse("add_addmission") + '?patient='+f"{user.patients.id}")
-        
-    context = {"form": form, "title": "Add Patient"}
-
+            except Exception as e:
+                messages.warning(request, f"{e}")
+        else:
+            form_error = f"{form.errors}"
+            messages.warning(request, form_error)
+    context = {
+        "form": form, 
+        "title": "Add Patient",
+        "languages": Language.objects.all()
+    }
     return render(request, "hod_templates/patient_form.html", context)
 
 
@@ -1355,7 +1357,6 @@ def new_purchase_fun(request):
 def add_medicine_on_purchese_page(request):
     if request.method == "POST":
         form = StockForm(request.POST, request.FILES)
-        print("fkjbkjh")
         if form.is_valid():
             form.save()
     return redirect(new_purchase_fun)
@@ -1404,7 +1405,7 @@ def update_added_stock_detail(request):
     data_type = request.POST.get("data_type")
     get_instance = get_object_or_404(NewPurchaseData, id=int(stock_id))
     if data_type == "buy_price_per_unit":
-        get_instance.buy_price_per_unit = int(new_value)
+        get_instance.buy_price_per_unit = float(new_value)
         get_instance.sub_total = int(get_instance.quantity) * int(new_value)
         get_instance.total = int(get_instance.quantity) * int(new_value)
         messages.success(request, "MRP Item updated")

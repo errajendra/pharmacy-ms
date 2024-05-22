@@ -45,7 +45,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="manufacture">Manufacture</label>
+                            <label for="manufacture">Manufacturer</label>
                             <select id="manufacture" class="form-control" name="manufacture_name" required>
                                 <option>Select One</option>
                                 {% for manufacture in manufacture_list %}
@@ -79,7 +79,8 @@
                                 <th>EXPIRED DATE</th>
                                 <th>MRP PER UNIT</th>
                                 <th>BUY PRICE PER UNIT</th>
-                                <th>QUANTITY</th>
+                                <th>Unit</th>
+                                <th>Quantity</th>
                                 <th>SUB TOTAL</th>
                                 <th>DISCOUNT(%)</th>
                                 <th>TOTAL</th>
@@ -96,6 +97,7 @@
                                     <td><input type="number" value="{{ purchase.mrp_per_unit }}" step="0.01" style="width: 80px;"></td> <!-- Adjust width as needed -->
                                     <td><input type="number" value="{{ purchase.buy_price_per_unit }}" data-type-value="buy_price_per_unit" data-id="{{purchase.id}}" class="changePerUnitPrice" step="1" style="width: 80px;"></td> <!-- Adjust width as needed -->
                                     <td><input type="number" value="{{ purchase.quantity }}" data-type-value="quantity" data-id="{{purchase.id}}" class="changePerUnitPrice" step="1" style="width: 50px;"></td> <!-- Adjust width as needed -->
+                                    <td><input type="number" value="{{ purchase.get_total_quanity }}" data-type-value="total_quantity" data-id="{{purchase.id}}" readonly style="width: 50px;"></td> <!-- Adjust width as needed -->
                                     <td>{{ purchase.sub_total }}</td>
                                     <td><input type="number" value="{{ purchase.discount }}" step="1" data-type-value="discount" data-id="{{purchase.id}}" class="changePerUnitPrice" style="width: 50px;"></td>
                                     <td>{{ purchase.total }}</td>
