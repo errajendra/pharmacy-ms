@@ -1,7 +1,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
 
     <a href="" class="brand-link ml-2">
-        <img src="{{request.user.doctor.profile_pic.url}}" alt="" width="36" height="36" class=" img-circle elevation-3" style="opacity: .8">
+        <img src="{{request.user.reception.profile_pic.url}}" alt="" width="36" height="36" class=" img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light mt-1 ml-3 mmust">H3TS</span>
     </a>
 
@@ -9,20 +9,18 @@
     <div class="sidebar">
         <div class="user-panel mr-3">
             <div class="pull-left image ml-2">
-                <img src="{{request.user.doctor.profile_pic.url}}" width="36" height="36" class="img-circle mt-2" alt="User Image">
+                <img src="{{request.user.reception.profile_pic.url}}" width="36" height="36" class="img-circle mt-2" alt="">
             </div>
             <div class="pull-left info">
                 <p>{{user.first_name}} {{user.last_name}}</p>
                 <a href="#"><i class="fa fa-circle text-success "></i> Online</a>
             </div>
         </div>
-
-
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
                 <li class="nav-item">
-                    <a href="{% url  'doctor_home' %}" class="nav-link">
+                    <a href="{% url 'receptionist_home' %}" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -30,52 +28,35 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url  'doctor_home' %}" class="nav-link">
+                    <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-clinic-medical"></i>
                         <p>
-                           View Appointments
+                           Schedule Appointments
                            </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url  'doctor_home' %}" class="nav-link">
+                    <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-procedures"></i>
                         <p>
-                          Update Patient Record
+                          Manage Patient Record
                            </p>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
+                        <i class="nav-icon fas fa-book-medical"></i>
                         <p>
-                            Prescriptions
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
+                          Billing Management
+                           </p>
                     </a>
-                    <ul class="nav nav-treeview">
-
-
-                        <li class="nav-item pl-2">
-                            <a href="{% url 'manage_patient_doctor' %}" class="nav-link">
-                                <i class="fas fa-pills"></i>
-                                <p class="pl-2">Prescribe</p>
-                            </a>
-                        </li>
-                        <li class="nav-item pl-2">
-                            <a href="{% url 'manage_precrip_doctor' %}" class="nav-link">
-                                <i class="fas fa-pills"></i>
-                                <p class="pl-2">Manage Prescriptions</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="{% url  'doctor_home' %}" class="nav-link">
-                        <i class="nav-icon fas fa-vials"></i>
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-comment-medical"></i>
                         <p>
-                          Clinical Notes
+                          Patient Notifications
                            </p>
                     </a>
                 </li>

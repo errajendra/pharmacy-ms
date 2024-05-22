@@ -41,6 +41,10 @@ def loginPage(request):
                 return redirect('clerk_home')
             elif user_type == 'Patients':
                 return redirect('patient_home')
+            elif user_type == 'Reception':
+                return redirect('receptionist_home')
+            elif user_type == 'Nurse':
+                return redirect('nurse_home')
                 
            
             else:
