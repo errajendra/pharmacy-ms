@@ -63,6 +63,23 @@ def createPatient(request):
     if request.method == "POST":
         form = PatientModelForm(request.POST, request.FILES)
 
+        pos = request.POST.get('pos', None)
+        if pos == "pos":
+            email = request.POST.get("email")
+            first_name = request.POST.get("first_name")
+            user = CustomUser.objects.create_user(
+                username=email,
+                email=email,
+                password=email,
+                first_name=first_name,
+                user_type="Patients",
+            )
+            user.patients.phone_number = request.POST.get("phone_number", None)
+            user.patients.address = request.POST.get("address", None)
+            user.save()
+            
+            return redirect("pos")
+        
         if form.is_valid():
             first_name = form.cleaned_data["first_name"]
             last_name = form.cleaned_data["last_name"]
@@ -108,11 +125,10 @@ def createPatient(request):
                 forms_ins.save()
                 messages.success(request, email + " Successfully Added")
 
-                pos = request.POST.get('pos', None)
-                if pos == "pos":
-                    return redirect("pos")
                 
                 return redirect("patient_form")
+        else:
+            print(form.errors)
             
     context = {
         "form": form, 
