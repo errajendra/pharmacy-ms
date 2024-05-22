@@ -37,7 +37,7 @@ class Language(models.Model):
 class CustomUser(AbstractUser):
     
     first_name = models.CharField(_("first name"), max_length=150, null=True, blank=True)
-    last_name = models.CharField(_("last name"), max_length=150, null=True, blank=True)
+    last_name = models.CharField(_("last name"), max_length=150, default="")
     user_type_data = (
         ("AdminHOD", "AdminHOD"), #1
         ("Pharmacist", "Pharmacist"),
