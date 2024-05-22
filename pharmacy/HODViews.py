@@ -213,23 +213,26 @@ def createPharmacist(request):
         address = request.POST.get("address")
         mobile = request.POST.get("mobile")
         # password = request.POST.get("password")
+        try:
+            user = CustomUser.objects.create_user(
+                username=email,
+                email=email,
+                password=email,
+                first_name=first_name,
+                last_name=last_name,
+                user_type="Pharmacist",
+            )
+            user.first_name = first_name
+            user.last_name = last_name
+            user.pharmacist.address = address
+            user.pharmacist.mobile = mobile
 
-        user = CustomUser.objects.create_user(
-            username=email,
-            email=email,
-            password=email,
-            first_name=first_name,
-            last_name=last_name,
-            user_type="Pharmacist",
-        )
-        user.first_name = first_name
-        user.last_name = last_name
-        user.pharmacist.address = address
-        user.pharmacist.mobile = mobile
-
-        user.save()
-        messages.success(request, "Staff Added Successfully!")
-        return redirect("add_pharmacist")
+            user.save()
+            messages.success(request, "Staff Added Successfully!")
+            return redirect("add_pharmacist")
+        except IntegrityError:
+            messages.error(request, "A user with this email already exists.")
+            return redirect("add_pharmacist")
 
     context = {"title": "Add Pharmacist"}
 
@@ -304,13 +307,13 @@ def createPathologist(request):
         last_name = request.POST.get("last_name")
         address = request.POST.get("address")
         mobile = request.POST.get("mobile")
-        password = request.POST.get("password")
+        # password = request.POST.get("password")
 
         try:
             user = CustomUser.objects.create(
                 username=username,
                 email=email,
-                password=password,
+                password=email,
                 first_name=first_name,
                 last_name=last_name,
                 user_type="Pathologist",
@@ -1570,7 +1573,7 @@ def manageNurse(request):
         "nurses": Nurses,
         "title": "Manage Nurse",
     }
-    return render(request, "nurse/nurse_list.html", context)
+    return render(request, "hod_templates/nurse/nurse_list.html", context)
 
 
 @login_required
@@ -1602,7 +1605,7 @@ def addNurse(request):
         "departments": Department.objects.all(),
         "title": "Add Nurse"
         }
-    return render(request, "nurse/add_nurse.html", context)
+    return render(request, "hod_templates/nurse/add_nurse.html", context)
 
 
 @login_required
@@ -1620,7 +1623,7 @@ def editNurse(request, id):
         "ins": ins,
         "departments": Department.objects.all(),
         "title": "Update Nurse"}
-    return render(request, "nurse/add_nurse.html", context)
+    return render(request, "hod_templates/nurse/add_nurse.html", context)
 
 
 @for_admin
@@ -1642,30 +1645,39 @@ def receptionist_list(request):
 
 @login_required
 def add_receptionist(request):
-    form = ReceptionistForm(request.POST or None, request.FILES or None)
     if request.method == "POST":
-        if form.is_valid():
-            try:
-                first_name = form.cleaned_data.get("first_name")
-                last_name = form.cleaned_data.get("last_name")
-                email = form.cleaned_data.get("email")
-                user = CustomUser.objects.create_user(
+        email = request.POST.get("email")
+        first_name = request.POST.get("first_name")
+        last_name = request.POST.get("last_name")
+        address = request.POST.get("address")
+        mobile = request.POST.get("mobile")
+        age = request.POST.get("age")
+        gender = request.POST.get("gender")
+        emp_no = request.POST.get("emp_no")
+        profile_pic = request.FILES['profile_pic']
+        try:
+            user = CustomUser.objects.create_user(
                     username=email,
                     email=email,
+                    password=email,
                     first_name=first_name,
                     last_name=last_name,
+                    user_type='Reception',
                 )
-                receptionist = form.save(commit=False)
-                receptionist.admin = user 
-                receptionist.save()
-
-                messages.success(request, "Receptionist added successfully!")
-                return redirect("receptionist_list")
-            except IntegrityError:
-                messages.error(request, "A user with this email already exists.")
-                return redirect("add_receptionist")
+            user.reception.address = address
+            user.reception.mobile = mobile
+            user.reception.age = age
+            user.reception.gender = gender
+            user.reception.emp_no = emp_no
+            user.reception.profile_pic = profile_pic
+            user.save()
+            
+            messages.success(request, "Receptionist added successfully!")
+            return redirect("receptionist_list")
+        except IntegrityError:
+            messages.error(request, "A user with this email already exists.")
+            return redirect("add_receptionist")
     context = {
-        "form": form,
         "receptionists": Reception.objects.all(),
         "title": "Add Receptionist"
         }

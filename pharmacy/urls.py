@@ -1,6 +1,6 @@
 from django.urls import path, include
 from .import HODViews
-from .import pharmacistViews,DoctorViews,views,patient_view,clerkViews
+from .import pharmacistViews,DoctorViews,views,patient_view,clerkViews, receptionistViews, nurseViews
 from django.contrib.auth import views as auth_views
 
 
@@ -46,7 +46,10 @@ urlpatterns=[
     path('admin_user/add_nurse/',HODViews.addNurse, name='add_nurse'), 
     path('admin_user/nurse-list/',HODViews.manageNurse,name='nurse_list'), 
     path('admin_user/edit-nurse/<int:id>/',HODViews.editNurse,name='edit_nurse'), 
-    path('admin_user/delete-nurse/<int:id>/',HODViews.deleteNurse,name='delete_nurse'),     
+    path('admin_user/delete-nurse/<int:id>/',HODViews.deleteNurse,name='delete_nurse'),  
+    
+    # Nurse Template View urls
+    path('nurse-home/',nurseViews.nurseHome, name='nurse_home'),    
     
     path('admin_user/add_manufacturer/',HODViews.addManufacturer, name='add_manufacturer'), 
     path('admin_user/manage_manufacturer/',HODViews.manageManufacturer, name='manage_manufacturer'), 
@@ -196,10 +199,13 @@ urlpatterns=[
 
     path("purchase-history/", HODViews.purchase_history, name="purchase_history"),
     
+    # Receptionist View urls
+    path('receptionist-list/',HODViews.receptionist_list,name='receptionist_list'),
+    path('add-receptionist/',HODViews.add_receptionist,name='add_receptionist'),
+    path('edit-receptionist/<int:id>/', HODViews.edit_receptionist, name="edit_receptionist"),
+    path('delete-receptionist/<int:id>/', HODViews.delete_receptionist, name="delete_receptionist"),
     
-     path('receptionist-list/',HODViews.receptionist_list,name='receptionist_list'),
-     path('add-receptionist/',HODViews.add_receptionist,name='add_receptionist'),
-     path('edit-receptionist/<int:id>/', HODViews.edit_receptionist, name="edit_receptionist"),
-     path('delete-receptionist/<int:id>/', HODViews.delete_receptionist, name="delete_receptionist"),
+    # Receptionist Template View urls
+    path('receptionist-home/',receptionistViews.receptionistHome,name='receptionist_home'),
 
 ]
