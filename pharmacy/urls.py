@@ -195,5 +195,11 @@ urlpatterns=[
     path('update-added-stock/', HODViews.update_added_stock_detail, name="update_added_stock_detail"),
 
     path("purchase-history/", HODViews.purchase_history, name="purchase_history"),
+    
+    
+     path('receptionist-list/',HODViews.receptionist_list,name='receptionist_list'),
+     path('add-receptionist/',HODViews.add_receptionist,name='add_receptionist'),
+     path('edit-receptionist/<int:id>/', HODViews.edit_receptionist, name="edit_receptionist"),
+     path('delete-receptionist/<int:id>/', HODViews.delete_receptionist, name="delete_receptionist"),
 
 ]

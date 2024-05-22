@@ -513,3 +513,55 @@ class NurseForm(ModelForm):
         #     "age": forms.DateInput(attrs={"class":"form-control", "type": "date"}),
         #     "department": forms.Select(attrs={"class":"form-control"}),
         # }
+
+class ReceptionistForm(forms.ModelForm):
+    email = forms.EmailField(
+        label="Email",
+        max_length=50,
+        required=False,
+        widget=forms.EmailInput(attrs={"class": "form-control"}),
+    )
+    first_name = forms.CharField(
+        label="First Name",
+        max_length=50,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    last_name = forms.CharField(
+        label="Last Name",
+        max_length=50,
+        required=False,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    age = forms.IntegerField(
+        label="Age",
+        widget=forms.NumberInput(attrs={"class": "form-control"}),
+    )
+    gender = forms.ChoiceField(
+        label="Gender",
+        choices=[('Female', 'Female'), ('Male', 'Male')],
+        widget=forms.Select(attrs={"class": "form-control"}),
+    )
+    emp_no = forms.CharField(
+        label="Employee No.",
+        max_length=50,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    profile_pic = forms.ImageField(
+        label="Profile Pic",
+        required=False,
+        widget=forms.FileInput(attrs={"class": "form-control"}),
+    )
+    mobile = forms.CharField(
+        label="Mobile",
+        max_length=15,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    address = forms.CharField(
+        label="Address",
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+    
+    class Meta:
+        model = Reception
+        fields = "__all__"
+        exclude = [ "admin"]

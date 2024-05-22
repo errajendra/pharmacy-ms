@@ -13,6 +13,7 @@ from .forms import *
 from .models import *
 
 from django.views.decorators.csrf import csrf_exempt
+from django.db import IntegrityError
 
 
 @for_admin
@@ -1609,3 +1610,77 @@ def deleteNurse(request, id):
     cat.delete()
     return redirect("nurse_list")
 
+
+@login_required
+def receptionist_list(request):
+    receptionists = Reception.objects.all().order_by("-id")
+    context = {
+        "receptionists": receptionists,
+        "title": "Receptionist List",
+    }
+    return render(request, "hod_templates/receptionist/receptionist_list.html", context)
+
+
+@login_required
+def add_receptionist(request):
+    form = ReceptionistForm(request.POST or None, request.FILES or None)
+    if request.method == "POST":
+        if form.is_valid():
+            try:
+                first_name = form.cleaned_data.get("first_name")
+                last_name = form.cleaned_data.get("last_name")
+                email = form.cleaned_data.get("email")
+                user = CustomUser.objects.create_user(
+                    username=email,
+                    email=email,
+                    first_name=first_name,
+                    last_name=last_name,
+                )
+                receptionist = form.save(commit=False)
+                receptionist.admin = user 
+                receptionist.save()
+
+                messages.success(request, "Receptionist added successfully!")
+                return redirect("receptionist_list")
+            except IntegrityError:
+                messages.error(request, "A user with this email already exists.")
+                return redirect("add_receptionist")
+    context = {
+        "form": form,
+        "receptionists": Reception.objects.all(),
+        "title": "Add Receptionist"
+        }
+    return render(request, "hod_templates/receptionist/add_receptionist.html", context)
+
+
+@login_required
+def edit_receptionist(request, id):
+    receptionist = get_object_or_404(Reception, id=id)
+    user = receptionist.admin 
+    if request.method == "POST":
+        form = ReceptionistForm(request.POST, request.FILES, instance=receptionist)
+        if form.is_valid():
+            user.first_name = request.POST.get('first_name')
+            user.last_name = request.POST.get('last_name')
+            user.save()
+            receptionist = form.save(commit=False)
+            receptionist.save()
+
+            messages.success(request, "Receptionist Updated Successfully!")
+            return redirect("receptionist_list")
+    else:
+        form = ReceptionistForm(instance=receptionist)
+    
+    context = {
+        "form": form,
+        "receptionist": receptionist,
+        "title": "Update Receptionist"
+    }
+    return render(request, "hod_templates/receptionist/edit_receptionist.html", context)
+    
+    
+@for_admin
+def delete_receptionist(request, id):
+    instance = get_object_or_404(Reception, id=id)
+    instance.delete()
+    return redirect("receptionist_list")
