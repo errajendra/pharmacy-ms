@@ -354,6 +354,8 @@ class Addmission(BaseModel):
         choices=(
             ("OPD", "OPD"),
             ("IPD/Bed Addmission", "IPD/Bed Addmission"),
+            ("OT", "OT"),
+            ("ICU", "ICU"),
         ),
         max_length=20, default="OPD"
     )
