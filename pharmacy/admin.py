@@ -98,3 +98,9 @@ class NurseAdmin(admin.ModelAdmin):
 class NurseAdmin(admin.ModelAdmin):
     list_display = ("admin", "emp_no", "gender", "address", "created_at")
     list_filter = ("created_at", )
+
+
+@admin.register(ClinicalNote)
+class ClinicalNoteAdmin(admin.ModelAdmin):
+    list_display = ("note_type", "note", "created_at")
+    list_filter = ("note_type", "created_at")

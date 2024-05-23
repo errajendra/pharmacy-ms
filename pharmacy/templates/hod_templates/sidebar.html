@@ -416,6 +416,32 @@
                     </ul>
                 </li>
 
+                {% comment %} Clinical Notes {% endcomment %}
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-notes-medical mr-2"></i>
+                        <p>
+                            Clinical Notes
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+
+                        <li class="nav-item pl-2">
+                            <a href="{% url 'add_clinical_note' %}" class="nav-link">
+                                <i class="fas fa-plus"></i>
+                                <p class="pl-2">Add Clinical Notes</p>
+                            </a>
+                        </li>
+                        <li class="nav-item pl-2">
+                            <a href="{% url 'clinical_note_list'  %}" class="nav-link">
+                                <i class="fas fa-list"></i>
+                                <p class="pl-2">Clinical Notes List</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
 
             </ul>
         </nav>

@@ -88,6 +88,13 @@ urlpatterns=[
     path('admin_user/edit_department/<int:id>/',HODViews.editDepartment, name='edit_department'), 
     path('admin_user/delete_department/<int:id>/',HODViews.deleteDepartment, name='delete_department'), 
     
+    # Clinical Notes Urls
+    path('admin-user/add_department/',HODViews.add_clinical_note, name='add_clinical_note'), 
+    path('admin-user/clinical_note_list/',HODViews.clinical_note_list, name='clinical_note_list'), 
+    path('admin-user/edit_clinical_note/<int:id>/',HODViews.edit_clinical_note, name='edit_clinical_note'), 
+    path('admin-user/delete_clinical_note/<int:id>/',HODViews.delete_clinical_note, name='delete_clinical_note'), 
+    
+    # Drug Unit Urls
     path('admin_user/add_drug_unit/',HODViews.addDrugUnit, name='add_drug_unit'), 
     path('admin_user/manage_drug_unit/',HODViews.manageDrugUnit, name='manage_drug_unit'), 
     path('admin_user/edit_drug_unit/<int:id>/',HODViews.editDrugUnit, name='edit_drug_unit'), 

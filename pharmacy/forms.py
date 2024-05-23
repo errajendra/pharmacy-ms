@@ -44,7 +44,7 @@ class PatientModelForm(ModelForm):
     class Meta:
         model = Patients
         fields = (
-            "first_name", "last_name", "gender", "dob", "marital_status", "bg", "language",
+            "first_name", "last_name", "gender", "dob", "marital_status", "bg",
             "phone_number", "phone_number2", "address", "city", "pin_code",
             "abha_no", "pm_jay", "adhar", "passport", "pan", "dl", "cat", "cast", "religion",
             "nationality", "education", "occupation", "activity", "food_preference", "smooking", "alcohol"
@@ -439,8 +439,18 @@ class AddmissionForm(ModelForm):
             "department": forms.Select(attrs={"class":"form-control w-auto"}),
             "purpose": forms.Select(attrs={"class":"form-control w-auto"}),
             
+            # OPD
+            "weight": forms.NumberInput(attrs={"class":"form-control w-auto"}),
+            "bp_systolic": forms.TextInput(attrs={"class":"form-control w-auto"}),
+            "bp_diastolic": forms.TextInput(attrs={"class":"form-control w-auto"}),
+            "pulse": forms.NumberInput(attrs={"class":"form-control w-auto"}),
+            "respiration_rates": forms.NumberInput(attrs={"class":"form-control w-auto"}),
+            "temp": forms.NumberInput(attrs={"class":"form-control w-auto"}),
+            "spo2": forms.NumberInput(attrs={"class":"form-control w-auto"}),
+
             # open these fields when purpose is OPD
-            "fees": forms.TextInput(attrs={"class":"form-control", "data-purpose":"FieldsOPD"}),
+            # "fees": forms.NumberInput(attrs={"class":"form-control w-auto", "data-purpose":"FieldsOPD"}),
+            "fees": forms.NumberInput(attrs={"class":"form-control w-auto"}),
             
             # open these fields when purpose is IPD or Bed Addmission
             "bht_no": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
@@ -449,6 +459,7 @@ class AddmissionForm(ModelForm):
             "addmission_time": forms.TextInput(attrs={"class":"form-control w-auto", 'type':'datetime-local', "data-purpose":"BedIPD"}),
             "discharge_time": forms.TextInput(attrs={"class":"form-control w-auto", 'type':'datetime-local', "data-purpose":"BedIPD"}),
             "ward_bed": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
+            "no_of_beds": forms.NumberInput(attrs={"class":"form-control w-auto", "data-purpose":"BedIPD"}),
             "operation_date": forms.DateTimeInput(attrs={"class":"form-control w-auto", 'type':'datetime-local', "data-purpose":"BedIPD"}),
             "addmission_type": forms.Select(attrs={"class":"form-control w-auto", "data-purpose":"BedIPD"}),
             "mlc_no": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
@@ -456,6 +467,8 @@ class AddmissionForm(ModelForm):
             "provisonal_diagnosis": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
             "final_diagnosis": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
             "summary_of_case": forms.Textarea(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
+            "staff": forms.Select(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
+            "facilities": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
             "result": forms.Select(attrs={"class":"form-control w-auto", "data-purpose":"BedIPD"}),
             "couse_of_death": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
         }
@@ -560,3 +573,13 @@ class ReceptionistForm(forms.ModelForm):
         fields = "__all__"
         exclude = [ "admin"]
 
+
+
+class ClinicalNoteForm(ModelForm):
+    class Meta:
+        model = ClinicalNote
+        fields = "__all__"
+        
+        widgets = {
+            "note_type": forms.Select(attrs={"class":"form-control w-auto"})
+        }

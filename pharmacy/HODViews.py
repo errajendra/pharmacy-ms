@@ -113,6 +113,10 @@ def createPatient(request):
                 form_instance = user.patients
                 
                 forms_ins = PatientModelForm(data=request.POST, instance=form_instance)
+                lang = request.POST.get('language', None)
+                if lang:
+                    lang, _lang_created = Language.objects.get_or_create(name=lang.strip())
+                    forms_ins.instance.language = lang
                 
                 # user.patients.address = address
                 # user.patients.phone_number = phone_number
@@ -770,6 +774,10 @@ def editPatient(request, patient_id):
 
                 # Then Update Students Table
                 # form = PatientModelForm(data=request.POST, instance=patient)
+                lang = request.POST.get('language', None)
+                if lang:
+                    lang, _lang_created = Language.objects.get_or_create(name=lang.strip())
+                    form.instance.language = lang
                 form.save()
                 messages.success(request, "Patient Updated Successfully!")
                 return redirect("all_patients")
@@ -1650,6 +1658,9 @@ def deleteNurse(request, id):
     return redirect("nurse_list")
 
 
+"""
+Receptionist Management View
+"""
 @login_required
 def receptionist_list(request):
     receptionists = Reception.objects.all().order_by("-id")
@@ -1732,3 +1743,57 @@ def delete_receptionist(request, id):
     instance = get_object_or_404(Reception, id=id)
     instance.delete()
     return redirect("receptionist_list")
+
+
+
+""" 
+Clinical Notes Views
+"""
+
+@login_required
+def clinical_note_list(request):
+    clinical_notes = ClinicalNote.objects.all().order_by("-id")
+    context = {
+        "clinical_notes": clinical_notes,
+        "title": "Clinical Note List",
+    }
+    return render(request, "hod_templates/clinical_note/clinical_note_list.html", context)
+
+
+@login_required
+def add_clinical_note(request):
+    if request.method == "POST":
+        form = ClinicalNoteForm(request.POST, request.FILES or None)
+        if form.is_valid():
+            form.save()
+    context = {
+        "form": ClinicalNoteForm(),
+        "title": "Add Clinical Note"
+        }
+    return render(request, "hod_templates/clinical_note/add_clinical_note.html", context)
+
+
+@login_required
+def edit_clinical_note(request, id):
+    clinical_note = get_object_or_404(ClinicalNote, id=id)
+    if request.method == "POST":
+        form = ClinicalNoteForm(request.POST, request.FILES, instance=clinical_note)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "clinical_note Updated Successfully!")
+            return redirect("clinical_note_list")
+    else:
+        form = ClinicalNoteForm(instance=clinical_note)
+    
+    context = {
+        "form": form,
+        "title": "Update clinical_note"
+    }
+    return render(request, "hod_templates/clinical_note/add_clinical_note.html", context)
+    
+    
+@for_admin
+def delete_clinical_note(request, id):
+    instance = get_object_or_404(ClinicalNote, id=id)
+    instance.delete()
+    return redirect("clinical_note_list")

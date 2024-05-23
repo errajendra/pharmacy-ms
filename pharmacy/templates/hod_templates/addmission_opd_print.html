@@ -93,7 +93,7 @@
 	<div>
 		<table>
 			<tr class="p-0">
-				<td colspan="2" class="text-center">
+				<td colspan="3" class="text-center">
 					<h1 class="mt-5 mb-5">SDM Hospital & Trama Center</h1>
 					<h3 class="m-0">Multy Speciality Hospital</h3>
 					<p class="m-0">Address: Naini, Mahewa Patti Pashchim Kachh, Uttar Pradesh 211007</p>
@@ -106,23 +106,35 @@
 			</tr>
 
 			<tr>
-				<td><span class="bold ml-10">Patient UHID.: </span> {{addmission.id}} </td>
+				<td colspan="2"><span class="bold ml-10">Patient UHID.: </span> {{addmission.id}} </td>
 				<td><span class="bold ml-10">Token No.: </span> <span style="font-size: x-large;"> {{addmission.id}} </span> </td>
 			</tr>
 
 			<tr>
-                <td> <span class="bold ml-10">Receipt ID.: </span> {{addmission.id}} </td>
+                <td colspan="2"> <span class="bold ml-10">Receipt ID.: </span> {{addmission.id}} </td>
 				<td> <span class="bold ml-10">OPD Date: </span>  {{addmission.created_at}} </td>
 			</tr>
 
 			<tr>
-                <td> <span class="bold ml-10">Patient/Guardian Name.: </span> {{addmission.patient}} / {{addmission.guardian}} </td>
+                <td colspan="2"> <span class="bold ml-10">Patient/Guardian Name.: </span> {{addmission.patient}} / {{addmission.guardian}} </td>
 				<td> <span class="bold ml-10">Age/Sex: </span>  {{addmission.created_at}} </td>
 			</tr>
 			
 			<tr>
-                <td>
-					<span class="bold ml-10">Doctor Name: </span> {{addmission.doctor}} <span class="text-small text-grey"> ({{addmission.doctor.department}}) </span> 
+                <td> <span class="bold ml-10">Weight: </span> {% if addmission.weight %} {{addmission.weight}} {% endif %}Kg</td>
+				<td> <span class="bold ml-10">BP: </span> Systolic- {% if addmission.bp_systolic %}{{addmission.bp_systolic}}{% endif %}, Diastolic- {% if addmission.bp_diastolic %} {{addmission.bp_diastolic}} {% endif %}</td>
+				<td> <span class="bold ml-10">Pulse: </span> {% if addmission.pulse %} {{addmission.pulse}} {% endif %} (Heartbeats/min) </td>
+			</tr>
+			
+			<tr>
+                <td> <span class="bold ml-10">Temp.: </span> {% if addmission.temp %} {{addmission.temp}} {% endif %}°F</td>
+				<td> <span class="bold ml-10">SPO2: </span> {% if addmission.spo2 %}{{addmission.spo2}}{% endif %}(%)</td>
+				<td> <span class="bold ml-10">Respiration Rates: </span> {% if addmission.respiration_rates %} {{addmission.respiration_rates}} {% endif %} (Heartbeats/min)</td>
+			</tr>
+			
+			<tr>
+                <td colspan="2">
+					<span class="bold ml-10">Doctor Name: </span> {{addmission.doctor.admin.get_full_name}} <span class="text-small text-grey"> ({{addmission.doctor.department}}) </span> 
 				</td>
 				<td>
 					<p> <span class="bold ml-10">Head: </span>  {{addmission.purpose}}  </p>
@@ -131,12 +143,12 @@
 			</tr>
 
 			<tr>
-                <td> <span class="bold ml-10">Address: </span> {{addmission.patient.address}} </td>
+                <td colspan="2"> <span class="bold ml-10">Address: </span> {{addmission.patient.address}} </td>
 				<td> </td>
 			</tr>
 			
 			<tr>
-                <td colspan="2"> 
+                <td colspan="3"> 
 					<p> 
 						<span class="bold ml-10">Printed On: </span> <span id="printedOn"> {{addmission.updated_at}} </span> 
 						<span class="float-right"> <span class="bold ml-10">Prepared By: </span> Admin </span>
@@ -147,9 +159,9 @@
 					<p> 
 						<span class="text-center text-small mt-5"> *** THIS IS COMPUTER GENARATED BILL SO NO NEED TO BE SIGNED. </span>
 					</p>
-					<p> 
+					{% comment %} <p> 
 						<p class="float-right m-0" style="font-family: 'Libre Barcode 128 Text';font-size: 40px;" > {{addmission.purpose}}/{{addmission.id}} </p>
-					</p>
+					</p> {% endcomment %}
 				</td>
 			</tr>
 			
@@ -157,6 +169,7 @@
 	</div>
 
 	<div class="text-center">
+		<a type="button" href="{% url "manage_addmission" %}" class="print-hide mt-5">Back</a>
         <button class="print-hide mt-5" onclick="window.print()">Print</button>
 	</div>
 	

@@ -350,12 +350,22 @@ class Addmission(BaseModel):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     reason = models.CharField(max_length=100, null=True, blank=True)
+    
+    # OPD
+    weight = models.FloatField(verbose_name="Patient Weight", blank=True, null=True, help_text="Enter Weight Reading")
+    bp_systolic = models.CharField(verbose_name="Blood Pressure (mmHg) - Systolic", max_length=50, blank=True, null=True, help_text="Enter Systolic Reading")
+    bp_diastolic = models.CharField(verbose_name="Blood Pressure (mmHg) - Diastolic", max_length=50, blank=True, null=True, help_text="Enter Diastolic Reading")
+    pulse = models.FloatField(verbose_name="Pulse (Heartbeats/min)", blank=True, null=True, help_text="Enter Reading (Sitting/Standing)")
+    respiration_rates = models.FloatField(verbose_name="Respiration Rates (Heartbeats/min)", blank=True, null=True, help_text="Enter Reading")
+    temp = models.FloatField(verbose_name="Temperature (°F)", blank=True, null=True, help_text="Enter Reading of Temperature (in °F)")
+    spo2 = models.FloatField(verbose_name="SPO2 (%)", blank=True, null=True, help_text="Enter SPO2 (%) Reading")
+    
     purpose = models.CharField(
         choices=(
             ("OPD", "OPD"),
             ("IPD/Bed Addmission", "IPD/Bed Addmission"),
-            ("OT", "OT"),
-            ("ICU", "ICU"),
+            # ("OT", "OT"),
+            # ("ICU", "ICU"),
         ),
         max_length=20, default="OPD"
     )
@@ -369,6 +379,7 @@ class Addmission(BaseModel):
     addmission_time = models.DateTimeField(verbose_name="Date & Time of Addmission", null=True, blank=True)
     discharge_time = models.DateTimeField(verbose_name="Date & Time of Discharge", null=True, blank=True)
     ward_bed = models.CharField(verbose_name="Ward/Bed No.", max_length=48, null=True, blank=True)
+    no_of_beds = models.PositiveIntegerField(verbose_name="No. of Beds", default=1, null=True, blank=True)
     operation_date = models.DateTimeField(verbose_name="Date & Time of Operation", null=True, blank=True)
     addmission_type = models.CharField(
         choices=(
@@ -384,6 +395,8 @@ class Addmission(BaseModel):
     provisonal_diagnosis = models.CharField(verbose_name="Provisonal Diagnosis", max_length=200, null=True, blank=True)
     final_diagnosis = models.CharField(verbose_name="Final Diagnosis", max_length=200, null=True, blank=True)
     summary_of_case = models.TextField(verbose_name="Summary of Case", null=True, blank=True)
+    staff = models.ForeignKey(Nurse, on_delete=models.SET_NULL, verbose_name="Staff Nurse (Asigned)", null=True, blank=True)
+    facilities = models.CharField(max_length=200, null=True, blank=True)
     result = models.CharField(
         choices=(
             ("Recovered", "Recovered"),
@@ -396,6 +409,8 @@ class Addmission(BaseModel):
         max_length=20, default="Recovered"
     )
     couse_of_death = models.CharField(verbose_name="Cause of Death", max_length=200, null=True, blank=True)
+    remark = models.CharField(verbose_name="Remark", max_length=200, null=True, blank=True)
+    
     
     
     def __str__(self) -> str:
@@ -667,3 +682,20 @@ class BillingPOS(BaseModel):
 # class BillingPOSDetail(BaseModel):
 #     pos = models.ForeignKey(BillingPOS, on_delete=models.CASCADE, related_name="details")
 #     medicine = models.ForeignKey
+
+class ClinicalNote(BaseModel):
+    note_type = models.CharField(
+        verbose_name="Note Type",
+        max_length=15,
+        choices=(
+            ("Complaints", "Complaints"),
+            ("Observation", "Observation"),
+            ("Diagnosis", "Diagnosis"),
+            ("Notes", "Notes"),
+        )
+    )
+    note = models.TextField()
+    image = models.ImageField(verbose_name="Photo", upload_to="clinical-notes/", null=True, blank=True)
+    
+    def __str__(self) -> str:
+        return str(self.pk) + " - " + self.note_type

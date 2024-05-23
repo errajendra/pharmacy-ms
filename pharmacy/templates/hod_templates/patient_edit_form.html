@@ -106,7 +106,8 @@
                                 <label for="id_language" class="form-label">
                                 Language Preference
                                 </label> 
-                                <select name="language" class="form-control select form-select" id="id_language">
+                                <input type="text" name="language" {% if instance.language %} value="{{instance.language.name}}" {% endif %} class="form-control languageinput" maxlength="50" id="id_language" required=""> 
+                                {% comment %} <select name="language" class="form-control select form-select" id="id_language">
                                     {% if instance.language %}
                                     {% for l in languages %}
                                     <option value="{{l.id}}" {% if instance.language == l %} selected="" {% endif %}> {{l}} </option>
@@ -117,7 +118,7 @@
                                     <option value="{{l.id}}" {% if instance.language.id == l.id %} selected="" {% endif %}> {{l}} </option>
                                     {% endfor %}
                                     {% endif %}
-                                </select>
+                                </select> {% endcomment %}
                             </div>
                             
                             <div id="div_id_email" class="mb-3 col-md-4 col-sm-6 col-xs-12"> <label for="id_email" class="form-label">
