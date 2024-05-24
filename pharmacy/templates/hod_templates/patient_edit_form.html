@@ -73,9 +73,14 @@
                                     <option value="Female" {% if instance.gender == "Female" %} selected="" {% endif %} >Female</option>
                                 </select>
                             </div>
-                            <div id="div_id_dob" class="mb-3 col-md-3 col-sm-6 col-xs-12"> <label for="id_dob" class="form-label">
+                            {% comment %} <div id="div_id_dob" class="mb-3 col-md-3 col-sm-6 col-xs-12"> <label for="id_dob" class="form-label">
                                 Age(DOB)
                                 </label> <input type="date" name="dob" {% if instance.dob %} value="{{instance.dob|date:'Y-m-d'}}" {% endif %} class="dateinput form-control" id="id_dob"> 
+                            </div> {% endcomment %}
+                            
+                            <div id="div_id_age" class="mb-3 col-md-3 col-sm-6 col-xs-12"> <label for="id_age" class="form-label">
+                                Age
+                                </label> <input type="number" name="age" min="0" max="120" {% if instance.age %} value="{{instance.age}}" {% endif %} class="dateinput form-control" id="id_age"> 
                             </div>
                             <div id="div_id_marital_status" class="mb-3 col-md-3 col-sm-6 col-xs-12">
                                 <label for="id_marital_status" class="form-label requiredField">
@@ -122,8 +127,8 @@
                             </div>
                             
                             <div id="div_id_email" class="mb-3 col-md-4 col-sm-6 col-xs-12"> <label for="id_email" class="form-label">
-                                Email<span class="asteriskField">*</span> 
-                                </label> <input type="email" name="email" {% if instance.admin.email %} value="{{instance.admin.email}}" disabled {% endif %} class="form-control emailinput" maxlength="50" id="id_email" required=""> 
+                                Email 
+                                </label> <input type="email" name="email" {% if instance.admin.email %} value="{{instance.admin.email}}" disabled {% endif %} class="form-control emailinput" maxlength="50" id="id_email" > 
                             </div>
 
                             <div id="div_id_phone_number" class="mb-3 col-md-4 col-sm-6 col-xs-12"> <label for="id_phone_number" class="form-label">

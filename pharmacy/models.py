@@ -187,8 +187,8 @@ class Patients(BaseModel):
         max_length=2,
         choices=[(i, i) for i in range(100)], null=True, blank=True
     )
-    phone_number = models.CharField(max_length=15, null=True, blank=True)
-    phone_number2 = models.CharField(max_length=15, null=True, blank=True)
+    phone_number = models.CharField(verbose_name="Mobile Number",max_length=15, null=True, blank=True)
+    phone_number2 = models.CharField(verbose_name="Alternate Mobile Number",  max_length=15, null=True, blank=True)
     profile_pic = models.ImageField(default="patient.jpg", upload_to="patient-profile", null=True, blank=True)
     dob = models.DateField(verbose_name="Age(DOB)", blank=True, null=True)
     bg = models.CharField(
@@ -339,6 +339,7 @@ class Prescription(BaseModel):
     patient_id = models.ForeignKey(Patients, null=True, on_delete=models.SET_NULL)
     description = models.TextField(null=True)
     prescribe = models.CharField(max_length=100, null=True)
+    
     
     def __str__(self) -> str:
         return f"{self.pk}"

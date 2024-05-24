@@ -63,17 +63,20 @@ def createPatient(request):
     if request.method == "POST":
         form = PatientModelForm(request.POST, request.FILES)
 
+        uname = CustomUser.objects.latest("id").id + 1 or 0
+        
         pos = request.POST.get('pos', None)
         if pos == "pos":
-            email = request.POST.get("email")
+            email = request.POST.get("email", None)
             first_name = request.POST.get("first_name")
             user = CustomUser.objects.create_user(
-                username=email,
+                username=f"p{uname}",
                 email=email,
                 password=email,
                 first_name=first_name,
                 user_type="Patients",
             )
+            user.patients.first_name = first_name
             user.patients.phone_number = request.POST.get("phone_number", None)
             user.patients.address = request.POST.get("address", None)
             user.save()
@@ -82,7 +85,7 @@ def createPatient(request):
         
         if form.is_valid():
             first_name = form.cleaned_data["first_name"]
-            last_name = form.cleaned_data["last_name"]
+            last_name = form.cleaned_data["last_name"] or ""
             # username = form.cleaned_data["username"]
             email = form.cleaned_data["email"]
             # password = form.cleaned_data["password"]
@@ -103,7 +106,7 @@ def createPatient(request):
                 
             else:
                 user = CustomUser.objects.create_user(
-                    username=email,
+                    username=f"p{uname}",
                     email=email,
                     password=email,
                     first_name=first_name,
@@ -193,8 +196,8 @@ def createPatientNext(request):
 @login_required
 def allPatients(request):
     form = PatientSearchForm1(request.POST or None)
-    patients = Patients.objects.all().order_by('-created_at')
-    context = {"patients": patients, "form": form, "title": "Admitted Patients"}
+    patients = Patients.objects.all().order_by('id')
+    context = {"patients": patients, "form": form, "title": "All Patients"}
     if request.method == "POST":
         # admin=form['first_name'].value()
         name = request.POST.get("search")
@@ -728,7 +731,7 @@ def addPrescription(request):
         form.save()
         return redirect("prescribe")
 
-    context = {"form": form, "title": "Prescribe Drug"}
+    context = {"form": form, "title": "Prescribe Drug."}
     return render(request, "hod_templates/prescribe.html", context)
 
 

@@ -44,7 +44,7 @@ class PatientModelForm(ModelForm):
     class Meta:
         model = Patients
         fields = (
-            "first_name", "last_name", "gender", "dob", "marital_status", "bg",
+            "first_name", "last_name", "gender", "dob", "age", "marital_status", "bg",
             "phone_number", "phone_number2", "address", "city", "pin_code",
             "abha_no", "pm_jay", "adhar", "passport", "pan", "dl", "cat", "cast", "religion",
             "nationality", "education", "occupation", "activity", "food_preference", "smooking", "alcohol"
