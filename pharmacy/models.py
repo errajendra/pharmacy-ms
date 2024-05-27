@@ -687,6 +687,7 @@ class BillingPOS(BaseModel):
 #     medicine = models.ForeignKey
 
 class ClinicalNote(BaseModel):
+    added_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     note_type = models.CharField(
         verbose_name="Note Type",
         max_length=15,

@@ -1,0 +1,62 @@
+{% extends 'doctor_templates/base_template.html' %}
+{% block page_title %}
+<h5>{{ title }}</h5>
+{% endblock page_title %}
+{% block main_content %}
+
+<!-- Start Section -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12 px-4">
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title">{{ title }}</h3>
+                </div>
+
+                <form method="POST" enctype="multipart/form-data" class="px-3 py-2">
+                    {% csrf_token %}
+                    {% include 'hod_templates/alert_messeges.html' %}
+
+                    <div class="card-body">
+                        <h5>Clinical Note</h5>
+                        <div class="row">
+                            <!-- Note Type Field -->
+                            <div class="col-md-12 mb-3">
+                                <div class="form-group">
+                                    <label for="note_type">Note Type</label>
+                                    <select name="note_type" id="note_type" class="form-control">
+                                        <option value="Complaints">Complaints</option>
+                                        <option value="Observation">Observation</option>
+                                        <option value="Diagnosis">Diagnosis</option>
+                                        <option value="Notes">Notes</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Note Field -->
+                            <div class="col-md-12 mb-3">
+                                <div class="form-group">
+                                    <label for="note">Note</label>
+                                    <textarea name="note" id="note" class="form-control" rows="4"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Image Field -->
+                            <div class="col-md-12 mb-3">
+                                <div class="form-group">
+                                    <label for="image">Photo</label>
+                                    <input type="file" name="image" id="image" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-info">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock main_content %}

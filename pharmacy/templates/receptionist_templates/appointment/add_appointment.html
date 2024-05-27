@@ -1,0 +1,253 @@
+{% extends 'receptionist_templates/base_template.html'%} 
+{% load crispy_forms_tags %} 
+{% block page_title %}
+<h5> {{title}} </h5>
+
+{% endblock page_title %} {% block main_content %}
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            {% include 'hod_templates/alert_messeges.html'%}
+
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title"> {{title}} </h3>
+                </div>
+                
+                {% if messages %}
+                    <div class="form-group">
+                        <div class="col-12">
+                            {% for message in messages %} 
+                            {% comment %} {{message.tag}} {% if message.tags == "error" %} {% endcomment %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% comment %} {% elif message.tags == "success" %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endif %}  {% endcomment %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <form method="POST" style="font-size:13px;" class='px-3 py-2'>
+                    {% csrf_token %} 
+                    
+                    <div class="card-body">
+                        <div class="row">
+
+                            <div id="div_id_patient" class="mb-3 col-md-4 col-sm-8">
+                                <label for="id_patient" class="form-label requiredField">
+                                    Patient<span class="asteriskField">*</span> 
+                                </label>
+                                <select name="patient" class="form-control select form-select" required="" id="id_patient">
+                                    {% if instance %} {% else %} <option value="" selected="">---------</option> {% endif %}
+                                    {% for p in patients %}
+                                    <option value="{{p.id}}" {% if instance.patient.id == p.id %} selected="" {% endif %}> {{p}} </option> 
+                                    {% endfor %}
+                                </select> 
+                            </div> 
+
+                            <div class="mb-3 col-md-2 col-sm-4 pt-4">
+                                <a href="{% url "patient_form" %}" type="button" class="btn btn-default">
+                                    Add New
+                                </a>
+                            </div> 
+
+                            <div id="div_id_doctor" class="mb-3 col-md-6 col-sm-12"> 
+                                <label for="id_doctor" class="form-label requiredField">
+                                            Doctor<span class="asteriskField">*</span> 
+                                </label> 
+                                <select name="doctor" class="form-control select form-select" required="" id="id_doctor">
+                                    {% if instance %} {% else %} <option value="" selected="">---------</option> {% endif %}
+                                    {% for d in doctors %}
+                                    <option value="{{d.id}}" {% if instance.doctor.id == d.id %} selected="" {% endif %}> {{d}} </option>
+                                    {% endfor %}
+
+                                </select>
+                            </div>
+                            
+                            <div id="div_id_date" class="mb-3 col-md-6 col-sm-12">
+                                <label for="id_date" class="form-label requiredField">
+                                    Date<span class="asteriskField">*</span> 
+                                </label>
+                                <input type="date" name="date" {% if instance.date %} value="{{instance.date|date:'Y-m-d'}}" {% endif %} class="form-control dateinput" required="" id="id_date"> 
+                            </div> 
+                            
+                            <div id="div_id_booking_mode" class="mb-3 col-md-6 col-sm-12">
+                                <label for="id_booking_mode" class="form-label requiredField">
+                                    Booking Mode<span class="asteriskField">*</span>
+                                </label> 
+                                <select name="booking_mode" class="form-control select form-select" id="id_booking_mode"> 
+                                    {% if instance %}
+                                    <option value="Offline" {% if instance.booking_mode == "Offline" %} selected="" {% endif %}>Offline</option> 
+                                    <option value="Online"  {% if instance.booking_mode == "Online" %} selected="" {% endif %} >Online</option>
+                                    {% else %}
+                                    <option value="Offline">Offline</option> 
+                                    <option value="Online">Online</option>
+                                    {% endif %}
+
+                                </select> 
+                            </div> 
+                            
+                            <div id="div_id_status" class="mb-3 col-md-6 col-sm-12"> 
+                                <label for="id_status" class="form-label requiredField">
+                                            Booking Status<span class="asteriskField">*</span> 
+                                </label> 
+                                <select name="status" class="form-control select form-select" id="id_status"> 
+                                    {% if instance %}
+                                    <option value="Pending" {% if instance.status == "Pending" %} selected="" {% endif %} >Pending</option> 
+                                    <option value="Scheduled" {% if instance.status == "Scheduled" %} selected="" {% endif %} >Scheduled</option> 
+                                    <option value="Confirmed" {% if instance.status == "Confirmed" %} selected="" {% endif %} >Confirmed</option> 
+                                    <option value="Rescheduled" {% if instance.status == "Rescheduled" %} selected="" {% endif %} >Rescheduled</option>
+                                    <option value="Cancel" {% if instance.status == "Cancel" %} selected="" {% endif %} >Cancel</option>
+                                     {% else %}
+                                    <option value="Pending">Pending</option> 
+                                    <option value="Scheduled">Scheduled</option> 
+                                    <option value="Confirmed" selected="">Confirmed</option> 
+                                    <option value="Rescheduled">Rescheduled</option>
+                                    <option value="Cancel">Cancel</option>
+                                    {% endif %}
+                                </select> 
+                            </div> 
+                            
+                            <div id="div_id_shift" class="mb-3 col-md-6 col-sm-12"> 
+                                <label for="id_shift" class="form-label requiredField">
+                                    Shift<span class="asteriskField">*</span>
+                                </label> 
+                                <select name="shift" class="form-control select form-select" id="id_shift"> 
+                                    {% if instance.shift %}
+                                    <option value="Morning" {% if instance.shift == "Morning" %} selected="" {% endif %}>Morning</option> 
+                                    <option value="Evening" {% if instance.shift == "Evening" %} selected="" {% endif %}>Evening</option>
+                                    {% else %}
+                                    <option value="Morning" selected="">Morning</option> 
+                                    <option value="Evening">Evening</option>
+                                    {% endif %}
+
+                                </select> 
+                            </div> 
+                            
+                            <div id="div_id_fee" class="mb-3 col-md-4 col-sm-6"> 
+                                <label for="id_fee" class="form-label requiredField">
+                                            Doctor Fees<span class="asteriskField">*</span>
+                                </label> 
+                                <input type="number" name="fee" {% if instance.fee %} value="{{instance.fee}}" {% else %} value="0" {% endif %} class="form-control numberinput" step="any" required="" id="id_fee"> 
+                            </div> 
+                            
+                            <div id="div_id_payment_mode" class="mb-3 col-md-4 col-sm-6"> 
+                                <label for="id_payment_mode" class="form-label requiredField">
+                                            Payment Mode<span class="asteriskField">*</span> 
+                                </label> 
+                                <select name="payment_mode" class="form-control select form-select" id="id_payment_mode"> 
+                                    {% if instance.payment_mode %}
+                                    
+                                    <option value="Cash" {% if instance.payment_mode == "Cash" %} selected="" {% endif %}>Cash</option> 
+                                    <option value="Upi" {% if instance.payment_mode == "Upi" %} selected="" {% endif %}>Upi</option> 
+                                    <option value="Bank Transfer" {% if instance.payment_mode == "Bank Transfer" %} selected="" {% endif %}>Bank Transfer</option> 
+                                    <option value="Other" {% if instance.payment_mode == "Other" %} selected="" {% endif %}>Other</option>
+                                    
+                                    {% else %}
+                                    <option value="Cash" selected="">Cash</option> 
+                                    <option value="Upi">Upi</option> 
+                                    <option value="Bank Transfer">Bank Transfer</option> 
+                                    <option value="Other">Other</option>
+                                    {% endif %}
+
+                                </select> 
+                            </div> 
+                            
+                            <div id="div_id_priority" class="mb-3 col-md-4 col-sm-6"> 
+                                <label for="id_priority" class="form-label requiredField">
+                                            Appointment Priority<span class="asteriskField">*</span> 
+                                </label> 
+                                <select name="priority" class="form-control select form-select" id="id_priority"> 
+                                    {% if instance.priority %}
+                                    <option value="Normal" {% if instance.priority == "Normal" %} selected=""{% endif %}>Normal</option> 
+                                    <option value="Urgent" {% if instance.priority == "Urgent" %} selected=""{% endif %}>Urgent</option> 
+                                    <option value="Very Urgent" {% if instance.priority == "Very Urgent" %} selected=""{% endif %}>Very Urgent</option> 
+                                    <option value="Low" {% if instance.priority == "Low" %} selected=""{% endif %}>Low</option>
+                                    {% else %}
+                                    <option value="Normal" selected="">Normal</option> 
+                                    <option value="Urgent">Urgent</option> 
+                                    <option value="Very Urgent">Very Urgent</option> 
+                                    <option value="Low">Low</option>
+                                    {% endif %}
+                                </select> 
+                            </div> 
+                            
+                            <div id="div_id_message" class="mb-3 col-md-6 col-sm-12"> 
+                                <label for="id_message" class="form-label">
+                                            Message
+                                </label> 
+                                <textarea name="message" {% if instance %} value="{{instance.message}}" {% endif %} cols="40" rows="10" class="form-control textarea" id="id_message"></textarea> 
+                            </div> 
+                            
+                            <div id="div_id_address" class="mb-3 col-md-6 col-sm-12"> <label for="id_address" class="form-label">
+                                            Address
+                                        </label> 
+                                <textarea name="address" {% if instance %} value="{{instance.address}}" {% endif %}  cols="40" rows="10" class="form-control textarea" id="id_address"></textarea> 
+                            </div> 
+                            
+                            {% comment %} <div id="div_id_token" class="mb-3"> <label for="id_token" class="form-label">
+                                            Token Number
+                                        </label> 
+                                <input type="number" name="token" min="0" class="numberinput form-control" id="id_token"> 
+                            </div> {% endcomment %}
+
+
+                        </div>
+
+                    </div>
+                    <input type="submit" class="btn btn-info"/>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    {% comment %} Write Onchange envent for id_doctor and load fees of doctor using ajax {% endcomment %}
+    <script type="text/javascript">
+        
+        // Use a consistent indentation of 4 spaces
+        $(document).ready(function() {
+            // Use a more specific selector to avoid conflicts
+            $('#id_doctor').on('change', function(event) {
+                const doctorId = $(this).val();
+
+                // Use a URL resolver to avoid hardcoding URLs
+                const url = `{% url 'load_doctor_fees' %}`;
+                $.ajax({
+                    type: 'GET',
+                    url,
+                    data: { doctor_id: doctorId },
+                    success: function(data) {
+                        // Use a more specific selector to avoid conflicts
+                        $('#id_fee').val(data.fees);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+          $('#id_patient').select2({
+            allowClear: true,
+          });
+          
+          $('#id_doctor').select2({
+            allowClear: true,
+          });
+          
+        });
+    </script>
+</section>
+{% endblock main_content %}

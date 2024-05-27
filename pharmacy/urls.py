@@ -164,6 +164,18 @@ urlpatterns=[
     path('manage_prescription_doctor/',DoctorViews.managePrescription,name='manage_precrip_doctor'),
     path('doctor_prescribe_delete/<str:pk>/',DoctorViews.deletePrescription,name='doctor_prescrip_delete'),
     path('doctor_prescribe_edit/<str:pk>/',DoctorViews.editPrescription,name='doctor_prescrip_edit'),
+    
+    path("doctor-appointment-list/", DoctorViews.appointment_list_doctor, name="appointment_list_doctor"),
+    path('update_appointment_status/<int:id>/', DoctorViews.update_appointment_status, name='update_appointment_status'),
+    
+    path("doctor-patient-record/", DoctorViews.patient_record_doctor, name="patient_record_doctor"),
+    path('update-patient-record/<int:id>/',DoctorViews.update_patient_record_doctor, name='update_patient_record_doctor'), 
+    path('view-patient-details/', DoctorViews.view_patient_details, name='view_patient_details'),
+    
+    path("clinical-notes-doctor/", DoctorViews.clinical_notes_doctor, name="clinical_notes_doctor"),
+    path("add-clinical-notes-doctor/", DoctorViews.add_clinical_note_doctor, name="add_clinical_note_doctor"),
+    path("edit-clinical-note-doctor/<int:id>/", DoctorViews.edit_clinical_note_doctor, name="edit_clinical_note_doctor"),
+    path("delete-clinical-note-doctor/<int:id>/", DoctorViews.delete_clinical_note_doctor, name="delete_clinical_note_doctor"),
 
     #Patients
     path('patient_profile/',patient_view.patientProfile,name='patient_profile'),
@@ -212,7 +224,10 @@ urlpatterns=[
     path('edit-receptionist/<int:id>/', HODViews.edit_receptionist, name="edit_receptionist"),
     path('delete-receptionist/<int:id>/', HODViews.delete_receptionist, name="delete_receptionist"),
     
+    
     # Receptionist Template View urls
     path('receptionist-home/',receptionistViews.receptionistHome,name='receptionist_home'),
+    path('appointment-list-receptionist/',receptionistViews.appointment_list_receptionist,name='appointment_list_receptionist'),
+    path('add-appointment-receptionist/',receptionistViews.add_appointment_receptionist,name='add_appointment_receptionist'),
 
 ]

@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from pharmacy.models import Patients, Doctor
+from pharmacy.models import Patients, Doctor, Addmission, ClinicalNote
 from .models import Appointment
 from .forms import AppointmentForm
+from django.contrib.auth.decorators import login_required
 
 
 def appointment_list(request):
@@ -76,3 +77,5 @@ def delete_appointment(request, id):
     appointment = Appointment.objects.get(id=id)
     appointment.delete()
     return redirect("appointment_list_admin")
+
+

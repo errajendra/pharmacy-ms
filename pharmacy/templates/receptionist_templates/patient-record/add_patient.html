@@ -1,4 +1,4 @@
-{% extends 'hod_templates/base_template.html'%}
+{% extends 'receptionist_templates/base_template.html'%}
 {% load crispy_forms_tags %}
 {% block page_title %}
 <h5>Add patient</h5>
@@ -63,17 +63,11 @@
                                     <option value="" {% if instance.gender %} {% else %} selected="" {% endif %} >---------</option>
                                     <option value="Male" {% if instance.gender == "Male" %} selected="" {% endif %} >Male</option>
                                     <option value="Female" {% if instance.gender == "Female" %} selected="" {% endif %} >Female</option>
-                                    <option value="Other" {% if instance.gender == "Other" %} selected="" {% endif %} >Other</option>
                                 </select>
                             </div>
-                            {% comment %} <div id="div_id_dob" class="mb-3 col-md-3 col-sm-6 col-xs-12"> <label for="id_dob" class="form-label">
+                            <div id="div_id_dob" class="mb-3 col-md-3 col-sm-6 col-xs-12"> <label for="id_dob" class="form-label">
                                 Age(DOB)
                                 </label> <input type="date" name="dob" class="dateinput form-control" id="id_dob"> 
-                            </div> {% endcomment %}
-                            
-                            <div id="div_id_age" class="mb-3 col-md-3 col-sm-6 col-xs-12"> <label for="id_age" class="form-label">
-                                Age
-                                </label> <input type="number" name="age" min="0" max="120" class="dateinput form-control" id="id_age"> 
                             </div>
                             <div id="div_id_marital_status" class="mb-3 col-md-3 col-sm-6 col-xs-12">
                                 <label for="id_marital_status" class="form-label requiredField">
@@ -104,7 +98,7 @@
                                 <label for="id_language" class="form-label">
                                 Language Preference
                                 </label> 
-                                <input type="text" name="language" {% if instance.language %} value="{{instance.language.name}}" {% endif %} class="form-control languageinput" maxlength="50" id="id_language"> 
+                                <input type="text" name="language" {% if instance.language %} value="{{instance.language.name}}" {% endif %} class="form-control languageinput" maxlength="50" id="id_language" required=""> 
                                 {% comment %} <select name="language" class="form-control select form-select" id="id_language">
                                     {% if instance.language %}
                                     {% for l in languages %}
@@ -120,20 +114,20 @@
                             </div>
                             
                             <div id="div_id_email" class="mb-3 col-md-4 col-sm-6 col-xs-12"> <label for="id_email" class="form-label">
-                                Email
-                                </label> <input type="email" name="email" {% if instance.admin.email %} value="{{instance.admin.email}}" disabled {% endif %} class="form-control emailinput" maxlength="50" id="id_email"> 
+                                Email<span class="asteriskField">*</span> 
+                                </label> <input type="email" name="email" {% if instance.admin.email %} value="{{instance.admin.email}}" disabled {% endif %} class="form-control emailinput" maxlength="50" id="id_email" required=""> 
                             </div>
 
                             <div id="div_id_phone_number" class="mb-3 col-md-4 col-sm-6 col-xs-12"> <label for="id_phone_number" class="form-label">
-                                Mobile Number
-                                </label> <input type="text" name="phone_number" {% if instance.phone_number %} value="{{instance.phone_number}}" {% endif %} maxlength="10" minlength="10" class="textinput form-control" id="id_phone_number"> 
+                                Phone number
+                                </label> <input type="text" name="phone_number" {% if instance.phone_number %} value="{{instance.phone_number}}" {% endif %} maxlength="15" class="textinput form-control" id="id_phone_number"> 
                             </div>
                             <div id="div_id_phone_number2" class="mb-3 col-md-4 col-sm-6 col-xs-12"> <label for="id_phone_number2" class="form-label">
-                                Alternate Mobile Number
-                                </label> <input type="text" name="phone_number2" {% if instance.phone_number2 %} value="{{instance.phone_number2}}" {% endif %} maxlength="10" minlength="10" class="textinput form-control" id="id_phone_number2"> 
+                                Phone number2
+                                </label> <input type="text" name="phone_number2" {% if instance.phone_number2 %} value="{{instance.phone_number2}}" {% endif %} maxlength="15" class="textinput form-control" id="id_phone_number2"> 
                             </div>
                             <div id="div_id_address" class="mb-3 col-md-6 col-sm-6 col-xs-12"> <label for="id_address" class="form-label">
-                                Address<span class="asteriskField">*</span> 
+                                Address
                                 </label> <input type="text" name="address" {% if instance.address %} value="{{instance.address}}" {% endif %} maxlength="100" class="textinput form-control" id="id_address"> 
                             </div>
                             <div id="div_id_city" class="mb-3 col-md-3 col-sm-3 col-xs-12"> <label for="id_city" class="form-label">
