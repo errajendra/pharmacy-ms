@@ -101,39 +101,39 @@ def createPatient(request):
             #     except:
             #         doctor = None
             # print(doctor)
-            if CustomUser.objects.filter(username=email).exists():
-                messages.error(request, "Email already exists")
+            # if CustomUser.objects.filter(username=email).exists():
+            #     messages.error(request, "Email already exists")
                 
-            else:
-                user = CustomUser.objects.create_user(
-                    username=f"p{uname}",
-                    email=email,
-                    password=email,
-                    first_name=first_name,
-                    last_name=last_name,
-                    user_type="Patients",
-                )
-                form_instance = user.patients
-                
-                forms_ins = PatientModelForm(data=request.POST, instance=form_instance)
-                lang = request.POST.get('language', None)
-                if lang:
-                    lang, _lang_created = Language.objects.get_or_create(name=lang.strip())
-                    forms_ins.instance.language = lang
-                
-                # user.patients.address = address
-                # user.patients.phone_number = phone_number
-                # user.patients.dob = dob
-                # user.patients.doctor = doctor
-                # user.patients.first_name = first_name
-                # user.patients.last_name = last_name
-                # user.patients.gender = gender
+            # else:
+            user = CustomUser.objects.create_user(
+                username=f"p{uname}",
+                email=email,
+                password=email,
+                first_name=first_name,
+                last_name=last_name,
+                user_type="Patients",
+            )
+            form_instance = user.patients
+            
+            forms_ins = PatientModelForm(data=request.POST, instance=form_instance)
+            lang = request.POST.get('language', None)
+            if lang:
+                lang, _lang_created = Language.objects.get_or_create(name=lang.strip())
+                forms_ins.instance.language = lang
+            
+            # user.patients.address = address
+            # user.patients.phone_number = phone_number
+            # user.patients.dob = dob
+            # user.patients.doctor = doctor
+            # user.patients.first_name = first_name
+            # user.patients.last_name = last_name
+            # user.patients.gender = gender
 
-                forms_ins.save()
-                messages.success(request, email + " Successfully Added")
+            forms_ins.save()
+            messages.success(request, email + " Successfully Added")
 
-                
-                return redirect("patient_form")
+            
+            return redirect("patient_form")
         else:
             print(form.errors)
             

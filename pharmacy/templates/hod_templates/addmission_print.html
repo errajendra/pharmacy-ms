@@ -63,6 +63,14 @@
 			line-height: 1.8;
 		}
 
+		.p-relative {
+			position: relative;
+		}
+		
+		.mt--90 {
+			margin-top: -90px;
+		}
+				
 		@media print {
 			@page {
 				size: A4;
@@ -124,28 +132,36 @@
 			<span class="bold ml-10">Final Diagnosis: </span> {% if addmission.final_diagnosis %} {{addmission.final_diagnosis}} {% else %} ........... {% endif %}
 		</p>
 		<p class="text-left">
-			<span class="bold ml-10">Facilities: </span> {% if addmission.facilities %} {{addmission.facilities}} {% else %} ........... {% endif %}
+			<span class="bold ml-10">Total Fees: </span> {% if addmission.fees %} {{addmission.fees}} {% else %} ........... {% endif %}
 		</p>
 		<p class="text-left">
-			<span class="bold ml-10">Staff: </span> {% if addmission.staff %} {{addmission.staff}} {% else %} ........... {% endif %}
+			<span class="bold ml-10">Advanced Fees: </span> {% if addmission.advanced_fees %} {{addmission.advanced_fees}} {% else %} ........... {% endif %}
 		</p>
-		<p class="text-left">
-			<span class="bold ml-10">Summary of Case: </span> {% if addmission.summary_of_case %} {{addmission.summary_of_case}} {% else %} ........... {% endif %}
-		</p>
-		<p class="text-left">
-			<span class="bold ml-10">Result: </span> {% if addmission.result %} {{addmission.result}} {% else %} ........... {% endif %}
-		</p>
-		<p class="text-left">
-			<span class="bold ml-10">Cause of Death: </span> {% if addmission.couse_of_death %} {{addmission.couse_of_death}} {% else %} ........... {% endif %}
-		</p>
-		<p class="text-left">
-			<span class="bold ml-10">Remark: </span> {% if addmission.remark %} {{addmission.remark}} {% else %} ........... {% endif %}
-		</p>
-	</div>
-	<div class="text-right mr-8">
-		<h4>Attendant Signature </h4>
-		<h5>Name: __________________________</h5>
-		<h5>Relationship with Patient: __________________________</h5>
+		<div class="p-relative">
+			<p class="text-left">
+				<span class="bold ml-10">Facilities: </span> {% if addmission.facilities %} {{addmission.facilities}} {% else %} ........... {% endif %}
+			</p>
+			<p class="text-left">
+				<span class="bold ml-10">Staff: </span> {% if addmission.staff %} {{addmission.staff}} {% else %} ........... {% endif %}
+			</p>
+			<p class="text-left">
+				<span class="bold ml-10">Summary of Case: </span> {% if addmission.summary_of_case %} {{addmission.summary_of_case}} {% else %} ........... {% endif %}
+			</p>
+			<p class="text-left">
+				<span class="bold ml-10">Result: </span> {% if addmission.result %} {{addmission.result}} {% else %} ........... {% endif %}
+			</p>
+			<p class="text-left">
+				<span class="bold ml-10">Cause of Death: </span> {% if addmission.couse_of_death %} {{addmission.couse_of_death}} {% else %} ........... {% endif %}
+			</p>
+			<p class="text-left">
+				<span class="bold ml-10">Remark: </span> {% if addmission.remark %} {{addmission.remark}} {% else %} ........... {% endif %}
+			</p>
+		</div>
+		<div class="text-right mr-8 mt--90 p-relative">
+			<h4>Attendant Signature </h4>
+			<h5>Name: __________________________</h5>
+			<h5>Relationship with Patient: __________________________</h5>
+		</div>
 	</div>
 	<div class="text-center">
 		<h4>-----***-----</h4>

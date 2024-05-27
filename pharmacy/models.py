@@ -175,6 +175,7 @@ class Patients(BaseModel):
     gender_category = (
         ("Male", "Male"),
         ("Female", "Female"),
+        ("Other", "Other"),
     )
     admin = models.OneToOneField(CustomUser, null=True, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, blank=True)
@@ -278,7 +279,7 @@ class Patients(BaseModel):
     )
 
     def __str__(self):
-        return "{} {} - {}".format(self.first_name if self.first_name else '', self.last_name if self.last_name else '', self.phone_number if self.phone_number else '')
+        return "{} {} ({})".format(self.first_name if self.first_name else '', self.last_name if self.last_name else '', self.admin.username )
 
 
 
@@ -374,6 +375,7 @@ class Addmission(BaseModel):
     fees = models.FloatField(verbose_name="Fees", default=0)
     
     # open these bellow fields on  form when choose purpose of IPD or Bed Addmission option
+    advanced_fees = models.FloatField(verbose_name="Advanced Fees", default=0)
     bht_no = models.CharField(verbose_name="BHT No", max_length=48, null=True, blank=True)
     uid = models.CharField(max_length=15, verbose_name="Adhar Number", null=True, blank=True)
     guardian = models.CharField(max_length=36, verbose_name="Guardian Name", null=True, blank=True)

@@ -56,7 +56,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                {% comment %} <div class="row">
                     <div class="col-10">
                         <div class="form-group">
                             <input id="search-input" type="text" placeholder="Search by name or generic" class="form-control">
@@ -67,7 +67,7 @@
                     <div class="col-2">
                         <button id="add-medicine-btn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#addMedicineModal">Add Medicine</button>
                     </div>
-                </div>
+                </div> {% endcomment %}
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover mb-0 small-table">
@@ -107,6 +107,25 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                    <table>
+                        <tr>
+                            <td>
+                                <div class="">
+                                    <div class="">
+                                        <input id="search-input" type="text" placeholder="Search & Add Medicine" class="form-control">
+                                        <!-- Change select to ul -->
+                                        <ul id="search-results" class="list-group" style="display: none;"></ul>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="">
+                                    <button id="add-medicine-btn" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addMedicineModal">Add Medicine</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
                 </div>
                 <div class="col-md-6 offset-md-6 mt-4"> <!-- Right column for additional content -->
                     <div class="card">
