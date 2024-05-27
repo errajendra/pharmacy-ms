@@ -46,7 +46,7 @@ class PatientModelForm(ModelForm):
     class Meta:
         model = Patients
         fields = (
-            "first_name", "last_name", "gender", "dob", "marital_status", "bg",
+            "first_name", "last_name", "gender", "dob", "age", "marital_status", "bg",
             "phone_number", "phone_number2", "address", "city", "pin_code",
             "abha_no", "pm_jay", "adhar", "passport", "pan", "dl", "cat", "cast", "religion",
             "nationality", "education", "occupation", "activity", "food_preference", "smooking", "alcohol"
@@ -455,6 +455,7 @@ class AddmissionForm(ModelForm):
             "fees": forms.NumberInput(attrs={"class":"form-control w-auto"}),
             
             # open these fields when purpose is IPD or Bed Addmission
+            "advanced_fees": forms.NumberInput(attrs={"class":"form-control w-auto", "data-purpose":"BedIPD"}),
             "bht_no": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
             "uid": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
             "guardian": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),

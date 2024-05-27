@@ -1,7 +1,7 @@
 {% extends 'hod_templates/base_template.html'%}
 {% load static %}
 {% block page_title %}
-<h5>All patients</h5>
+<h5>{{title}} </h5>
 
 {% endblock page_title %}
 {% block main_content %}
@@ -34,7 +34,7 @@
 
         <div class="col-md-12 px-3">
 
-            <div class="card card-primar sc">
+            <div class="card card-primar table-responsive w-100">
                 <div class="card-header">
                     <span>Patiets Records</span>
                     <div class="card-tools d-flex">
@@ -45,7 +45,7 @@
                     </div>
 
                 </div>
-                <table class="table table-bordered table-hover dataTable" id="plist">
+                <table class="table table-bordered table-hover dataTable">
                     <thead>
                     <tr>
                         <th>ID</th>
