@@ -1,0 +1,67 @@
+{% extends 'doctor_templates/base_template.html' %}
+{% block page_title %}
+<h5>{{ title }}</h5>
+{% endblock page_title %}
+{% block main_content %}
+
+<!-- Start Section -->
+<section class="content">
+    <div class="row">
+        <div class="col-md-12 px-4">
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title">{{ title }}</h3>
+                </div>
+
+                <form method="POST" enctype="multipart/form-data" class="px-3 py-2">
+                    {% csrf_token %}
+                    {% include 'hod_templates/alert_messeges.html' %}
+
+                    <div class="card-body">
+                        <h5>Clinical Note</h5>
+                        <div class="row">
+                            <!-- Note Type Field -->
+                            <div class="col-md-12 mb-3">
+                                <div class="form-group">
+                                    <label for="note_type">Note Type</label>
+                                    <select name="note_type" id="note_type" class="form-control">
+                                        <option value="Complaints" {% if clinical_note.note_type == "Complaints" %}selected{% endif %}>Complaints</option>
+                                        <option value="Observation" {% if clinical_note.note_type == "Observation" %}selected{% endif %}>Observation</option>
+                                        <option value="Diagnosis" {% if clinical_note.note_type == "Diagnosis" %}selected{% endif %}>Diagnosis</option>
+                                        <option value="Notes" {% if clinical_note.note_type == "Notes" %}selected{% endif %}>Notes</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Note Field -->
+                            <div class="col-md-12 mb-3">
+                                <div class="form-group">
+                                    <label for="note">Note</label>
+                                    <textarea name="note" id="note" class="form-control" rows="4">{{ clinical_note.note }}</textarea>
+                                </div>
+                            </div>
+
+                            <!-- Image Field -->
+                            <div class="col-md-12 mb-3">
+                                <div class="form-group">
+                                    <label for="image">Photo</label>
+                                    {% if clinical_note.image %}
+                                        <div>
+                                            <img src="{{ clinical_note.image.url }}" alt="Clinical Note Image" style="max-width: 200px; margin-bottom: 10px;">
+                                        </div>
+                                    {% endif %}
+                                    <input type="file" name="image" id="image" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-info">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock main_content %}

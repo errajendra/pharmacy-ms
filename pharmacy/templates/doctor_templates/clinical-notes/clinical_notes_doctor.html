@@ -1,0 +1,94 @@
+{% extends 'doctor_templates/base_template.html'%}
+{% block page_title %}
+<h5> {{title}} </h5>
+{% endblock page_title %}
+
+{% block main_content %}
+<section class="content">
+    {% if messages %}
+    <div class="form-group">
+        <div class="col-12">
+            {% for message in messages %}
+            {% if message.tags == "error" %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% elif message.tags == "success" %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <span>{{title}} </span>
+                    <div class="card-tools d-flex">
+                        <a class="btn btn-sm btn-info mr-2" href="{% url 'add_clinical_note_doctor' %}" role="button">+ Add Note</a>
+                    </div>
+                </div>
+                <table class="table table-bordered table-hover dataTable" id="plist">
+                    <thead>
+                        <tr>
+                            <th class="text-center">SN</th>
+                            <th class="text-center">Image</th>
+                            <th class="text-center">Note Type</th>
+                            <th class="text-center">Note</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for note in notes %}
+                        <tr class="hov">
+                            <td class="text-center">{{ forloop.counter }}</td>
+                            <td class="text-center">
+                                {% if note.image %}
+                                <img src="{{ note.image.url }}" style="width: 100px; height:100px;">
+                                {% endif %}
+                            </td>
+                            <td class="text-center">{{ note.note_type }}</td>
+                            <td class="text-center">{{ note.note }}</td>
+                            <td class="d-flex justify-content-center">
+                                <a href="{% url 'edit_clinical_note_doctor' note.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
+                                <a href="{% url 'delete_clinical_note_doctor' note.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
+                            </td>
+                        </tr>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModalCenter{{note.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter{{appointment.id}}Title" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Confirm Delete</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are You Sure to Delete!
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <a href="#" type="button" class="btn btn-primary">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

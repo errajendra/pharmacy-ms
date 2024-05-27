@@ -1,5 +1,7 @@
 from django import forms
 from .models import Appointment
+from pharmacy.models import Addmission
+
 
 
 class AppointmentForm(forms.ModelForm):
@@ -20,3 +22,5 @@ class AppointmentForm(forms.ModelForm):
             'message': forms.Textarea(attrs={'class': 'form-control'}),
             'address': forms.Textarea(attrs={'class': 'form-control'}),
         }
+
+

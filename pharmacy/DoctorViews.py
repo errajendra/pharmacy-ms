@@ -1,11 +1,12 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.contrib.auth.forms import  UserCreationForm
 from .decorators import *
-
+from django.contrib.auth.decorators import login_required
 from .forms import *
 from .models import *
+from appointment.models import Appointment
 
 def doctorHome(request): 
     prescip = Prescription.objects.all().count()
@@ -122,6 +123,8 @@ def managePrescription(request):
     }
     return render(request,'doctor_templates/manage_prescription.html' ,context)
 
+
+@login_required
 def editPrescription(request,pk):
     prescribe=Prescription.objects.get(id=pk)
     form=PrescriptionForm(instance=prescribe)
@@ -150,3 +153,130 @@ def editPrescription(request,pk):
 
     return render(request,'doctor_templates/edit_prescription.html',context)
     
+    
+@login_required
+def appointment_list_doctor(request):
+    doctor = get_object_or_404(Doctor, admin=request.user)
+    appointments = Appointment.objects.filter(doctor=doctor).order_by('-date')
+    
+    context = {
+        "title": "Appointments",
+        "appointments": appointments,
+    }
+    return render(request, "doctor_templates/appointment/appointment_list_doctor.html", context)
+
+
+@login_required
+def update_appointment_status(request, id):
+    appointment = get_object_or_404(Appointment, id=id)
+    if request.method == "POST":
+        status = request.POST.get('status')
+        appointment.status = status
+        appointment.save()
+        messages.success(request, 'Appointment status updated successfully.')
+    return redirect('appointment_list_doctor')
+
+
+@login_required
+def patient_record_doctor(request):
+    doctor = get_object_or_404(Doctor, admin=request.user)
+    addmissions = Addmission.objects.filter(doctor=doctor).order_by("-id")
+    context = {
+        "addmissions": addmissions,
+        "title": "Manage Patient Record",
+    }
+    return render(request, "doctor_templates/patient-record/patient_list_doctor.html", context)
+
+
+@login_required
+def update_patient_record_doctor(request, id):
+    cat = get_object_or_404(Addmission, id=id)
+    form = PatientRecordForm(instance=cat, data=request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Patient Record Updated Successfully!")
+
+            return redirect("patient_record_doctor")
+    context = {"form": form, "title": "Update Patient Record"}
+    return render(request, "doctor_templates/patient-record/update_patient_record.html", context)
+
+
+@login_required
+def clinical_notes_doctor(request):
+    user = request.user
+    if user.user_type == 'Doctor':
+        notes = ClinicalNote.objects.filter(added_by=user).order_by("-id")
+        context = {
+            "notes": notes,
+            "title": "Clinical Notes",
+        }
+        return render(request, "doctor_templates/clinical-notes/clinical_notes_doctor.html", context)
+    else:
+        return render(request, "appointment/clinical_notes_doctor.html")
+
+
+@login_required
+def add_clinical_note_doctor(request):
+    if request.method == 'POST':
+        note_type = request.POST.get('note_type')
+        note = request.POST.get('note')
+        image = request.FILES.get('image')
+
+        if not note_type or not note:
+            messages.error(request, 'Note type and note are required.')
+        else:
+            if request.user.user_type == 'Doctor':
+                clinical_note = ClinicalNote(
+                    added_by=request.user,
+                    note_type=note_type,
+                    note=note,
+                    image=image
+                )
+                clinical_note.save()
+                messages.success(request, 'Clinical note added successfully.')
+                return redirect('clinical_notes_doctor')
+            else:
+                messages.warning(request, "User is not Doctor!!")
+
+    context = {
+        'title': 'Add Clinical Note'
+    }
+    
+    return render(request, 'doctor_templates/clinical-notes/add_clinical_note.html', context)
+
+
+@login_required
+def edit_clinical_note_doctor(request, id):
+    clinical_note = get_object_or_404(ClinicalNote, id=id)
+    if request.method == "POST":
+        note_type = request.POST.get('note_type')
+        note = request.POST.get('note')
+        image = request.FILES.get('image')
+
+        if not note_type or not note:
+            messages.error(request, 'Note type and note are required.')
+        else:
+            if request.user.user_type == 'Doctor':
+                clinical_note.note_type = note_type
+                clinical_note.note = note
+                if image:
+                    clinical_note.image = image
+                clinical_note.save()
+                messages.success(request, "Clinical note updated successfully!")
+                return redirect("clinical_notes_doctor")
+            else:
+                messages.warning(request, "User is not Doctor!!")
+
+    context = {
+        "clinical_note": clinical_note,
+        "title": "Update Clinical Note"
+    }
+    return render(request, "doctor_templates/clinical-notes/edit_clinical_notes.html", context)
+    
+    
+@login_required
+def delete_clinical_note_doctor(request, id):
+    instance = get_object_or_404(ClinicalNote, id=id)
+    instance.delete()
+    return redirect("clinical_notes_doctor")

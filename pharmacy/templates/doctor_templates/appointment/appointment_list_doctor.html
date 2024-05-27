@@ -1,0 +1,137 @@
+{% extends 'doctor_templates/base_template.html'%}
+{% block page_title %}
+<h5> {{title}} </h5>
+{% endblock page_title %}
+
+{% block main_content %}
+<section class="content">
+    {% if messages %}
+    <div class="form-group">
+        <div class="col-12">
+            {% for message in messages %}
+            {% if message.tags == "error" %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% elif message.tags == "success" %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <span> {{title}} </span>
+                </div>
+                <table class="table table-bordered table-hover dataTable table-responsive" id="plist">
+                    <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th>Token</th>
+                            <th>Patient</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Shift</th>
+                            <th>Doctor Fees</th>
+                            <th>Payment Mode</th>
+                            <th>Priority</th>
+                            <th>Booking Mode</th>
+                            <th>Message</th>
+                            <th>Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in appointments %}
+                        <tr class="hov">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ appointment.token }}</td>
+                            <td>{{ appointment.patient.admin.get_full_name }}</td>
+                            <td>{{ appointment.date|date }}</td>
+                            <td>
+                                <form action="{% url 'update_appointment_status' appointment.id %}" method="post">
+                                    {% csrf_token %}
+                                    <select name="status" class="btn btn-secondary" onchange="this.form.submit(); changeSelectColor(this);">
+                                        <option value="Pending" {% if appointment.status == "Pending" %}selected{% endif %}>Pending</option>
+                                        <option value="Scheduled" {% if appointment.status == "Scheduled" %}selected{% endif %}>Scheduled</option>
+                                        <option value="Confirmed" {% if appointment.status == "Confirmed" %}selected{% endif %}>Confirmed</option>
+                                        <option value="Rescheduled" {% if appointment.status == "Rescheduled" %}selected{% endif %}>Rescheduled</option>
+                                        <option value="Cancel" {% if appointment.status == "Cancel" %}selected{% endif %}>Cancel</option>
+                                    </select>
+                                </form>
+                            </td>
+                            <td>{{ appointment.shift }}</td>
+                            <td>{{ appointment.fee }}</td>
+                            <td>{{ appointment.payment_mode }}</td>
+                            <td>{{ appointment.priority }}</td>
+                            <td>{{ appointment.booking_mode }}</td>
+                            <td>{{ appointment.message }}</td>
+                            <td>{{ appointment.address }}</td>
+                        </tr>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModalCenter{{appointment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter{{appointment.id}}Title" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Confirm Delete</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are You Sure to Delete!
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        <a href="{% url "delete_appointment_admin" appointment.id %}" type="button" class="btn btn-primary">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    function changeSelectColor(selectElement) {
+        const colors = {
+            "Pending": "#ffeb00",
+            "Scheduled": "lightblue",
+            "Confirmed": "lightgreen",
+            "Rescheduled": "lightgray",
+            "Cancel": "lightcoral"
+        };
+        selectElement.style.backgroundColor = colors[selectElement.value];
+        selectElement.style.color = "black";
+        selectElement.style.border = "none";
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('select[name="status"]').forEach(function(selectElement) {
+            changeSelectColor(selectElement);
+        });
+    });
+    </script>
+    
+    <style>
+    .status-select {
+        color: black;
+        border: none;
+    }
+    </style>
+{% endblock %}

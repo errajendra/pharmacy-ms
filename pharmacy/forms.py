@@ -11,6 +11,8 @@ from django.core.validators import RegexValidator
 from phonenumber_field.formfields import PhoneNumberField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Field
+from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
+from crispy_forms.helper import FormHelper
 
 
 import json
@@ -583,3 +585,68 @@ class ClinicalNoteForm(ModelForm):
         widgets = {
             "note_type": forms.Select(attrs={"class":"form-control w-auto"})
         }
+
+
+class PatientRecordForm(forms.ModelForm):
+    class Meta:
+        model = Addmission
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(PatientRecordForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        
+        # Check if the instance is being edited
+        if self.instance and self.instance.pk:
+            self.fields['patient'].disabled = True
+            self.fields['doctor'].disabled = True
+        
+        self.helper.layout = Layout(
+            Fieldset(
+                'General Information',
+                'patient',
+                'department',
+                'doctor',
+                'reason',
+                'purpose',
+                'fees',
+            ),
+            Fieldset(
+                'OPD Details',
+                'weight',
+                'bp_systolic',
+                'bp_diastolic',
+                'pulse',
+                'respiration_rates',
+                'temp',
+                'spo2',
+                css_class='opd-details'
+            ),
+            Fieldset(
+                'IPD/Bed Addmission Details',
+                'bht_no',
+                'uid',
+                'guardian',
+                'addmission_time',
+                'discharge_time',
+                'ward_bed',
+                'no_of_beds',
+                'operation_date',
+                'addmission_type',
+                'mlc_no',
+                'icd',
+                'provisonal_diagnosis',
+                'final_diagnosis',
+                'summary_of_case',
+                'staff',
+                'facilities',
+                'result',
+                'couse_of_death',
+                'remark',
+                css_class='ipd-details'
+            ),
+            ButtonHolder(
+                Submit('submit', 'Save', css_class='btn btn-info')
+            )
+        )
