@@ -59,7 +59,6 @@ def adminDashboard(request):
 @login_required
 def createPatient(request):
     form = PatientModelForm()
-
     if request.method == "POST":
         form = PatientModelForm(request.POST, request.FILES)
 
@@ -140,7 +139,10 @@ def createPatient(request):
         "languages": Language.objects.all()
     }
 
-    return render(request, "hod_templates/patient_form.html", context)
+    if request.user.user_type == 'Reception':
+        return render(request, "receptionist_templates/patient-record/add_patient.html", context)
+    else:
+        return render(request, "hod_templates/patient_form.html", context)
 
 
 

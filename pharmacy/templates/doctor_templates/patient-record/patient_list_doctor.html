@@ -1,17 +1,21 @@
-{% extends 'doctor_templates/base_template.html'%} {% block page_title %}
-<h5>{{title}} </h5>
+{% extends 'doctor_templates/base_template.html' %}
 
-{% endblock page_title %} {% block main_content %}
+{% block page_title %}
+<h5>{{title}}</h5>
+{% endblock page_title %}
+
+{% block main_content %}
 <section class="content">
     {% if messages %}
     <div class="form-group">
         <div class="col-12">
-            {% for message in messages %} {% if message.tags == "error" %}
+            {% for message in messages %}
+            {% if message.tags == "error" %}
             <div class="col-sm-12">
-                <div class="alert fade alert-simple alert-danger alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show mt-1 " role="alert" data-brk-library="component__alert">
+                <div class="alert fade alert-simple alert-danger alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show mt-1" role="alert" data-brk-library="component__alert">
                     <button type="button" class="close font__size-18" data-dismiss="alert">
                         <span aria-hidden="true">
-                            <i class="fa fa-times danger "></i>
+                            <i class="fa fa-times danger"></i>
                         </span>
                         <span class="sr-only">Close</span>
                     </button>
@@ -23,42 +27,29 @@
             <div class="alert fade alert-simple alert-success alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show mt-1">
                 <button type="button" class="close font__size-18" data-dismiss="alert">
                     <span aria-hidden="true">
-                    <i class="fa fa-times greencross"></i>
-                    </a></span>
-                    <span class="sr-only">Close</span> 
+                        <i class="fa fa-times greencross"></i>
+                    </span>
+                    <span class="sr-only">Close</span>
                 </button>
                 <i class="start-icon far fa-check-circle faa-tada animated"></i>
                 <strong class="font__weight-semibold">Well done!</strong> {{message}}
             </div>
-            {% endif %} {% endfor %}
+            {% endif %}
+            {% endfor %}
         </div>
     </div>
     {% endif %}
     <div class="row">
         <div class="col-md-12">
-
             <div class="card manage sc">
                 <div class="card-header">
-                    <span>{{title}} </span>
+                    <span>{{title}}</span>
                     <div class="card-tools d-flex">
-                        <!--                
-                    <div class="input-group input-group-sm" style="width: 150px;">
-                       
-                        <div class="input-group-append">
-                        <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
-                        </div>
-                    </div> -->
-                        <!-- <input type="search" name="search" id="filter" class="form-control float-right" placeholder="Search"> -->
-
-
-                        {% comment %} <a class="btn btn-sm btn-info mr-2" href="{% url 'add_addmission' %}" role="button">+ Add Addmission</a> {% endcomment %}
-
+                        <!-- <a class="btn btn-sm btn-info mr-2" href="{% url 'add_addmission' %}" role="button">+ Add Addmission</a> -->
                     </div>
-
                 </div>
                 <table class="table table-bordered table-hover dataTable" id="plist">
                     <thead>
-
                         <tr>
                             <th class="text-center">No</th>
                             <th class="text-center">Patient</th>
@@ -67,33 +58,84 @@
                             <th class="text-center">Department</th>
                             <th class="text-center">Reason</th>
                             <th class="text-center">Action</th>
-
                         </tr>
                     </thead>
                     <tbody>
                         {% for addmission in addmissions %}
                         <tr class="hov">
-                            <td class="text-center">{{forloop.counter}}</td>
-                            <td class="text-center">{{addmission.patient}}</td>
-                            <td class="text-center">{{addmission.patient.phone_number}}</td>
-                            <td class="text-center">{{addmission.purpose}}</td>
-                            <td class="text-center">{{addmission.department}}</td>
-                            <td class="text-center">{{addmission.reason}}</td>
-
-                            <!-- End Expire -->
+                            <td class="text-center">{{ forloop.counter }}</td>
+                            <td class="text-center">{{ addmission.patient }}</td>
+                            <td class="text-center">{{ addmission.patient.phone_number }}</td>
+                            <td class="text-center">{{ addmission.purpose }}</td>
+                            <td class="text-center">{{ addmission.department }}</td>
+                            <td class="text-center">{{ addmission.reason }}</td>
                             <td class="d-flex justify-content-center">
-                                <a href="{%url 'update_patient_record_doctor' addmission.id %}" class="btn btn-sm btn-success">Update</a> &nbsp;
+                                <a href="{% url 'update_patient_record_doctor' addmission.id %}" class="btn btn-sm btn-success">Update</a> &nbsp;
+                                <a href="javascript:void(0);" data-target="#admissionDetailModal" data-id="{{ addmission.id }}" data-url="{% url 'view_patient_details' %}" class="btn btn-sm btn-primary view-details-btn"><i class="fas fa-eye"></i></a> &nbsp;
                             </td>
-
                         </tr>
                         {% endfor %}
-
                     </tbody>
-
                 </table>
             </div>
         </div>
     </div>
 </section>
+
+<!-- Modal -->
+<div class="modal fade" id="admissionDetailModal" tabindex="-1" role="dialog" aria-labelledby="admissionDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="admissionDetailModalLabel">Patient Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Details will be appended here by JavaScript -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include jQuery before your custom JavaScript code -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.view-details-btn').on('click', function(e) {
+            var patient_id = $(this).data('id');
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                type: 'post',
+                data: {
+                    'patient_id': patient_id,
+                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                },
+                dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                    if (data.html) {
+                        $("#admissionDetailModal .modal-body").html(data.html);
+                        $("#admissionDetailModal").modal('show');
+                    } else {
+                        alert("Error: Unable to load details.");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error); // Log error details for debugging
+                    console.error('Response:', xhr.responseText);
+                    alert('An error occurred while fetching the admission details.');
+                }
+            });
+        });
+    });
+</script>
 
 {% endblock %}

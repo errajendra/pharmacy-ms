@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from .forms import *
 from .models import *
 from appointment.models import Appointment
+from django.views.decorators.csrf import csrf_exempt
+from django.template.loader import render_to_string
 
 def doctorHome(request): 
     prescip = Prescription.objects.all().count()
@@ -202,6 +204,22 @@ def update_patient_record_doctor(request, id):
     return render(request, "doctor_templates/patient-record/update_patient_record.html", context)
 
 
+@csrf_exempt
+def view_patient_details(request):
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest' and request.method == 'POST':
+        try:
+            patient_id = request.POST.get('patient_id')
+            admission = Addmission.objects.get(id=patient_id)
+            context = {'data': admission}
+            html = render_to_string("doctor_templates/patient-record/view_patient_detail.html", context, request=request)
+            return JsonResponse({'html': html})
+        except Addmission.DoesNotExist:
+            return JsonResponse({'html': '<p>Admission not found.</p>'}, status=404)
+        except Exception as ex:
+            return JsonResponse({'html': f'<p>Error: {str(ex)}</p>'}, status=500)
+    return JsonResponse({'html': '<p>Invalid request.</p>'}, status=400)
+        
+        
 @login_required
 def clinical_notes_doctor(request):
     user = request.user

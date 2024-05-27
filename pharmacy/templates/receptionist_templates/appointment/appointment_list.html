@@ -1,4 +1,4 @@
-{% extends 'doctor_templates/base_template.html'%}
+{% extends 'receptionist_templates/base_template.html'%}
 {% block page_title %}
 <h5> {{title}} </h5>
 {% endblock page_title %}
@@ -34,6 +34,9 @@
             <div class="card">
                 <div class="card-header">
                     <span> {{title}} </span>
+                    <div class="card-tools d-flex">
+                        <a class="btn btn-sm btn-info mr-2" href="{% url 'add_appointment_receptionist' %}" role="button">+ Add Appointment</a> 
+                    </div>
                 </div>
                 <table class="table table-bordered table-hover dataTable table-responsive" id="plist">
                     <thead>
@@ -41,6 +44,7 @@
                             <th>SN</th>
                             <th>Token</th>
                             <th>Patient</th>
+                            <th>Doctor</th>
                             <th>Date</th>
                             <th>Status</th>
                             <th>Shift</th>
@@ -58,6 +62,7 @@
                             <td>{{ forloop.counter }}</td>
                             <td>{{ appointment.token }}</td>
                             <td>{{ appointment.patient.admin.get_full_name }}</td>
+                            <td>{{ appointment.doctor.admin.get_full_name }}</td>
                             <td>{{ appointment.date|date }}</td>
                             <td>
                                 {% if appointment.status == "Confirmed" %}

@@ -1,0 +1,44 @@
+{% block main_content %}
+<!-- doctor_templates/patient-record/view_patient_detail.html -->
+
+<div class="container">
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <th>Patient Name</th>
+                <td>{{ data.patient.admin.get_full_name|upper }}</td>
+            </tr>
+            <tr>
+                <th>Contact</th>
+                <td>{{ data.patient.phone_number }}</td>
+            </tr>
+            <tr>
+                <th>Purpose</th>
+                <td>{{ data.purpose }}</td>
+            </tr>
+            <tr>
+                <th>Department</th>
+                <td>{{ data.department.name }}</td>
+            </tr>
+            <tr>
+                <th>Reason</th>
+                <td>{{ data.reason }}</td>
+            </tr>
+            <tr>
+                <th>Doctor</th>
+                <td>{{ data.doctor.admin.get_full_name }}</td>
+            </tr>
+            <tr>
+                <th>Admission Time</th>
+                <td>{{ data.addmission_time }}</td>
+            </tr>
+            <tr>
+                <th>Discharge Time</th>
+                <td>{{ data.discharge_time }}</td>
+            </tr>
+            <!-- Add more fields as needed -->
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

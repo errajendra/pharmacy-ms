@@ -170,6 +170,7 @@ urlpatterns=[
     
     path("doctor-patient-record/", DoctorViews.patient_record_doctor, name="patient_record_doctor"),
     path('update-patient-record/<int:id>/',DoctorViews.update_patient_record_doctor, name='update_patient_record_doctor'), 
+    path('view-patient-details/', DoctorViews.view_patient_details, name='view_patient_details'),
     
     path("clinical-notes-doctor/", DoctorViews.clinical_notes_doctor, name="clinical_notes_doctor"),
     path("add-clinical-notes-doctor/", DoctorViews.add_clinical_note_doctor, name="add_clinical_note_doctor"),
@@ -223,7 +224,10 @@ urlpatterns=[
     path('edit-receptionist/<int:id>/', HODViews.edit_receptionist, name="edit_receptionist"),
     path('delete-receptionist/<int:id>/', HODViews.delete_receptionist, name="delete_receptionist"),
     
+    
     # Receptionist Template View urls
     path('receptionist-home/',receptionistViews.receptionistHome,name='receptionist_home'),
+    path('appointment-list-receptionist/',receptionistViews.appointment_list_receptionist,name='appointment_list_receptionist'),
+    path('add-appointment-receptionist/',receptionistViews.add_appointment_receptionist,name='add_appointment_receptionist'),
 
 ]
