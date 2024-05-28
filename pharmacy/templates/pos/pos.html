@@ -265,7 +265,7 @@
                                             <select onchange="getCartDetails();" id="customer" name="customer" class="form-control selectpickerhg" data-live-search="true">
                                             {% comment %} <option value="0" selected> Walking Customer </option> {% endcomment %}
                                             {% for c in custumers %}
-                                            <option value="{{c.id}}"> {{c.get_full_name}} ({{c.username}})</option>
+                                            <option value="{{c.id}}" {% if request.session.pos_custumer == c.id %} selected="" {% endif %}> {{c.get_full_name}} ({{c.username}})</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -301,6 +301,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="w-100" id="cart">
                                     <div class="cart-calculation">
                                         <div class="table-responsive">
@@ -321,6 +322,17 @@
                                                     
                                                 </tbody>
                                             </table>
+                                            {% comment %} <table>
+                                                <tr>
+                                                    <td>
+                                                        <div class="">
+                                                            <input id="search-input" type="text" placeholder="Search & Add Medicine" class="form-control">
+                                                            <!-- Change select to ul -->
+                                                            <ul id="search-results" class="list-group" style="display: none;"></ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table> {% endcomment %}
                                         </div>
 
                                         {% comment %} Sub total {% endcomment %}
@@ -590,66 +602,6 @@
             </div>
         </div>
         
-        {% comment %} <div class="modal fade" id="paymentModal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content pvl14">
-                    <div class="modal-header">
-                        <h3 class="modal-title">Payment</h3>
-                        <button id="payment_close" onclick="placeOrder()" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group row">
-                            <label class="col-sm-4 col-form-label" for="">Payment Method</label>
-                            <div class="col-sm-8">
-                                <select name="payment_method" id="payment_method" class="form-control" required="">
-                                    <option value="68">Gpay</option>
-                                    <option value="69">PayTM</option>
-                                    <option value="71">tst</option>
-                                    <option value="72">Taka</option>
-                                    <option value="77">jazzcash</option>
-                                    <option value="78">Cash</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group col-12 text-center">
-                            <button onclick="placeOrder('mfs')" class="btn btn-success px-5" id="order_complete" type="submit">Submit</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> {% endcomment %}
-
-        {% comment %} <div class="modal fade" id="short-cut-keys" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Short cut keys</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <span>To click order : alt + O</span><br>
-                        <span>To click payment submit : alt + S</span><br>
-                        <span>To close payment submit : alt + Z</span><br>
-                        <span>To click cancel cart item all : alt + C</span><br>
-                        <span>To click add new customer : alt + A</span> <br>
-                        <span>To submit add new customer form : alt + N</span><br>
-                        <span>To click short cut keys : alt + K</span><br>
-                        <span>To print invoice : alt + P</span> <br>
-                        <span>To cancel invoice : alt + B</span> <br>
-                        <span>To focus search input : alt + Q</span> <br>
-                        <span>To click extra discount : alt + E</span> <br>
-                        <span>To click coupon discount : alt + D</span> <br>
-                        <span>To click clear cart : alt + X</span> <br>
-                        <span>To click new order : alt + R</span> <br>
-                    </div>
-                </div>
-            </div>
-        </div> {% endcomment %}
-
     </main>
     <audio id="audio" src="/static/pos/music/beep.mp3"></audio>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
@@ -693,6 +645,33 @@
     {% comment %} Cart Add, Delete and Listing  Functionality {% endcomment %}
     <script type="text/javascript">
 
+        // Event listener for the input event of the search input field
+        $('#search-input').on('input', function() {
+            var query = $(this).val();
+            $.ajax({
+                url: "/search-stock/",
+                data: {
+                    'query': query
+                },
+                dataType: 'json',
+                success: function(data) {
+                    $('#search-results').empty();
+                    for (var i = 0; i < data.length; i++) {
+                        var optionText = '<img src="' + data[i].image + '" class="option-image" style="height:50px;width:50px;"> ' +
+                                        '<strong>' + data[i].drug_name + '</strong> - ' +
+                                        ' (' + data[i].category + ') ' + 
+                                        // ' unit-' + data[i].unit + 
+                                        // ' batch- ' + data[i].batch + 
+                                        'onclick="addToCart('+ data[i].id + ', "med")"' + 
+                                        ' Rs ' + data[i].price;
+                        // Change appending option to li
+                        $('#search-results').append('<li data-value="' + data[i].id + '">' + optionText + '</li>');
+                    }
+                    $('#search-results').show();
+                }
+            });
+        });
+        
         function playMusic() {
             var audio = document.getElementById("audio");
             audio.play();

@@ -223,6 +223,9 @@ def place_order_poc_billing(request):
                 "message": message,
                 "bill_slip_url": bill_slip_url,
             }
+            # clear the recnetly added custumer detail
+            if request.session.get('pos_custumer', None):
+                request.session.pop('pos_custumer')
             return JsonResponse(data)
         
         except Exception as ex:

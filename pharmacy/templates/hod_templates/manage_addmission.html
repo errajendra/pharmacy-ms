@@ -56,45 +56,47 @@
                     </div>
 
                 </div>
-                <table class="table table-bordered table-hover dataTable" id="plist">
-                    <thead>
+                <div class="card-body table-responsive">
+                    <table class="table table-bordered table-hover dataTable" id="plist">
+                        <thead>
 
-                        <tr>
-                            <th>No</th>
-                            <th>Patient</th>
-                            <th>Contact</th>
-                            <th>Purpose</th>
-                            <th>Department</th>
-                            <th>Doctor</th>
-                            <th>Reason</th>
-                            <th class="text-center">Action</th>
+                            <tr>
+                                <th>No</th>
+                                <th>Patient</th>
+                                <th>Contact</th>
+                                <th>Purpose</th>
+                                <th>Department</th>
+                                <th>Doctor</th>
+                                <th>Reason</th>
+                                <th class="text-center">Action</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for addmission in addmissions %}
-                        <tr class="hov">
-                            <td>{{forloop.counter}}</td>
-                            <td>{{addmission.patient}}</td>
-                            <td>{{addmission.patient.phone_number}}</td>
-                            <td>{{addmission.purpose}}</td>
-                            <td>{{addmission.department}}</td>
-                            <td>{{addmission.doctor.admin.get_full_name}}</td>
-                            <td>{{addmission.reason}}</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for addmission in addmissions %}
+                            <tr class="hov">
+                                <td>{{forloop.counter}}</td>
+                                <td>{{addmission.patient}}</td>
+                                <td>{{addmission.patient.phone_number}}</td>
+                                <td>{{addmission.purpose}}</td>
+                                <td>{{addmission.department}}</td>
+                                <td>{{addmission.doctor.admin.get_full_name}}</td>
+                                <td>{{addmission.reason}}</td>
 
-                            <!-- End Expire -->
-                            <td class="d-flex justify-content-center">
-                                <a href="{%url 'print_addmission' addmission.id %}" class="btn btn-sm btn-success" target="_blank">Print</a> &nbsp;
-                                <a href="{%url 'edit_addmission' addmission.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
-                                <a href="{%url 'delete_addmission' addmission.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
-                            </td>
+                                <!-- End Expire -->
+                                <td class="d-flex justify-content-center">
+                                    <a href="{%url 'print_addmission' addmission.id %}" class="btn btn-sm btn-success" target="_blank">Print</a> &nbsp;
+                                    <a href="{%url 'edit_addmission' addmission.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
+                                    <a href="{%url 'delete_addmission' addmission.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
+                                </td>
 
-                        </tr>
-                        {% endfor %}
+                            </tr>
+                            {% endfor %}
 
-                    </tbody>
+                        </tbody>
 
-                </table>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

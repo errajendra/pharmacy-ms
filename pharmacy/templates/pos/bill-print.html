@@ -60,6 +60,9 @@
 			p, table {
 				page-break-inside: avoid;
 			}
+			.print-hide {
+				display: none;
+			}
 		}
 	</style>
 </head>
@@ -140,8 +143,8 @@
 		</table>
 
 		<h4>Thankyou</h4>
-        <button onclick="history.back()">Back</button>
-        <button onclick="window.print()">Print</button>
+        <button onclick="history.back()" class="print-hide">Back</button>
+        <button onclick="window.print()" class="print-hide">Print</button>
 	</div>
 </body>
 </html>

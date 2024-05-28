@@ -34,8 +34,8 @@
         </div>
     </div>
     {% endif %}
-    <div class="row">
-        <div class="col-md-12">
+    <div class="">
+        <div class="">
 
             <div class="card manage sc">
                 <div class="card-header">
@@ -56,42 +56,44 @@
                     </div>
 
                 </div>
-                <table class="table table-bordered table-hover dataTable" id="plist">
-                    <thead>
+                <div class="card-body table-responsive">
+                    <table class="table table-bordered table-hover dataTable" id="plist">
+                        <thead>
 
-                        <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th>Unit</th>
-                            <th>Actual Cost</th>
-                            <th>MRP</th>
-                            <th>Discount</th>
-                            <th class="text-center">Action</th>
+                            <tr>
+                                <th>No</th>
+                                <th>Name</th>
+                                <th>Unit</th>
+                                <th>Actual Cost</th>
+                                <th>MRP</th>
+                                <th>Discount</th>
+                                <th class="text-center">Action</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for hospital_item in hospital_items %}
-                        <tr class="hov">
-                            <td>{{forloop.counter}}</td>
-                            <td>{{hospital_item.name}}</td>
-                            <td>{{hospital_item.unit}}</td>
-                            <td>{{hospital_item.actual_price}}</td>
-                            <td>{{hospital_item.price}}</td>
-                            <td>{{hospital_item.discount}}</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for hospital_item in hospital_items %}
+                            <tr class="hov">
+                                <td>{{forloop.counter}}</td>
+                                <td>{{hospital_item.name}}</td>
+                                <td>{{hospital_item.unit}}</td>
+                                <td>{{hospital_item.actual_price}}</td>
+                                <td>{{hospital_item.price}}</td>
+                                <td>{{hospital_item.discount}}</td>
 
-                            <!-- End Expire -->
-                            <td class="d-flex justify-content-center">
-                                <a href="{%url 'edit_hospital_item' hospital_item.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
-                                <a href="{%url 'delete_hospital_item' hospital_item.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
-                            </td>
+                                <!-- End Expire -->
+                                <td class="d-flex justify-content-center">
+                                    <a href="{%url 'edit_hospital_item' hospital_item.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
+                                    <a href="{%url 'delete_hospital_item' hospital_item.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
+                                </td>
 
-                        </tr>
-                        {% endfor %}
+                            </tr>
+                            {% endfor %}
 
-                    </tbody>
+                        </tbody>
 
-                </table>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

@@ -34,8 +34,8 @@
         </div>
     </div>
     {% endif %}
-    <div class="row">
-        <div class="col-md-12">
+    <div class="">
+        <div class="">
 
             <div class="card manage sc">
                 <div class="card-header">
@@ -55,88 +55,90 @@
 
                     </div>
 
+                </div> 
+                <div class="card-body table-responsive">
+                    <table class="table table-bordered table-hover dataTable" id="plist">
+                        <thead>
+
+                            <tr>
+                                <th>No</th>
+                                <th>Medicine Name</th>
+                                <th>Category</th>
+                                <th>Type</th>
+                                <th>Unit</th>
+                                <th>Batch</th>
+                                <th>Manufacturer</th>
+                                <th>Vender</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Discount</th>
+                                <th>GST</th>
+                                <th>Expiry Date</th>
+                                <th class="text-center">Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for stock in stocks %}
+                            <tr class="hov">
+                                <td>{{forloop.counter}}</td>
+                                <td>{{stock.drug_name}}</td>
+                                <td>{{stock.category}}</td>
+                                <td> {% if stock.type %} {{stock.type}} {% endif %} </td>
+                                <td> {% if stock.unit %} {{stock.unit}} {% endif %} </td>
+                                <td> {% if stock.batch %} {{stock.batch}} {% endif %} </td>
+                                <td> {% if stock.manufacture %} {{stock.manufacture}} {% endif %} </td>
+                                <td> {% if stock.vender %} {{stock.vender}} {% endif %} </td>
+                                <td>
+                                    <span class="d-flex justify-content-center">
+                                    {% if stock.quantity <= stock.reorder_level %}
+                                    <div  class="d-flex justify-content-center px-2 mt-2"style="background-color:#a00b80;;border-radius: 10px;font-size: 11px; width:70px;font-weight: 600;color: white;">{{stock.quantity}}</div>
+                                    {% else %}{{stock.quantity}}
+                                    {% endif %}</span>
+
+                                </td>
+                                <td>
+                                    {% if stock.price %}
+                                        <a href="{% url 'reorder_level' stock.id %}">₹ {{stock.price}}</a></td>
+                                    {% else %}
+                                        <a href="{% url 'reorder_level' stock.id %}">Add level</a>
+                                    {% endif %}
+                        <!--                            <td>{{stock.last_updated |date:"F d, Y"}}</td>-->
+                                <td>{{stock.discount}} (%)</td>
+                                <td>{{stock.igta}}</td>
+
+                                <!-- Checks expired drugs -->
+
+                                {% comment %} {% for expire in expired %} {% if stock.drug_name == expire.drug_name %}
+                                <td class="">
+                                    <div style="background-color: rgb(48, 58, 92);border-radius: 10px;font-size: 11px; width:120px;font-weight: 600;color: white;" class="d-flex justify-content-center ml-2 mt-2 px-1 "> EXPIRED </div>
+                                </td>
+                                {% endif %} {% endfor %} {% endcomment %}
+                                <!-- Checks Not expired drugs -->
+
+
+                                {% comment %} {% for expire in expa %} {% if stock.drug_name == expire.drug_name %} {% endcomment %}
+                                <td>
+                                    {% if stock.valid_to %}
+                                    {{stock.valid_to|date}}
+                                    {% endif %}
+                                </td>
+                                {% comment %} {% endif %} {% endfor %} {% endcomment %}
+                                <!-- End Expire -->
+                                <td class="d-flex justify-content-center">
+                                    <a href="{%url 'edit_drug' stock.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
+                                    <a href="{%url 'delete_drug' stock.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
+                                    <a href="{% url 'drug_detail' stock.id %}" class="btn btn-sm btn-warning">View</a>
+                                    {% comment %} <a href="{%url 'receive_drug' stock.id %}" class="btn btn-sm btn-primary ml-2">Add</a> {% endcomment %}
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
                 </div>
-                <table class="table table-bordered table-hover dataTable" id="plist">
-                    <thead>
-
-                        <tr>
-                            <th>No</th>
-                            <th>Medicine Name</th>
-                            <th>Category</th>
-                            <th>Type</th>
-                            <th>Unit</th>
-                            <th>Batch</th>
-                            <th>Manufacturer</th>
-                            <th>Vender</th>
-                            <th>Quantity</th>
-                            <th>Price</th>
-                            <th>Discount</th>
-                            <th>GST</th>
-                            <th>Expiry Date</th>
-                            <th class="text-center">Action</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for stock in stocks %}
-                        <tr class="hov">
-                            <td>{{forloop.counter}}</td>
-                            <td>{{stock.drug_name}}</td>
-                            <td>{{stock.category}}</td>
-                            <td> {% if stock.type %} {{stock.type}} {% endif %} </td>
-                            <td> {% if stock.unit %} {{stock.unit}} {% endif %} </td>
-                            <td> {% if stock.batch %} {{stock.batch}} {% endif %} </td>
-                            <td> {% if stock.manufacture %} {{stock.manufacture}} {% endif %} </td>
-                            <td> {% if stock.vender %} {{stock.vender}} {% endif %} </td>
-                            <td>
-                                <span class="d-flex justify-content-center">
-                                 {% if stock.quantity <= stock.reorder_level %}
-                                <div  class="d-flex justify-content-center px-2 mt-2"style="background-color:#a00b80;;border-radius: 10px;font-size: 11px; width:70px;font-weight: 600;color: white;">{{stock.quantity}}</div>
-                                {% else %}{{stock.quantity}}
-                                {% endif %}</span>
-
-                            </td>
-                            <td>
-                                {% if stock.price %}
-                                    <a href="{% url 'reorder_level' stock.id %}">₹ {{stock.price}}</a></td>
-                                {% else %}
-                                    <a href="{% url 'reorder_level' stock.id %}">Add level</a>
-                                {% endif %}
-<!--                            <td>{{stock.last_updated |date:"F d, Y"}}</td>-->
-                            <td>{{stock.discount}} (%)</td>
-                            <td>{{stock.igta}}</td>
-
-                            <!-- Checks expired drugs -->
-
-                            {% comment %} {% for expire in expired %} {% if stock.drug_name == expire.drug_name %}
-                            <td class="">
-                                <div style="background-color: rgb(48, 58, 92);border-radius: 10px;font-size: 11px; width:120px;font-weight: 600;color: white;" class="d-flex justify-content-center ml-2 mt-2 px-1 "> EXPIRED </div>
-                            </td>
-                            {% endif %} {% endfor %} {% endcomment %}
-                            <!-- Checks Not expired drugs -->
-
-
-                            {% comment %} {% for expire in expa %} {% if stock.drug_name == expire.drug_name %} {% endcomment %}
-                            <td>
-                                {% if stock.valid_to %}
-                                {{stock.valid_to|date}}
-                                {% endif %}
-                            </td>
-                            {% comment %} {% endif %} {% endfor %} {% endcomment %}
-                            <!-- End Expire -->
-                            <td class="d-flex justify-content-center">
-                                <a href="{%url 'edit_drug' stock.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
-                                <a href="{%url 'delete_drug' stock.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
-                                <a href="{% url 'drug_detail' stock.id %}" class="btn btn-sm btn-warning">View</a>
-                                {% comment %} <a href="{%url 'receive_drug' stock.id %}" class="btn btn-sm btn-primary ml-2">Add</a> {% endcomment %}
-                            </td>
-
-                        </tr>
-                        {% endfor %}
-
-                    </tbody>
-
-                </table>
             </div>
         </div>
     </div>

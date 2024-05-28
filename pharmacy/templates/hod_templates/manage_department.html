@@ -56,34 +56,36 @@
                     </div>
 
                 </div>
-                <table class="table table-bordered table-hover dataTable" id="plist">
-                    <thead>
+                <div class="card-body table-responsive">
+                    <table class="table table-bordered table-hover dataTable" id="plist">
+                        <thead>
 
-                        <tr>
-                            <th>No</th>
-                            <th>Name</th>
-                            <th class="text-center">Action</th>
+                            <tr>
+                                <th>No</th>
+                                <th>Name</th>
+                                <th class="text-center">Action</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for department in departments %}
-                        <tr class="hov">
-                            <td>{{forloop.counter}}</td>
-                            <td>{{department.name}}</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for department in departments %}
+                            <tr class="hov">
+                                <td>{{forloop.counter}}</td>
+                                <td>{{department.name}}</td>
 
-                            <!-- End Expire -->
-                            <td class="d-flex justify-content-center">
-                                <a href="{%url 'edit_department' department.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
-                                <a href="{%url 'delete_department' department.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
-                            </td>
+                                <!-- End Expire -->
+                                <td class="d-flex justify-content-center">
+                                    <a href="{%url 'edit_department' department.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
+                                    <a href="{%url 'delete_department' department.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
+                                </td>
 
-                        </tr>
-                        {% endfor %}
+                            </tr>
+                            {% endfor %}
 
-                    </tbody>
+                        </tbody>
 
-                </table>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

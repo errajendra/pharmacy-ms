@@ -34,8 +34,8 @@
         </div>
     </div>
     {% endif %}
-    <div class="row">
-        <div class="col-md-12">
+    <div class="">
+        <div class="">
 
             <div class="card manage sc">
                 <div class="card-header">
@@ -56,34 +56,36 @@
                     </div>
 
                 </div>
-                <table class="table table-bordered table-hover dataTable" id="plist">
-                    <thead>
+                <div class="card-body table-responsive">
+                    <table class="table table-bordered table-hover dataTable" id="plist">
+                        <thead>
 
-                        <tr>
-                            <th>SN</th>
-                            <th>Name</th>
-                            <th class="text-center">Action</th>
+                            <tr>
+                                <th>SN</th>
+                                <th>Name</th>
+                                <th class="text-center">Action</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for manufacturer in manufacturers %}
-                        <tr class="hov">
-                            <td>{{forloop.counter}}</td>
-                            <td>{{manufacturer.name}}</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for manufacturer in manufacturers %}
+                            <tr class="hov">
+                                <td>{{forloop.counter}}</td>
+                                <td>{{manufacturer.name}}</td>
 
-                            <!-- End Expire -->
-                            <td class="d-flex justify-content-center">
-                                <a href="{%url 'edit_manufacturer' manufacturer.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
-                                <a href="{%url 'delete_manufacturer' manufacturer.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
-                            </td>
+                                <!-- End Expire -->
+                                <td class="d-flex justify-content-center">
+                                    <a href="{%url 'edit_manufacturer' manufacturer.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
+                                    <a href="{%url 'delete_manufacturer' manufacturer.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
+                                </td>
 
-                        </tr>
-                        {% endfor %}
+                            </tr>
+                            {% endfor %}
 
-                    </tbody>
+                        </tbody>
 
-                </table>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

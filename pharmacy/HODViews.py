@@ -66,6 +66,7 @@ def createPatient(request):
         
         pos = request.POST.get('pos', None)
         if pos == "pos":
+            # check if request is came from pos billing page
             email = request.POST.get("email", None)
             first_name = request.POST.get("first_name")
             user = CustomUser.objects.create_user(
@@ -79,7 +80,7 @@ def createPatient(request):
             user.patients.phone_number = request.POST.get("phone_number", None)
             user.patients.address = request.POST.get("address", None)
             user.save()
-            
+            request.session['pos_custumer'] = user.id
             return redirect("pos")
         
         if form.is_valid():
