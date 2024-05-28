@@ -255,12 +255,12 @@
                         <form onsubmit="placeOrder()" id="placeOrder" action="https://demopharma.ayaantec.com/pos/order">
                             <div class="card bg-transparent shadow-none pr-1 pl-1 cart-table">
                                 <div class="row mb-2 align-items-center">
-                                    <div class="col-lg-4 my-2 my-lg-2">
+                                    <div class="col-lg-3 my-2 my-lg-2">
                                         <button class="w-100 d-inline-block btn btn-info btn rounded" id="add_new_customer" type="button" data-toggle="modal" data-target="#add-customer" title="Add Customer">
                                             <i class="tio-user-add"></i> Add new customer
                                         </button>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         {% comment %} <select onchange="customer_change(this.value);" id="customer" name="customer_id" data-placeholder="Walk In Customer" class="form-control"> {% endcomment %}
                                             <select onchange="getCartDetails();" id="customer" name="customer" class="form-control selectpickerhg" data-live-search="true">
                                             {% comment %} <option value="0" selected> Walking Customer </option> {% endcomment %}
@@ -269,8 +269,11 @@
                                             {% endfor %}
                                         </select>
                                     </div>
+                                    <div class="col-lg-3">
+                                        <input type="text" id="doctorName" class="form-control" placeholder="Enter Doctor Name" />
+                                    </div>
 
-                                    <div class="col-lg-4 text-right">
+                                    <div class="col-lg-3 text-right">
                                         <div class="d-flex align-items-center justify-content-end">
                                             {% comment %} <button data-toggle="modal" data-target="#short-cut-keys" class="btn btn-warning rounded mx-2" type="button" title="Keyboard shortcuts">
                                                 <i class="tio-keyboard text-white"></i>
@@ -322,7 +325,7 @@
                                                     
                                                 </tbody>
                                             </table>
-                                            {% comment %} <table>
+                                            <table>
                                                 <tr>
                                                     <td>
                                                         <div class="">
@@ -332,7 +335,7 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-                                            </table> {% endcomment %}
+                                            </table>
                                         </div>
 
                                         {% comment %} Sub total {% endcomment %}
@@ -659,15 +662,15 @@
                     for (var i = 0; i < data.length; i++) {
                         var optionText = '<img src="' + data[i].image + '" class="option-image" style="height:50px;width:50px;"> ' +
                                         '<strong>' + data[i].drug_name + '</strong> - ' +
-                                        ' (' + data[i].category + ') ' + 
+                                        ' (' + data[i].category + ') ' +
                                         // ' unit-' + data[i].unit + 
                                         // ' batch- ' + data[i].batch + 
-                                        'onclick="addToCart('+ data[i].id + ', "med")"' + 
                                         ' Rs ' + data[i].price;
                         // Change appending option to li
-                        $('#search-results').append('<li data-value="' + data[i].id + '">' + optionText + '</li>');
+                        $('#search-results').append('<li data-value="' + data[i].id + '" onclick="addToCart('+ data[i].id + ', `med`)" ' + '>' + optionText + '</li>');
                     }
                     $('#search-results').show();
+
                 }
             });
         });
@@ -739,6 +742,10 @@
                     $("#subtotal").val(data.total_cart_price);
                     $("#subtotal").data("subtotal", data.total_cart_price);
                     calculateGrandTotal(); 
+                    // clar the search input text
+                    $("#search-input").val('');
+                    $('#search-results').empty();
+                    $("#search-input").focus();
                 },
            });
         };
@@ -795,6 +802,7 @@
                 const paid_amount = $('#paidAmount').val();
                 const due_amount = $("#due_amount").val();
                 const tax = $("#taxAmount").text();
+                const drName = $("#doctorName").val();
                 
                 var grand_total = $('#grandTotal').data('grandtotal'); // Final amount or Net Pay
             
@@ -808,6 +816,8 @@
                     tax_percent: $('#tax_amount').val(), // tax percentage input applied on 
                     tax: tax,
                     grand_total: grand_total, // Final amount or Net Pay
+
+                    dr_name: drName,
                     
                     csrfmiddlewaretoken: '{{ csrf_token }}',
                     
