@@ -54,6 +54,7 @@
                             <th>Booking Mode</th>
                             <th>Message</th>
                             <th>Address</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,6 +88,9 @@
                             <td>{{ appointment.booking_mode }}</td>
                             <td>{{ appointment.message }}</td>
                             <td>{{ appointment.address }}</td>
+                            <td>
+                                <a href="{% url 'edit_appointment_admin' appointment.id %}" class="btn btn-sm btn-success">Edit</a>
+                            </td>
                         </tr>
                         <!-- Modal -->
                         <div class="modal fade" id="exampleModalCenter{{appointment.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenter{{appointment.id}}Title" aria-hidden="true">

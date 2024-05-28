@@ -786,10 +786,16 @@ def editPatient(request, patient_id):
                     form.instance.language = lang
                 form.save()
                 messages.success(request, "Patient Updated Successfully!")
-                return redirect("all_patients")
+                if request.user.user_type == 'Reception':
+                    return redirect("patient_list_receptionist")
+                else:
+                    return redirect("all_patients")
             except:
                 messages.success(request, "Failed to Update Patient.")
-                return redirect("all_patients")
+                if request.user.user_type == 'Reception':
+                    return redirect("patient_list_receptionist")
+                else:
+                    return redirect("all_patients")
 
     context = {
         "id": patient_id,
@@ -798,7 +804,10 @@ def editPatient(request, patient_id):
         "title": "Edit Patient",
         "languages": Language.objects.all()
     }
-    return render(request, "hod_templates/patient_edit_form.html", context)
+    if request.user.user_type == 'Reception':
+        return render(request, "receptionist_templates/patient-record/edit_patient.html", context)
+    else:
+        return render(request, "hod_templates/patient_edit_form.html", context)
     # return render(request, "hod_templates/edit_patient.html", context)
 
 

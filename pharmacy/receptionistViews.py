@@ -40,3 +40,17 @@ def add_appointment_receptionist(request):
         "doctors": Doctor.objects.all()
     }
     return render(request, "receptionist_templates/appointment/add_appointment.html", context)
+
+
+@login_required
+def patient_list_receptionist(request):
+    form = PatientSearchForm1(request.POST or None)
+    patients = Patients.objects.all().order_by('-created_at')
+    context = {"patients": patients, "form": form, "title": "Admitted Patients"}
+    if request.method == "POST":
+        # admin=form['first_name'].value()
+        name = request.POST.get("search")
+        patients = patients.filter(first_name__icontains=name)
+
+        context = {"patients": patients, form: form}
+    return render(request, "receptionist_templates/patient-record/patient_list.html", context) 
