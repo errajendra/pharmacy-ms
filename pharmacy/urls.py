@@ -229,5 +229,6 @@ urlpatterns=[
     path('receptionist-home/',receptionistViews.receptionistHome,name='receptionist_home'),
     path('appointment-list-receptionist/',receptionistViews.appointment_list_receptionist,name='appointment_list_receptionist'),
     path('add-appointment-receptionist/',receptionistViews.add_appointment_receptionist,name='add_appointment_receptionist'),
+    path('patient-record-receptionist/',receptionistViews.patient_list_receptionist,name='patient_list_receptionist'),
 
 ]

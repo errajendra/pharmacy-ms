@@ -61,7 +61,10 @@ def edit_appointment(request, id):
         form = AppointmentForm(request.POST or None, instance=appointment)
         if form.is_valid():
             form.save()
-            return redirect("appointment_list_admin")
+            if request.user.user_type == 'Reception':
+                return redirect("appointment_list_receptionist")
+            else:  
+                return redirect("appointment_list_admin")
         else:
             messages.warning(request, str(form.errors))
     context = {
@@ -70,7 +73,10 @@ def edit_appointment(request, id):
         "patients": Patients.objects.all(),
         "doctors": Doctor.objects.all()
     }
-    return render(request, "appointment/new_booking.html", context)
+    if request.user.user_type == 'Reception':
+        return render(request, "receptionist_templates/appointment/add_appointment.html", context)
+    else:
+        return render(request, "appointment/new_booking.html", context)
 
 
 def delete_appointment(request, id):

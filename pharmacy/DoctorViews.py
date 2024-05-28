@@ -176,7 +176,10 @@ def update_appointment_status(request, id):
         appointment.status = status
         appointment.save()
         messages.success(request, 'Appointment status updated successfully.')
-    return redirect('appointment_list_doctor')
+    if request.user.user_type == 'Reception':
+        return redirect("appointment_list_receptionist")
+    else:
+        return redirect('appointment_list_doctor')
 
 
 @login_required
