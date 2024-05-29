@@ -30,11 +30,11 @@
         </div>
     </div>
     {% endif %}
-    <div class="row">
+    <div class="">
 
-        <div class="col-md-12 px-3">
+        <div class="px-3">
 
-            <div class="card card-primar table-responsive w-100">
+            <div class="card card-primar">
                 <div class="card-header">
                     <span>Patiets Records</span>
                     <div class="card-tools d-flex">
@@ -45,48 +45,50 @@
                     </div>
 
                 </div>
-                <table class="table table-bordered table-hover dataTable">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Profile</th>
-                        <th>UserName</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Mobile</th>
-                        <th>Last Login</th>
-                        <th class="text-center">Action</th>
+                <div class="card-body table-responsive">
+                    <table class="table table-hover dataTable" id="plist">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Profile</th>
+                            <th>UserName</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Mobile</th>
+                            <th>Last Login</th>
+                            <th class="text-center">Action</th>
 
 
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for patient in patients %}
-                    <tr class="hov">
-                        <td>{{patient.admin.id}}</td>
-                        <td><img src="{{patient.profile_pic.url}}" class="" width="35" height="35" alt=""></td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for patient in patients %}
+                        <tr class="hov">
+                            <td>{{patient.admin.id}}</td>
+                            <td><img src="{{patient.profile_pic.url}}" class="" width="35" height="35" alt=""></td>
 
-                        <td>{{patient.admin.username}}</td>
-                        <td> {% if patient.first_name %} {{patient.first_name}} {% endif %} </td>
-                        <td> {% if patient.last_name %} {{patient.last_name}} {% endif %} </td>
+                            <td>{{patient.admin.username}}</td>
+                            <td> {% if patient.first_name %} {{patient.first_name}} {% endif %} </td>
+                            <td> {% if patient.last_name %} {{patient.last_name}} {% endif %} </td>
 
-                        <td> {% if patient.admin.email %} {{patient.admin.email}} {% endif %} </td>
-                        <td> {% if patient.phone_number %} {{patient.phone_number}} {% endif %} </td>
+                            <td> {% if patient.admin.email %} {{patient.admin.email}} {% endif %} </td>
+                            <td> {% if patient.phone_number %} {{patient.phone_number}} {% endif %} </td>
 
-                        <td>{{patient.admin.last_login}}</td>
+                            <td>{{patient.admin.last_login}}</td>
 
-                        <td>
-                            <a href="{% url 'edit_patient' patient.admin.id %}" class="btn btn-sm btn-success">Edit</a>
-                            <a href="{% url 'delete_patient' patient.id %}" class="btn btn-sm btn-danger">Delete</a>
-                            {% comment %} <a href="{% url 'patient_record' patient.id %}" class="btn btn-sm btn-warning">View</a> {% endcomment %}
-                        </td>
+                            <td>
+                                <a href="{% url 'edit_patient' patient.admin.id %}" class="btn btn-sm btn-success">Edit</a>
+                                <a href="{% url 'delete_patient' patient.id %}" class="btn btn-sm btn-danger">Delete</a>
+                                {% comment %} <a href="{% url 'patient_record' patient.id %}" class="btn btn-sm btn-warning">View</a> {% endcomment %}
+                            </td>
 
-                    </tr>
-                    {% endfor %}
-                    </tbody>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
 
-                </table>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

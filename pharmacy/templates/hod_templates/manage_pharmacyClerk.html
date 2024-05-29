@@ -35,8 +35,8 @@
     </div>
     {% endif %}
 
-    <div class="row">
-        <div class="col-md-12">
+    <div class="">
+        <div class="">
 
 
             <div class="card card-primary sc">
@@ -57,51 +57,53 @@
 
                     </div>
                 </div>
-                <table class="table" id="plist">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>pic</th>
-                            <th>UserName</th>
-                            <th>FirstName</th>
-                            <th>LastName</th>
-                            <th>Email</th>
+                <div class="card-body table-responsive">
+                    <table class="table" id="plist">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>pic</th>
+                                <th>UserName</th>
+                                <th>FirstName</th>
+                                <th>LastName</th>
+                                <th>Email</th>
 
-                            <th>Mobile</th>
+                                <th>Mobile</th>
 
-                            <th>Address</th>
-                            <th>last Login</th>
-                            <th class="text-center">Action</th>
+                                <th>Address</th>
+                                <th>last Login</th>
+                                <th class="text-center">Action</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for staff in staffs %}
-                        <tr class="hov">
-                            <td>{{staff.id}}</td>
-                            <td> <img src="{{staff.profile_pic.url}}" class="" width="35" height="35" alt=""></td>
-                            <td>{{staff.admin.username}}</td>
-                            <td>{{staff.admin.first_name}}</td>
-                            <td>{{staff.admin.last_name}}</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for staff in staffs %}
+                            <tr class="hov">
+                                <td>{{staff.id}}</td>
+                                <td> <img src="{{staff.profile_pic.url}}" class="" width="35" height="35" alt=""></td>
+                                <td>{{staff.admin.username}}</td>
+                                <td>{{staff.admin.first_name}}</td>
+                                <td>{{staff.admin.last_name}}</td>
 
-                            <td>{{staff.admin.email}}</td>
-                            <td>{{staff.mobile}}</td>
+                                <td>{{staff.admin.email}}</td>
+                                <td>{{staff.mobile}}</td>
 
-                            <td>{{staff.address}}</td>
-                            <td>{{staff.admin.last_login}}</td>
-                            <td><a href="{% url 'delete_clerk' staff.id %}" class="btn btn-sm btn-danger">Delete</a>
-                                <a href="{% url 'edit_clerk' staff.admin.id %}" class="btn btn-sm btn-success">Edit</a>
-                            </td>
+                                <td>{{staff.address}}</td>
+                                <td>{{staff.admin.last_login}}</td>
+                                <td><a href="{% url 'delete_clerk' staff.id %}" class="btn btn-sm btn-danger">Delete</a>
+                                    <a href="{% url 'edit_clerk' staff.admin.id %}" class="btn btn-sm btn-success">Edit</a>
+                                </td>
 
 
-                            <!-- <td>{{patient.dob|date:"F   d, Y"}}</td>
-                        <td>{{patient.mobile}}</td> -->
-                            <!-- <td>{{patient.date_admitted}}</td> -->
+                                <!-- <td>{{patient.dob|date:"F   d, Y"}}</td>
+                            <td>{{patient.mobile}}</td> -->
+                                <!-- <td>{{patient.date_admitted}}</td> -->
 
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
