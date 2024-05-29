@@ -92,9 +92,10 @@ class PatientForm(forms.Form):
     email = forms.EmailField(
         label="Email",
         max_length=50,
+        required=False, 
         widget=forms.EmailInput(attrs={"class": "form-control"}),
     )
-    gender_list = (("Male", "Male"), ("Female", "Female"))
+    gender_list = (("Male", "Male"), ("Female", "Female"), ("Other", "Other"))
     gender = forms.ChoiceField(
         label="Gender",
         choices=gender_list,
@@ -142,11 +143,11 @@ class PatientForm(forms.Form):
     
 
     def clean_email(self):
-        email = self.cleaned_data["email"]
-        if not email:
-            raise ValidationError("Email field is required")
-        if CustomUser.objects.filter(email=email).exists():
-            raise ValidationError("Email already exist")
+        email = self.cleaned_data.get("email")
+        # if not email:
+        #     raise ValidationError("Email field is required")
+        # if CustomUser.objects.filter(email=email).exists():
+        #     raise ValidationError("Email already exist")
         return email
 
     def clean_firstName(self):
