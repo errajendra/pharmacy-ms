@@ -150,9 +150,52 @@ def createPatient(request):
 
 
 
-@login_required
+# @login_required
+# def createPatientNext(request):
+#     """ same as createPatient() additionaly it will redirected to Addmission form. """
+#     form = PatientForm()
+
+#     if request.method == "POST":
+#         form = PatientForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             try:
+#                 first_name = form.cleaned_data["first_name"]
+#                 last_name = form.cleaned_data["last_name"]
+#                 email = form.cleaned_data["email"]
+                
+#                 if CustomUser.objects.filter(username=email).exists():
+#                     messages.warning(request, "Email already exists")
+                    
+#                 else:
+#                     user = CustomUser.objects.create_user(
+#                         username=email,
+#                         email=email,
+#                         password=email,
+#                         first_name=first_name,
+#                         last_name=last_name,
+#                         user_type="Patients",
+#                     )
+#                     form_instance = user.patients
+#                     forms_ins = PatientModelForm(data=request.POST, instance=form_instance)
+#                     forms_ins.save()
+                
+#                     messages.success(request, email + " was Successfully Added")
+#                     return redirect(reverse("add_addmission") + '?patient='+f"{user.patients.id}")
+            
+#             except Exception as e:
+#                 messages.warning(request, f"{e}")
+#         else:
+#             form_error = f"{form.errors}"
+#             messages.warning(request, form_error)
+#     context = {
+#         "form": form, 
+#         "title": "Add Patient",
+#         "languages": Language.objects.all()
+#     }
+#     return render(request, "hod_templates/patient_form.html", context)
+
 def createPatientNext(request):
-    """ same as createPatient() additionaly it will redirected to Addmission form. """
+    """ Same as createPatient(), additionally it will be redirected to the Admission form. """
     form = PatientForm()
 
     if request.method == "POST":
@@ -161,32 +204,38 @@ def createPatientNext(request):
             try:
                 first_name = form.cleaned_data["first_name"]
                 last_name = form.cleaned_data["last_name"]
-                email = form.cleaned_data["email"]
-                
-                if CustomUser.objects.filter(username=email).exists():
+                email = form.cleaned_data.get("email")  # Use .get() to safely handle None
+
+                if email and CustomUser.objects.filter(username=email).exists():
                     messages.warning(request, "Email already exists")
-                    
                 else:
+                    if email:
+                        username = email
+                    else:
+                        latest_user_id = CustomUser.objects.latest("id").id if CustomUser.objects.exists() else 0
+                        username = f"p{latest_user_id + 1}"
                     user = CustomUser.objects.create_user(
-                        username=email,
+                        username=username,
                         email=email,
-                        password=email,
+                        password=email, 
                         first_name=first_name,
                         last_name=last_name,
                         user_type="Patients",
                     )
+
                     form_instance = user.patients
                     forms_ins = PatientModelForm(data=request.POST, instance=form_instance)
                     forms_ins.save()
-                
-                    messages.success(request, email + " was Successfully Added")
-                    return redirect(reverse("add_addmission") + '?patient='+f"{user.patients.id}")
-            
+
+                    messages.success(request, f"{username} was Successfully Added")
+                    return redirect(reverse("add_addmission") + '?patient=' + f"{user.patients.id}")
+
             except Exception as e:
                 messages.warning(request, f"{e}")
         else:
             form_error = f"{form.errors}"
             messages.warning(request, form_error)
+
     context = {
         "form": form, 
         "title": "Add Patient",
