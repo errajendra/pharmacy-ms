@@ -1,0 +1,98 @@
+{% extends 'doctor_templates/base_template.html' %}
+
+{% block page_title %}
+<h5>Prescribe</h5>
+{% endblock page_title %}
+
+{% block link %}
+{% endblock link %}
+
+{% block main_content %}
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Prescribe Patient</h3>
+                </div>
+                <form method="POST" style="font-size:13px;" class="px-3 py-2">
+                    {% csrf_token %}
+                    {% if messages %}
+                    <div class="form-group">
+                        <div class="col-12">
+                            {% for message in messages %}
+                            {% if message.tags == "error" %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% elif message.tags == "success" %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="{{ form.patient_id.id_for_label }}">{{ form.patient_id.label }}</label>
+                                {{ form.patient_id }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.drug_name.id_for_label }}">{{ form.drug_name.label }}</label>
+                                {{ form.drug_name }}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            
+                            <div class="col-md-6">
+                                <label for="{{ form.route.id_for_label }}">{{ form.route.label }}</label>
+                                {{ form.route }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.dose.id_for_label }}">{{ form.dose.label }}</label>
+                                {{ form.dose }}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                           
+                            <div class="col-md-6">
+                                <label for="{{ form.intake.id_for_label }}">{{ form.intake.label }}</label>
+                                {{ form.intake }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.duration.id_for_label }}">{{ form.duration.label }}</label>
+                                {{ form.duration }}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            
+                            <div class="col-md-6">
+                                <label for="{{ form.quantity.id_for_label }}">{{ form.quantity.label }}</label>
+                                {{ form.quantity }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.instruction.id_for_label }}">{{ form.instruction.label }}</label>
+                                {{ form.instruction }}
+                            </div>
+                        </div>
+                       
+                        
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Prescribe</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock main_content %}

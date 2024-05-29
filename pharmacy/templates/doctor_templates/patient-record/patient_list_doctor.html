@@ -71,7 +71,7 @@
                             <td class="text-center">{{ addmission.reason }}</td>
                             <td class="d-flex justify-content-center">
                                 <a href="{% url 'update_patient_record_doctor' addmission.id %}" class="btn btn-sm btn-success">Update</a> &nbsp;
-                                <a href="javascript:void(0);" data-target="#admissionDetailModal" data-id="{{ addmission.id }}" data-url="{% url 'view_patient_details' %}" class="btn btn-sm btn-primary view-details-btn"><i class="fas fa-eye"></i></a> &nbsp;
+                                {% comment %} <a href="javascript:void(0);" data-target="#admissionDetailModal" data-id="{{ addmission.id }}" data-url="{% url 'view_patient_details' %}" class="btn btn-sm btn-primary view-details-btn"><i class="fas fa-eye"></i></a> &nbsp; {% endcomment %}
                             </td>
                         </tr>
                         {% endfor %}

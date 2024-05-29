@@ -9,6 +9,7 @@ from .models import *
 from appointment.models import Appointment
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
+from django.urls import reverse
 
 def doctorHome(request): 
     prescip = Prescription.objects.all().count()
@@ -82,12 +83,13 @@ def addPrescription(request,pk):
     return render(request,'doctor_templates/prescribe_form.html',context)
 
 def patient_personalDetails(request,pk):
-    patient=Patients.objects.get(id=pk)
-    prescrip=patient.prescription_set.all()
+    patient=Addmission.objects.get(id=pk)
+    # patient=Patients.objects.get(id=pk)
+    # prescrip=addmission.prescription_set.all()
 
     context={
         "patient":patient,
-        "prescription":prescrip
+        # "prescription":prescrip
 
     }
     return render(request,'doctor_templates/patient_personalRecords.html',context)
@@ -221,7 +223,55 @@ def view_patient_details(request):
         except Exception as ex:
             return JsonResponse({'html': f'<p>Error: {str(ex)}</p>'}, status=500)
     return JsonResponse({'html': '<p>Invalid request.</p>'}, status=400)
-        
+
+
+@login_required
+def all_patient_record_doctor(request):
+    doctor = get_object_or_404(Doctor, admin=request.user)
+    patients = Addmission.objects.filter(doctor=doctor).order_by("-id")
+    context = {
+        "patients": patients,
+        "title": "Patient Record",
+    }
+    return render(request, "doctor_templates/prescription/all_patient_list.html", context)
+
+  
+@login_required  
+def view_patient_profile(request, id):
+    addmission = Addmission.objects.get(id=id)
+    doctor = Doctor.objects.get(id=addmission.doctor.id)
+    patient = Patients.objects.get(id=addmission.patient_id)
+    prescriptions = Prescription.objects.filter(patient_id=patient, doctor=doctor)
+    print(prescriptions)
+    context = {
+        "data":addmission,
+        "prescriptions":prescriptions
+    }
+    return render(request, "doctor_templates/prescription/patient_profile.html", context)
+ 
+@login_required 
+def add_prescription_patient(request, id):
+    addmission = get_object_or_404(Addmission, id=id)
+    patient = Patients.objects.get(id=addmission.patient_id)
+    doctor = Doctor.objects.get(id=addmission.doctor.id)
+    if request.method == 'POST':
+        form = PrescriptionForm(request.POST)
+        if form.is_valid():
+            prescription = form.save(commit=False)
+            prescription.patient_id = patient
+            prescription.doctor = doctor
+            prescription.save()
+            messages.success(request, 'Prescription added successfully')
+            return redirect(reverse('view_patient_profile', kwargs={'id': id}))
+    else:
+        form = PrescriptionForm()
+    
+    context = {
+        "form": form
+    }
+    return render(request, 'doctor_templates/prescription/add_prescription.html', context)
+
+
         
 @login_required
 def clinical_notes_doctor(request):

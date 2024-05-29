@@ -71,13 +71,12 @@
 
 
                             <td>
-                                <a href="{% url 'edit_nurse' staff.id %}" class="btn btn-sm btn-success">Edit</a>
+                                <a href="{% url 'edit_nurse' staff.id %}" class="btn btn-sm btn-success"> <i class="fa fa-edit"></i></a>
 
                                 <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModalCenter">
-                                    Delete
+                                    <i class="fa fa-trash"></i>
                                 </button>
-                                
                                 <!-- Modal -->
                                 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">

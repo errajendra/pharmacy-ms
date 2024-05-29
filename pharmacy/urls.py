@@ -171,6 +171,9 @@ urlpatterns=[
     path("doctor-patient-record/", DoctorViews.patient_record_doctor, name="patient_record_doctor"),
     path('update-patient-record/<int:id>/',DoctorViews.update_patient_record_doctor, name='update_patient_record_doctor'), 
     path('view-patient-details/', DoctorViews.view_patient_details, name='view_patient_details'),
+    path("doctor-all-patient-record/", DoctorViews.all_patient_record_doctor, name="all_patient_record_doctor"),
+    path("view-patient-profile/<int:id>/", DoctorViews.view_patient_profile, name="view_patient_profile"),
+    path("add-prescription-patient/<int:id>/", DoctorViews.add_prescription_patient, name="add_prescription_patient"),
     
     path("clinical-notes-doctor/", DoctorViews.clinical_notes_doctor, name="clinical_notes_doctor"),
     path("add-clinical-notes-doctor/", DoctorViews.add_clinical_note_doctor, name="add_clinical_note_doctor"),
