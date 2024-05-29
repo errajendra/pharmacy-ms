@@ -337,8 +337,8 @@ def createPathologist(request):
         # password = request.POST.get("password")
 
         try:
-            user = CustomUser.objects.create(
-                username=username,
+            user = CustomUser.objects.create_user(
+                username=email,
                 email=email,
                 password=email,
                 first_name=first_name,
@@ -357,7 +357,8 @@ def createPathologist(request):
 
     context = {"title": "Add Pathologist"}
 
-    return render(request, "hod_templates/add_pharmacyClerk.html", context)
+    # return render(request, "hod_templates/add_pharmacyClerk.html", context)
+    return render(request, "hod_templates/pathologist/add_pathologist.html", context)
 
 
 @login_required

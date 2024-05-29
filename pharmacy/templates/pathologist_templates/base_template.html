@@ -9,14 +9,14 @@
                 </li>
             </ul>
 
-            <h4 style="margin-left: 10px; margin-top: 5px;">Pathalogist Login </h4>
+            <h4 style="margin-left: 10px; margin-top: 5px;">Pathologist Login </h4>
 
             <ul class="navbar-nav ml-auto">
                 <li class="mx-3">
 
                     <a href="#" class="sm-submenu-with-image a">
                         <span>{{user.first_name}}  {{user.last_name}}</span>
-                        <img src="{{request.user.pathalogist.profile_pic.url}}" class="img-circle elevation-1" width="38" height="38" alt="">
+                        <img src="{{request.user.pathologist.profile_pic.url}}" class="img-circle elevation-1" width="38" height="38" alt="">
                         <span class="avatar-status avatar-sm-status avatar-status-success"></span>
                     </a>
                 </li>
@@ -46,7 +46,7 @@
 
         </nav>
 
-        {% include 'pathalogist_templates/sidebar.html'%}
+        {% include 'hod_templates/sidebar.html'%}
 
         <div class="content-wrapper">
             <div class="content-header">

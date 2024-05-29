@@ -22,8 +22,10 @@ def loginPage(request):
             user = CustomUser.objects.get(username=username)
             # user.set_password(password)
             # user.save()
+            print(user)
             if not user.check_password(password):
                 user = None
+                print(user)
         except:
             user = None
         if user:
@@ -38,7 +40,7 @@ def loginPage(request):
             elif user_type == 'Doctor':
                 return redirect('doctor_home')
             elif user_type == 'Pathologist':
-                return redirect('clerk_home')
+                return redirect('pathologist_home')
             elif user_type == 'Patients':
                 return redirect('patient_home')
             elif user_type == 'Reception':

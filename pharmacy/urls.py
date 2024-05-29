@@ -1,6 +1,6 @@
 from django.urls import path, include
 from .import HODViews
-from .import pharmacistViews,DoctorViews,views,patient_view,clerkViews, receptionistViews, nurseViews
+from .import pharmacistViews,DoctorViews,views,patient_view,clerkViews, receptionistViews, nurseViews, pathologistsViews
 from django.contrib.auth import views as auth_views
 
 
@@ -231,4 +231,6 @@ urlpatterns=[
     path('add-appointment-receptionist/',receptionistViews.add_appointment_receptionist,name='add_appointment_receptionist'),
     path('patient-record-receptionist/',receptionistViews.patient_list_receptionist,name='patient_list_receptionist'),
 
+    # Pathologists Template View urls
+    path('pathologist-home/',pathologistsViews.pathologistsHome,name='pathologist_home'),
 ]

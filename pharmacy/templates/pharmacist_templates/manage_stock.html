@@ -45,17 +45,15 @@
                             <!-- start expire -->
                             {% comment %} {% if expired %} {% endcomment %}
                             <!-- Checks expired drugs -->
-
+                            <td class="">
                             {% for expire in expired %} 
                             {% if expire.id == stock.id %}
-                                <td class="">
-                                    <div style="background-color: rgb(48, 58, 92);border-radius: 10px;font-size: 11px; width:120px;font-weight: 600;color: white;" class="d-flex justify-content-center ml-2 mt-2 px-1 "> EXPIRED </div>
-                                </td>
+                            <div style="background-color: rgb(48, 58, 92);border-radius: 10px;font-size: 11px; width:120px;font-weight: 600;color: white;" class="d-flex justify-content-center ml-2 mt-2 px-1 "> EXPIRED </div> 
                             {% else %}
-                                <td>{{stock.valid_to}}</td>
+                              {{stock.valid_to}}
                             {% endif %} 
                             {% endfor %}
-
+                        </td>
                             <td>
                                 {% if stock.status %}
                                 Active
