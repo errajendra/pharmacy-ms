@@ -427,7 +427,7 @@ class Addmission(BaseModel):
     )
     mlc_no = models.CharField(verbose_name="MLC No", max_length=48, null=True, blank=True)
     icd = models.CharField(verbose_name="ICD", max_length=48, null=True, blank=True)
-    provisonal_diagnosis = models.CharField(verbose_name="Provisonal Diagnosis", max_length=200, null=True, blank=True)
+    provisonal_diagnosis = models.CharField(verbose_name="Provisional Diagnosis", max_length=200, null=True, blank=True)
     final_diagnosis = models.CharField(verbose_name="Final Diagnosis", max_length=200, null=True, blank=True)
     summary_of_case = models.TextField(verbose_name="Summary of Case", null=True, blank=True)
     staff = models.ForeignKey(Nurse, on_delete=models.SET_NULL, verbose_name="Staff Nurse (Asigned)", null=True, blank=True)
