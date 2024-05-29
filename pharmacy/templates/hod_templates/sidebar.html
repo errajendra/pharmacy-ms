@@ -6,443 +6,427 @@
 }
 </style>
 {% if request.user.user_type == 'AdminHOD' %}
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <!-- Brand Logo -->
-    <a href="" class="brand-link ml-2">
-        {% if request.user.adminhod.profile_pic.url %}
-        <img src="{{request.user.adminhod.profile_pic.url}}" alt="" width="36" height="36"
-             class=" img-circle elevation-3" style="opacity: .8">
-        {% endif %}
-        <span class="brand-text font-weight-light mt-1 ml-3 mmust"><b>Wooshelf</b></span>
-    </a>
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <a href="" class="brand-link ml-2">
+            {% if request.user.adminhod.profile_pic.url %}
+            <img src="{{request.user.adminhod.profile_pic.url}}" alt="" width="36" height="36"
+                class=" img-circle elevation-3" style="opacity: .8">
+            {% endif %}
+            <span class="brand-text font-weight-light mt-1 ml-3 mmust"><b>Wooshelf</b></span>
+        </a>
 
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <!-- Sidebar user (optional) -->
-        {% comment %} <div class="user-panel mr-3">
-            <div class="pull-left image sm-submenu-with-image a ml-2 ">
-                <img src="{{request.user.adminhod.profile_pic.url}}" class="img-circle mt-2" width="36" height="36"
-                     alt="User Image">
-            </div>
-            <div class="pull-left info">
-                <p>{{user.first_name}} {{user.last_name}}</p>
-                <a href="#"><i class="fa fa-circle text-success "></i> Online</a>
-            </div>
-        </div> {% endcomment %}
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar user (optional) -->
+            {% comment %} <div class="user-panel mr-3">
+                <div class="pull-left image sm-submenu-with-image a ml-2 ">
+                    <img src="{{request.user.adminhod.profile_pic.url}}" class="img-circle mt-2" width="36" height="36"
+                        alt="User Image">
+                </div>
+                <div class="pull-left info">
+                    <p>{{user.first_name}} {{user.last_name}}</p>
+                    <a href="#"><i class="fa fa-circle text-success "></i> Online</a>
+                </div>
+            </div> {% endcomment %}
 
 
-        <!-- Sidebar Menu -->
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item {% if request.path == '/' %}active{% endif %}">
-                    <a href="{% url  'admin_dashboard' %}" class="nav-link">
-                        <i class="fas fa-tachometer-alt mr-2"></i>
-                        <p class="text-white">
-                            Dashboard
-                        </p>
-                    </a>
-                </li>
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <li class="nav-item {% if request.path == '/' %}active{% endif %}">
+                        <a href="{% url  'admin_dashboard' %}" class="nav-link">
+                            <i class="fas fa-tachometer-alt mr-2"></i>
+                            <p class="text-white">
+                                Dashboard
+                            </p>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item {% if request.resolver_match.url_name == 'all_patients' %}active{% endif %}">
+                        <a href="{% url 'all_patients'  %}" class="nav-link">
+                            <i class="fas fa-wheelchair mr-2"></i>
+                            <p>
+                                Manage Patient
+                            </p>
+                        </a>
+                    
+                    </li>
 
-                <li class="nav-item">
-                    <a class="nav-link collapsed text-truncate" href="#submenu2" data-toggle="collapse" data-target="#admissionMenu">
-                        <i class="fas fa-shopping-bag mr-2"></i>
-                        <span class="nav-link-text text-white">Admission</span>
-                        <i class="fas fa-angle-down text-white float-right"></i>
-                    </a>
-                    <div class="collapse {% if request.resolver_match.url_name == 'patient_form' or request.resolver_match.url_name == 'all_patients' or request.resolver_match.url_name == 'add_addmission' or request.resolver_match.url_name == 'manage_addmission' %}show{% endif %}" id="admissionMenu" aria-expanded="true">
-                        <ul class="flex-column nav pl-3">
-                            <li class="nav-item {% if request.resolver_match.url_name == 'patient_form' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'patient_form' %}">
-                                    <i class="fa fa-shopping-basket nav-icon"></i>
-                                    <span class="nav-link-text text-white">Add Patient</span>
+                    {% comment %} Appointment {% endcomment %}
+                    <li class="nav-item {% if request.path == '/appointment/admin-appointment-list/' %}active{% endif %}">
+                        <a href="{% url 'appointment_list_admin'  %}" class="nav-link">
+                            <i class="fas fa-calendar mr-2"></i>
+                            <p>
+                                Appointment
+                            </p>
+                        </a>
+                    
+                    </li>
+
+
+                    <li class="nav-item">
+                        <a class="nav-link collapsed text-truncate" href="#submenu2" data-toggle="collapse" data-target="#admissionMenu">
+                            <i class="fas fa-shopping-bag mr-2"></i>
+                            <span class="nav-link-text text-white">Admission</span>
+                            <i class="fas fa-angle-down text-white float-right"></i>
+                        </a>
+                        <div class="collapse {% if request.resolver_match.url_name == 'manage_ipd_admission' or request.resolver_match.url_name == 'add_addmission' or request.resolver_match.url_name == 'manage_addmission' %}show{% endif %}" id="admissionMenu" aria-expanded="true">
+                            <ul class="flex-column nav pl-3">
+
+                                
+                                <li class="nav-item {% if request.resolver_match.url_name == 'manage_addmission' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'manage_addmission' %}">
+                                        <i class="fa fa-shopping-basket nav-icon"></i>
+                                        <span class="nav-link-text text-white">OPD</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.resolver_match.url_name == 'manage_ipd_admission' %}active{% endif %}">
+                                    <a class="nav-link " href="{% url 'manage_ipd_admission' %}">
+                                        <i class="fa fa-bed nav-icon"></i>
+                                        <span class="nav-link-text text-white">IPD</span>
+                                    </a>
+                                </li>
+
+                                {% comment %} <li class="nav-item {% if request.resolver_match.url_name == 'patient_form' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'patient_form' %}">
+                                        <i class="fa fa-shopping-basket nav-icon"></i>
+                                        <span class="nav-link-text text-white">Add Patient</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.resolver_match.url_name == 'all_patients' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'all_patients' %}">
+                                        <i class="fa fa-shopping-basket nav-icon"></i>
+                                        <span class="nav-link-text text-white">Manage Patient</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.resolver_match.url_name == 'add_addmission' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'add_addmission' %}">
+                                        <i class="fa fa-shopping-basket nav-icon"></i>
+                                        <span class="nav-link-text text-white">Add Admission</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.resolver_match.url_name == 'manage_addmission' %}active{% endif %}">
+                                    <a class="nav-link " href="{% url 'manage_addmission' %}">
+                                        <i class="fa fa-shopping-basket nav-icon"></i>
+                                        <span class="nav-link-text text-white">Manage Admission</span>
+                                    </a>
+                                </li> {% endcomment %}
+                            </ul>
+                        </div>
+                    </li>
+                    
+                    
+                    
+
+                    {% comment %} Vender {% endcomment %}
+                    {% comment %} <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-address-book mr-2"></i>
+                            <p>
+                                Vender
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+
+                            <li class="nav-item pl-2">
+                                <a href="{% url 'add_vender' %}" class="nav-link">
+                                    <i class="fas fa-user-plus"></i>
+                                    <p class="pl-2">add Vender</p>
                                 </a>
                             </li>
-                            <li class="nav-item {% if request.resolver_match.url_name == 'all_patients' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'all_patients' %}">
-                                    <i class="fa fa-shopping-basket nav-icon"></i>
-                                    <span class="nav-link-text text-white">Manage Patient</span>
+                            <li class="nav-item pl-2">
+                                <a href="{% url 'manage_vender'  %}" class="nav-link">
+                                    <i class="fas fa-th"></i>
+                                    <p class="pl-2">Manage Vender</p>
                                 </a>
                             </li>
-                            <li class="nav-item {% if request.resolver_match.url_name == 'add_addmission' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'add_addmission' %}">
-                                    <i class="fa fa-shopping-basket nav-icon"></i>
-                                    <span class="nav-link-text text-white">Add Admission</span>
-                                </a>
-                            </li>
-                            <li class="nav-item {% if request.resolver_match.url_name == 'manage_addmission' %}active{% endif %}">
-                                <a class="nav-link " href="{% url 'manage_addmission' %}">
-                                    <i class="fa fa-shopping-basket nav-icon"></i>
-                                    <span class="nav-link-text text-white">Manage Admission</span>
-                                </a>
-                            </li>
+
                         </ul>
-                    </div>
-                </li>
-                
-                
-                
+                    </li> {% endcomment %}
 
-                {% comment %} Appointment {% endcomment %}
-                <li class="nav-item {% if request.path == '/appointment/admin-appointment-list/' %}active{% endif %}">
-                    <a href="{% url 'appointment_list_admin'  %}" class="nav-link">
-                        <i class="fas fa-calendar mr-2"></i>
-                        <p>
-                            Appointment
-                            {% comment %} <i class="right fas fa-angle-left"></i> {% endcomment %}
-                        </p>
-                    </a>
-                    {% comment %} <ul class="nav nav-treeview">
+                    
+                    {% comment %} Role Management {% endcomment %}
+                    <li class="nav-item">
+                        <a class="nav-link collapsed text-truncate" href="#submenu2" data-toggle="collapse" data-target="#staffMenu">
+                            <i class="fas fa-address-book mr-2"></i>
+                            <span class="nav-link-text text-white">Staff</span>
+                            <i class="fas fa-angle-down text-white float-right"></i>
+                        </a>
+                        <div class="collapse {% if request.resolver_match.url_name == 'manage_doctor' or request.resolver_match.url_name == 'nurse_list' or request.resolver_match.url_name == 'receptionist_list' or request.resolver_match.url_name == 'manage_Pathologist' or request.resolver_match.url_name == 'manage_pharmacist' %}show{% endif %}" id="staffMenu" aria-expanded="true">
+                            <ul class="flex-column nav pl-3">
+                                <li class="nav-item {% if request.resolver_match.url_name == 'manage_doctor' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'manage_doctor' %}">
+                                        <i class="fas fa-user-md mr-2"></i>
+                                        <span class="nav-link-text text-white">Doctor</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.resolver_match.url_name == 'nurse_list' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'nurse_list' %}">
+                                        <i class="fas fa-user-nurse mr-2"></i>
+                                        <span class="nav-link-text text-white">Nurse</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.resolver_match.url_name == 'receptionist_list' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'receptionist_list' %}">
+                                        <i class="fas fa-laptop-medical mr-2"></i>
+                                        <span class="nav-link-text text-white">Reception</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.resolver_match.url_name == 'manage_Pathologist' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'manage_Pathologist' %}">
+                                        <i class="fas fa-microscope mr-2"></i>
+                                        <span class="nav-link-text text-white">Pathologist</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.resolver_match.url_name == 'manage_pharmacist' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'manage_pharmacist' %}">
+                                        <i class="fas fa-capsules mr-2"></i>
+                                        <span class="nav-link-text text-white">Pharmacist</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    
 
-                        <li class="nav-item pl-2">
-                            <a href="{% url 'new_appointment_admin' %}" class="nav-link">
-                                <i class="fas fa-user-plus"></i>
-                                <p class="pl-2">Book Appointment</p>
-                            </a>
-                        </li>
-                        <li class="nav-item pl-2">
-                            <a href="{% url 'appointment_list_admin'  %}" class="nav-link">
-                                <i class="fas fa-th"></i>
-                                <p class="pl-2">Manage Appointment</p>
-                            </a>
-                        </li>
+                    {% comment %} <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-briefcase-medical mr-2"></i>
+                            <p>
+                                Doctor
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
 
-                    </ul> {% endcomment %}
-                </li>
-                
-                {% comment %} <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-address-book mr-2"></i>
-                        <p>
-                            Pharmacist
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-
-                        <li class="nav-item pl-2">
-                            <a href="{% url 'add_pharmacist' %}" class="nav-link">
-                                <i class="fas fa-user-plus"></i>
-                                <p class="pl-2">Add Pharmacist</p>
-                            </a>
-                        </li>
-                        <li class="nav-item pl-2">
-                            <a href="{% url 'manage_pharmacist'  %}" class="nav-link">
-                                <i class="fas fa-th"></i>
-                                <p class="pl-2">Manage Pharmacist</p>
-                            </a>
-                        </li>
-
-                    </ul>
-                </li> {% endcomment %}
-
-                {% comment %} Vender {% endcomment %}
-                {% comment %} <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-address-book mr-2"></i>
-                        <p>
-                            Vender
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-
-                        <li class="nav-item pl-2">
-                            <a href="{% url 'add_vender' %}" class="nav-link">
-                                <i class="fas fa-user-plus"></i>
-                                <p class="pl-2">add Vender</p>
-                            </a>
-                        </li>
-                        <li class="nav-item pl-2">
-                            <a href="{% url 'manage_vender'  %}" class="nav-link">
-                                <i class="fas fa-th"></i>
-                                <p class="pl-2">Manage Vender</p>
-                            </a>
-                        </li>
-
-                    </ul>
-                </li> {% endcomment %}
-
-                
-                {% comment %} Role Management {% endcomment %}
-                <li class="nav-item">
-                    <a class="nav-link collapsed text-truncate" href="#submenu2" data-toggle="collapse" data-target="#staffMenu">
-                        <i class="fas fa-address-book mr-2"></i>
-                        <span class="nav-link-text text-white">Staff</span>
-                        <i class="fas fa-angle-down text-white float-right"></i>
-                    </a>
-                    <div class="collapse {% if request.resolver_match.url_name == 'manage_doctor' or request.resolver_match.url_name == 'nurse_list' or request.resolver_match.url_name == 'receptionist_list' or request.resolver_match.url_name == 'manage_Pathologist' or request.resolver_match.url_name == 'manage_pharmacist' %}show{% endif %}" id="staffMenu" aria-expanded="true">
-                        <ul class="flex-column nav pl-3">
-                            <li class="nav-item {% if request.resolver_match.url_name == 'manage_doctor' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'manage_doctor' %}">
-                                    <i class="fas fa-user-md mr-2"></i>
-                                    <span class="nav-link-text text-white">Doctor</span>
+                            <li class="nav-item pl-2">
+                                <a href="{% url 'add_doctor' %}" class="nav-link">
+                                    <i class="fas fa-user-plus"></i>
+                                    <p class="pl-2">Add Doctor</p>
                                 </a>
                             </li>
-                            <li class="nav-item {% if request.resolver_match.url_name == 'nurse_list' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'nurse_list' %}">
-                                    <i class="fas fa-user-nurse mr-2"></i>
-                                    <span class="nav-link-text text-white">Nurse</span>
+                            <li class="nav-item pl-2">
+                                <a href="{% url 'manage_doctor'  %}" class="nav-link">
+                                    <i class="fas fa-th"></i>
+                                    <p class="pl-2">Manage Doctor</p>
                                 </a>
                             </li>
-                            <li class="nav-item {% if request.resolver_match.url_name == 'receptionist_list' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'receptionist_list' %}">
-                                    <i class="fas fa-laptop-medical mr-2"></i>
-                                    <span class="nav-link-text text-white">Reception</span>
-                                </a>
-                            </li>
-                            <li class="nav-item {% if request.resolver_match.url_name == 'manage_Pathologist' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'manage_Pathologist' %}">
-                                    <i class="fas fa-microscope mr-2"></i>
-                                    <span class="nav-link-text text-white">Pathologist</span>
-                                </a>
-                            </li>
-                            <li class="nav-item {% if request.resolver_match.url_name == 'manage_pharmacist' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'manage_pharmacist' %}">
-                                    <i class="fas fa-capsules mr-2"></i>
-                                    <span class="nav-link-text text-white">Pharmacist</span>
-                                </a>
-                            </li>
+
                         </ul>
-                    </div>
-                </li>
-                
+                    </li> {% endcomment %}
 
-                {% comment %} <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-briefcase-medical mr-2"></i>
-                        <p>
-                            Doctor
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
+                    {% comment %} Department {% endcomment %}
+                    <li class="nav-item">
+                        <a class="nav-link collapsed text-truncate" href="#submenu1" data-toggle="collapse" data-target="#departmentMenu">
+                            <i class="fas fa-briefcase-medical mr-2"></i>
+                            <span class="nav-link-text text-white">Department</span>
+                            <i class="fas fa-angle-down text-white float-right"></i>
+                        </a>
+                        <div class="collapse {% if request.resolver_match.url_name == 'add_department' or request.resolver_match.url_name == 'manage_department' %}show{% endif %}" id="departmentMenu" aria-expanded="true">
+                            <ul class="flex-column nav pl-3">
+                                <li class="nav-item {% if request.resolver_match.url_name == 'add_department' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'add_department' %}">
+                                        <i class="fas fa-user-plus mr-2"></i>
+                                        <span class="nav-link-text text-white">Add Department</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.resolver_match.url_name == 'manage_department' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'manage_department' %}">
+                                        <i class="fas fa-th mr-2"></i>
+                                        <span class="nav-link-text text-white">Manage Department</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    
+                    {% comment %} <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-chalkboard-teacher mr-2"></i>
+                            <p>
+                                Pathologist
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
 
-                        <li class="nav-item pl-2">
-                            <a href="{% url 'add_doctor' %}" class="nav-link">
-                                <i class="fas fa-user-plus"></i>
-                                <p class="pl-2">Add Doctor</p>
-                            </a>
-                        </li>
-                        <li class="nav-item pl-2">
-                            <a href="{% url 'manage_doctor'  %}" class="nav-link">
-                                <i class="fas fa-th"></i>
-                                <p class="pl-2">Manage Doctor</p>
-                            </a>
-                        </li>
-
-                    </ul>
-                </li> {% endcomment %}
-
-                {% comment %} Department {% endcomment %}
-                <li class="nav-item">
-                    <a class="nav-link collapsed text-truncate" href="#submenu1" data-toggle="collapse" data-target="#departmentMenu">
-                        <i class="fas fa-briefcase-medical mr-2"></i>
-                        <span class="nav-link-text text-white">Department</span>
-                        <i class="fas fa-angle-down text-white float-right"></i>
-                    </a>
-                    <div class="collapse {% if request.resolver_match.url_name == 'add_department' or request.resolver_match.url_name == 'manage_department' %}show{% endif %}" id="departmentMenu" aria-expanded="true">
-                        <ul class="flex-column nav pl-3">
-                            <li class="nav-item {% if request.resolver_match.url_name == 'add_department' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'add_department' %}">
-                                    <i class="fas fa-user-plus mr-2"></i>
-                                    <span class="nav-link-text text-white">Add Department</span>
+                            <li class="nav-item pl-2">
+                                <a href="{% url 'add_Pathologist' %}" class="nav-link">
+                                    <i class="fas fa-user-plus"></i>
+                                    <p class="pl-2">Add Pathologist</p>
                                 </a>
                             </li>
-                            <li class="nav-item {% if request.resolver_match.url_name == 'manage_department' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'manage_department' %}">
-                                    <i class="fas fa-th mr-2"></i>
-                                    <span class="nav-link-text text-white">Manage Department</span>
+                            <li class="nav-item pl-2">
+                                <a href="{% url 'manage_Pathologist'  %}" class="nav-link">
+                                    <i class="fas fa-th"></i>
+
+                                    <p class="pl-2">Manage Pathologist</p>
                                 </a>
                             </li>
+
                         </ul>
-                    </div>
-                </li>
-                
-                {% comment %} <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-chalkboard-teacher mr-2"></i>
-                        <p>
-                            Pathologist
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-
-                        <li class="nav-item pl-2">
-                            <a href="{% url 'add_Pathologist' %}" class="nav-link">
-                                <i class="fas fa-user-plus"></i>
-                                <p class="pl-2">Add Pathologist</p>
-                            </a>
-                        </li>
-                        <li class="nav-item pl-2">
-                            <a href="{% url 'manage_Pathologist'  %}" class="nav-link">
-                                <i class="fas fa-th"></i>
-
-                                <p class="pl-2">Manage Pathologist</p>
-                            </a>
-                        </li>
-
-                    </ul>
-                </li> {% endcomment %}
+                    </li> {% endcomment %}
 
 
-                <li class="nav-item">
-                    <a class="nav-link collapsed text-truncate" href="#submenuStock" data-toggle="collapse" data-target="#stockMenu">
-                        <i class="fas fa-layer-group mr-2"></i>
-                        <span class="nav-link-text text-white">Stocked Medicines</span>
-                        <i class="fas fa-angle-down text-white float-right"></i>
-                    </a>
-                    <div class="collapse {% if request.path == '/admin_user/manage_stock/' or request.path == '/admin_user/add_stock/' or request.path == '/admin_user/add_category/' or request.path == '/admin_user/manage_category/' or request.path == '/admin_user/manage_manufacturer/' or request.path == '/admin_user/manage_vender/' or request.path == '/admin_user/manage_drug_type/' or request.path == '/admin_user/manage-stock-expired/' or request.path == '/admin_user/add-medines-bulk-by-csv/' or request.path == '/admin_user/manage-inactive-stocks/' or request.path == '/admin_user/manage_hospital_item/' %}show{% endif %}" id="stockMenu" aria-expanded="true">
-                        <ul class="flex-column nav pl-3">
-                            <li class="nav-item {% if request.path == '/admin_user/add_stock/' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'add_stock' %}">
-                                    <i class="fas fa-capsules"></i>
-                                    <span class="nav-link-text text-white">Add Medicines</span>
-                                </a>
-                            </li>
-                            <li class="nav-item {% if request.path == '/admin_user/manage_stock/' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'manage_stock' %}">
-                                    <i class="fas fa-capsules"></i>
-                                    <span class="nav-link-text text-white">Manage Medicines</span>
-                                </a>
-                            </li>
-                            <li class="nav-item {% if request.path == '/admin_user/manage-stock-expired/' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'manage_stock_expired' %}">
-                                    <i class="fas fa-capsules"></i>
-                                    <span class="nav-link-text text-white">Expired Medicines</span>
-                                </a>
-                            </li>
-                            <li class="nav-item {% if request.path == '/admin_user/manage-inactive-stocks/' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'manage_inactive_stock' %}">
-                                    <i class="fas fa-capsules"></i>
-                                    <span class="text-white" style="font-size: 13px;">Medicines for Approval</span>
-                                </a>
-                            </li>
-                            <li class="nav-item {% if request.path == '/admin_user/manage_category/' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'manage_category' %}">
-                                    <i class="fas fa-pills"></i>
-                                    <span class="nav-link-text text-white">Category</span>
-                                </a>
-                            </li>
-                            <li class="nav-item {% if request.path == '/admin_user/manage_manufacturer/' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'manage_manufacturer' %}">
-                                    <i class="fas fa-pills"></i>
-                                    <span class="nav-link-text text-white">Manufacturer</span>
-                                </a>
-                            </li>
-                            <li class="nav-item {% if request.path == '/admin_user/manage_vender/' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'manage_vender' %}">
-                                    <i class="fas fa-pills"></i>
-                                    <span class="nav-link-text text-white">Vender</span>
-                                </a>
-                            </li>
-                            <li class="nav-item {% if request.path == '/admin_user/manage_drug_type/' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'manage_drug_type' %}">
-                                    <i class="fas fa-pills"></i>
-                                    <span class="nav-link-text text-white">Product Type</span>
-                                </a>
-                            </li>
-                            <li class="nav-item {% if request.path == '/admin_user/manage_hospital_item/' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'manage_hospital_item' %}">
-                                    <i class="fas fa-pills"></i>
-                                    <span class="nav-link-text text-white">Hospital Items</span>
-                                </a>
-                            </li>
-                            <li class="nav-item {% if request.path == '/admin_user/add-medines-bulk-by-csv/' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'upload_medicine_bulk_by_csv' %}">
-                                    <i class="fas fa-upload"></i>
-                                    <span class="nav-link-text text-white">Bulk Upload</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link collapsed text-truncate" href="#submenuReport" data-toggle="collapse" data-target="#reportMenu">
-                        <i class="fas fa-layer-group mr-2"></i>
-                        <span class="d-none d-sm-inline text-white">Report</span>
-                        <i class="fas fa-angle-down text-white float-right"></i>
-                    </a>
-                    <div class="collapse {% if request.path == '/admin_user/medicine-detailed-history/' %}show{% endif %}" id="reportMenu">
-                        <ul class="flex-column nav pl-3">
-                            <li class="nav-item {% if request.path == '/admin_user/medicine-detailed-history/' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'medicine_details_history' %}">
-                                    <i class="fas fa-upload"></i>
-                                    <span class="nav-link-text text-white">Medicine Report</span>
-                                </a>
-                            </li>
-                            <!-- Commented section for future use if needed -->
-                            <!--
-                            <li class="nav-item {% if request.path == '/admin_user/medicine-detailed-history/' or request.path == '/manage_stock2/' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'manage_stock2' %}">
-                                    <i class="fas fa-upload"></i>
-                                    <span class="nav-link-text">Sell Invoice</span>
-                                </a>
-                            </li>
-                            -->
-                        </ul>
-                    </div>
-                </li>
-                
+                    <li class="nav-item">
+                        <a class="nav-link collapsed text-truncate" href="#submenuStock" data-toggle="collapse" data-target="#stockMenu">
+                            <i class="fas fa-layer-group mr-2"></i>
+                            <span class="nav-link-text text-white">Stocked Medicines</span>
+                            <i class="fas fa-angle-down text-white float-right"></i>
+                        </a>
+                        <div class="collapse {% if request.path == '/admin_user/manage_stock/' or request.path == '/admin_user/add_stock/' or request.path == '/admin_user/add_category/' or request.path == '/admin_user/manage_category/' or request.path == '/admin_user/manage_manufacturer/' or request.path == '/admin_user/manage_vender/' or request.path == '/admin_user/manage_drug_type/' or request.path == '/admin_user/manage-stock-expired/' or request.path == '/admin_user/add-medines-bulk-by-csv/' or request.path == '/admin_user/manage-inactive-stocks/' or request.path == '/admin_user/manage_hospital_item/' %}show{% endif %}" id="stockMenu" aria-expanded="true">
+                            <ul class="flex-column nav pl-3">
+                                <li class="nav-item {% if request.path == '/admin_user/add_stock/' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'add_stock' %}">
+                                        <i class="fas fa-capsules"></i>
+                                        <span class="nav-link-text text-white">Add Medicines</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.path == '/admin_user/manage_stock/' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'manage_stock' %}">
+                                        <i class="fas fa-capsules"></i>
+                                        <span class="nav-link-text text-white">Manage Medicines</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.path == '/admin_user/manage-stock-expired/' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'manage_stock_expired' %}">
+                                        <i class="fas fa-capsules"></i>
+                                        <span class="nav-link-text text-white">Expired Medicines</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.path == '/admin_user/manage-inactive-stocks/' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'manage_inactive_stock' %}">
+                                        <i class="fas fa-capsules"></i>
+                                        <span class="text-white" style="font-size: 13px;">Medicines for Approval</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.path == '/admin_user/manage_category/' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'manage_category' %}">
+                                        <i class="fas fa-pills"></i>
+                                        <span class="nav-link-text text-white">Category</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.path == '/admin_user/manage_manufacturer/' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'manage_manufacturer' %}">
+                                        <i class="fas fa-pills"></i>
+                                        <span class="nav-link-text text-white">Manufacturer</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.path == '/admin_user/manage_vender/' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'manage_vender' %}">
+                                        <i class="fas fa-pills"></i>
+                                        <span class="nav-link-text text-white">Vender</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.path == '/admin_user/manage_drug_type/' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'manage_drug_type' %}">
+                                        <i class="fas fa-pills"></i>
+                                        <span class="nav-link-text text-white">Product Type</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.path == '/admin_user/manage_hospital_item/' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'manage_hospital_item' %}">
+                                        <i class="fas fa-pills"></i>
+                                        <span class="nav-link-text text-white">Hospital Items</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.path == '/admin_user/add-medines-bulk-by-csv/' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'upload_medicine_bulk_by_csv' %}">
+                                        <i class="fas fa-upload"></i>
+                                        <span class="nav-link-text text-white">Bulk Upload</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link collapsed text-truncate" href="#submenuReport" data-toggle="collapse" data-target="#reportMenu">
+                            <i class="fas fa-layer-group mr-2"></i>
+                            <span class="d-none d-sm-inline text-white">Report</span>
+                            <i class="fas fa-angle-down text-white float-right"></i>
+                        </a>
+                        <div class="collapse {% if request.path == '/admin_user/medicine-detailed-history/' %}show{% endif %}" id="reportMenu">
+                            <ul class="flex-column nav pl-3">
+                                <li class="nav-item {% if request.path == '/admin_user/medicine-detailed-history/' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'medicine_details_history' %}">
+                                        <i class="fas fa-upload"></i>
+                                        <span class="nav-link-text text-white">Medicine Report</span>
+                                    </a>
+                                </li>
+                                <!-- Commented section for future use if needed -->
+                                <!--
+                                <li class="nav-item {% if request.path == '/admin_user/medicine-detailed-history/' or request.path == '/manage_stock2/' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'manage_stock2' %}">
+                                        <i class="fas fa-upload"></i>
+                                        <span class="nav-link-text">Sell Invoice</span>
+                                    </a>
+                                </li>
+                                -->
+                            </ul>
+                        </div>
+                    </li>
+                    
 
 
-                <li class="nav-item">
-                    <a class="nav-link collapsed text-truncate" href="#submenuPurchasedInvoice" data-toggle="collapse" data-target="#purchasedInvoiceMenu">
-                        <i class="fas fa-file-invoice mr-2"></i>
-                        <span class="d-none d-sm-inline text-white">Purchased Invoice</span>
-                        <i class="fas fa-angle-down text-white float-right"></i>
-                    </a>
-                    <div class="collapse {% if request.resolver_match.url_name == 'new_purchase' or request.resolver_match.url_name == 'purchase_history' %}show{% endif %}" id="purchasedInvoiceMenu">
-                        <ul class="flex-column nav pl-3">
-                            <li class="nav-item {% if request.resolver_match.url_name == 'new_purchase' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'new_purchase' %}">
-                                    <i class="fas fa-circle"></i>
-                                    <span class="nav-link-text text-white">New Purchase</span>
-                                </a>
-                            </li>
-                            <li class="nav-item {% if request.resolver_match.url_name == 'purchase_history' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'purchase_history' %}">
-                                    <i class="fas fa-circle"></i>
-                                    <span class="nav-link-text text-white">Purchased History</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                
-                {% comment %} Clinical Notes {% endcomment %}
-                <li class="nav-item">
-                    <a class="nav-link collapsed text-truncate" href="#submenuClinicalNotes" data-toggle="collapse" data-target="#clinicalNotesMenu">
-                        <i class="fas fa-notes-medical mr-2"></i>
-                        <span class="d-none d-sm-inline text-white">Clinical Notes</span>
-                        <i class="fas fa-angle-down text-white float-right"></i>
-                    </a>
-                    <div class="collapse{% if request.resolver_match.url_name == 'add_clinical_note' or request.resolver_match.url_name == 'clinical_note_list' %}show{% endif %}" id="clinicalNotesMenu">
-                        <ul class="flex-column nav pl-3">
-                            <li class="nav-item {% if request.resolver_match.url_name == 'add_clinical_note' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'add_clinical_note' %}">
-                                    <i class="fas fa-plus"></i>
-                                    <span class="nav-link-text text-white">Add Clinical Notes</span>
-                                </a>
-                            </li>
-                            <li class="nav-item {% if request.resolver_match.url_name == 'clinical_note_list' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'clinical_note_list' %}">
-                                    <i class="fas fa-list"></i>
-                                    <span class="nav-link-text text-white">Clinical Notes List</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                
-            </ul>
-        </nav>
-        <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-</aside>
+                    <li class="nav-item">
+                        <a class="nav-link collapsed text-truncate" href="#submenuPurchasedInvoice" data-toggle="collapse" data-target="#purchasedInvoiceMenu">
+                            <i class="fas fa-file-invoice mr-2"></i>
+                            <span class="d-none d-sm-inline text-white">Purchased Invoice</span>
+                            <i class="fas fa-angle-down text-white float-right"></i>
+                        </a>
+                        <div class="collapse {% if request.resolver_match.url_name == 'new_purchase' or request.resolver_match.url_name == 'purchase_history' %}show{% endif %}" id="purchasedInvoiceMenu">
+                            <ul class="flex-column nav pl-3">
+                                <li class="nav-item {% if request.resolver_match.url_name == 'new_purchase' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'new_purchase' %}">
+                                        <i class="fas fa-circle"></i>
+                                        <span class="nav-link-text text-white">New Purchase</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.resolver_match.url_name == 'purchase_history' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'purchase_history' %}">
+                                        <i class="fas fa-circle"></i>
+                                        <span class="nav-link-text text-white">Purchased History</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    
+                    {% comment %} Clinical Notes {% endcomment %}
+                    <li class="nav-item">
+                        <a class="nav-link collapsed text-truncate" href="#submenuClinicalNotes" data-toggle="collapse" data-target="#clinicalNotesMenu">
+                            <i class="fas fa-notes-medical mr-2"></i>
+                            <span class="d-none d-sm-inline text-white">Clinical Notes</span>
+                            <i class="fas fa-angle-down text-white float-right"></i>
+                        </a>
+                        <div class="collapse{% if request.resolver_match.url_name == 'add_clinical_note' or request.resolver_match.url_name == 'clinical_note_list' %}show{% endif %}" id="clinicalNotesMenu">
+                            <ul class="flex-column nav pl-3">
+                                <li class="nav-item {% if request.resolver_match.url_name == 'add_clinical_note' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'add_clinical_note' %}">
+                                        <i class="fas fa-plus"></i>
+                                        <span class="nav-link-text text-white">Add Clinical Notes</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.resolver_match.url_name == 'clinical_note_list' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'clinical_note_list' %}">
+                                        <i class="fas fa-list"></i>
+                                        <span class="nav-link-text text-white">Clinical Notes List</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+    </aside>
 
 {% elif request.user.user_type == 'Doctor' %}
 

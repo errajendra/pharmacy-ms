@@ -187,13 +187,13 @@
                                 <label for="id_message" class="form-label">
                                             Message
                                 </label> 
-                                <textarea name="message" {% if instance %} value="{{instance.message}}" {% endif %} cols="40" rows="10" class="form-control textarea" id="id_message"></textarea> 
+                                <input name="message" {% if instance %} value="{{instance.message}}" {% endif %} cols="40" rows="10" class="form-control input" id="id_message"></input> 
                             </div> 
                             
                             <div id="div_id_address" class="mb-3 col-md-6 col-sm-12"> <label for="id_address" class="form-label">
                                             Address
                                         </label> 
-                                <textarea name="address" {% if instance %} value="{{instance.address}}" {% endif %}  cols="40" rows="10" class="form-control textarea" id="id_address"></textarea> 
+                                <input name="address" {% if instance %} value="{{instance.address}}" {% endif %}  cols="40" rows="10" class="form-control input" id="id_address"></input> 
                             </div> 
                             
                             {% comment %} <div id="div_id_token" class="mb-3"> <label for="id_token" class="form-label">

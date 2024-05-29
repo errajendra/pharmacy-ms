@@ -2,7 +2,10 @@ from django.http.response import JsonResponse
 from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
-from ..models import Stock, CustomUser as User, Cart, BillingPOS, HospitalItem
+from ..models import (
+    Stock, CustomUser as User, Cart, BillingPOS, HospitalItem, 
+    Addmission as Admission,
+)
 
 
 
@@ -237,3 +240,20 @@ def place_order_poc_billing(request):
             return JsonResponse({"status":500, "message": "Internal Server Error", "error": f"{ex}"}, status=500)
         
     return JsonResponse({"status":405, "message": "Method Not allowed"}, status=405)
+
+
+
+""" Transfer Purpose of Admission using Ajax post request"""
+def transfer_admission(request):
+    """ Cart Items of perticular user """
+    if request.method == 'POST':
+        admission = get_object_or_404(Admission, id=request.POST.get('admission_id', None))
+        admission.purpose = request.POST.get("transfer")
+        admission.save()
+        return JsonResponse(
+            {
+                "status": 200,
+                "message": "Success."
+            },
+            safe=False
+        )

@@ -1529,15 +1529,25 @@ def purchase_history(request):
 
 
 
-# Patient Addmission
+# Patient OPD Addmission
 @login_required
 def manageAddmission(request):
-    addmissions = Addmission.objects.all().order_by("-id")
+    addmissions = Addmission.objects.filter(purpose="OPD").order_by("-id")
     context = {
         "addmissions": addmissions,
-        "title": "Manage Patient Addmission",
+        "title": "Manage OPD Admission",
     }
-    return render(request, "hod_templates/manage_addmission.html", context)
+    return render(request, "hod_templates/admission/manage_addmission.html", context)
+
+
+@login_required
+def manageIpdAddmission(request):
+    admissions = Addmission.objects.filter(purpose="IPD/Bed Addmission").order_by("-id")
+    context = {
+        "admissions": admissions,
+        "title": "Manage IPD Admissions",
+    }
+    return render(request, "hod_templates/admission/manage-ipd.html", context)
 
 
 @login_required
@@ -1580,10 +1590,10 @@ def printAddmission(request, id):
     ad = get_object_or_404(Addmission, id=id)
     if ad.purpose == "IPD/Bed Addmission":
         context = {"title": "IPD/Bed Addmission Slip", "addmission": ad}
-        return render(request, "hod_templates/addmission_print.html", context)
+        return render(request, "hod_templates/admission/addmission_print.html", context)
 
-    context = {"title": "OPD RECIEPT", "addmission": ad}
-    return render(request, "hod_templates/addmission_opd_print.html", context)
+    context = {"title": "OPD RECEIPT", "addmission": ad}
+    return render(request, "hod_templates/admission/addmission_opd_print.html", context)
 
 
 @for_admin

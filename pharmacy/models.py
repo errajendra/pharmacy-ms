@@ -409,7 +409,7 @@ class Addmission(BaseModel):
     # open these bellow fields on  form when choose purpose of IPD or Bed Addmission option
     advanced_fees = models.FloatField(verbose_name="Advanced Fees", default=0)
     bht_no = models.CharField(verbose_name="BHT No", max_length=48, null=True, blank=True)
-    uid = models.CharField(max_length=15, verbose_name="Adhar Number", null=True, blank=True)
+    # uid = models.CharField(max_length=15, verbose_name="Adhar Number", null=True, blank=True)
     guardian = models.CharField(max_length=36, verbose_name="Guardian Name", null=True, blank=True)
     addmission_time = models.DateTimeField(verbose_name="Date & Time of Addmission", null=True, blank=True)
     discharge_time = models.DateTimeField(verbose_name="Date & Time of Discharge", null=True, blank=True)
@@ -432,6 +432,9 @@ class Addmission(BaseModel):
     summary_of_case = models.TextField(verbose_name="Summary of Case", null=True, blank=True)
     staff = models.ForeignKey(Nurse, on_delete=models.SET_NULL, verbose_name="Staff Nurse (Asigned)", null=True, blank=True)
     facilities = models.CharField(max_length=200, null=True, blank=True)
+    days = models.PositiveIntegerField(null=True, blank=True)
+    condition = models.CharField(verbose_name="Condition", max_length=200, null=True, blank=True)
+    usages = models.CharField(verbose_name="Usages", max_length=200, null=True, blank=True)
     result = models.CharField(
         choices=(
             ("Recovered", "Recovered"),
