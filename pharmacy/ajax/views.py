@@ -159,7 +159,7 @@ def place_order_poc_billing(request):
             data = request.POST
             message = "OK"
             
-            custumer = get_object_or_404(User, id=data['customer_id'])
+            customer = get_object_or_404(User, id=data['customer_id'])
             sub_total = data['sub_total']
             invoice_discount_type = data['invoice_discount_type']
             invoice_discount = data['invoice_discount']
@@ -169,12 +169,12 @@ def place_order_poc_billing(request):
             tax = data['tax']
             dr_name = data['dr_name']
             
-            custumer_cart_items = custumer.cart_items.all()
+            customer_cart_items = customer.cart_items.all()
             order_details = []
             hospital_item_detail = []
             medicins = []
             
-            for cart in custumer_cart_items:
+            for cart in customer_cart_items:
                 if cart.medicine:
                     order_details.append(
                         {
@@ -212,7 +212,7 @@ def place_order_poc_billing(request):
             }
             # Create order here
             order = BillingPOS.objects.create(
-                custumer = custumer,
+                custumer = customer,
                 details = order_data
             ) 
             for i in medicins:
@@ -226,9 +226,10 @@ def place_order_poc_billing(request):
                 "message": message,
                 "bill_slip_url": bill_slip_url,
             }
-            # clear the recnetly added custumer detail
+            # clear the recently added customer detail
             if request.session.get('pos_custumer', None):
                 request.session.pop('pos_custumer')
+            
             return JsonResponse(data)
         
         except Exception as ex:

@@ -45,7 +45,7 @@ class CustomUser(AbstractUser):
         ("Supplier", "Supplier"),
         ("Vender", "Vender"),
         ("Pathologist", "Pathologist"), # Pharmacy Clerk (old)
-        ("Patients", "Patients"), # Custumer
+        ("Patients", "Patients"), # Customer
         ("Nurse", "Nurse"), # Pharmacy Clerk (old)
         ("Reception", "Reception"),
     )
@@ -337,13 +337,45 @@ class Vender(BaseModel):
 
 
 class Prescription(BaseModel):
-    patient_id = models.ForeignKey(Patients, null=True, on_delete=models.SET_NULL)
-    description = models.TextField(null=True)
-    prescribe = models.CharField(max_length=100, null=True)
-    
+    patient_id = models.ForeignKey(Patients, on_delete=models.CASCADE)
+    doctor = models.ForeignKey(Doctor, null=True, on_delete=models.SET_NULL)
+    drug_name = models.CharField(verbose_name="Medicine Name", max_length=50, null=True, blank=True)
+    route = models.CharField(verbose_name="Route", max_length=50, null=True, blank=True)
+    dose = models.CharField(verbose_name="Dosage & Frequency", max_length=50, null=True, blank=True)
+    intake = models.CharField(
+        verbose_name="Intake", max_length=15, 
+        choices=(
+            ("Before Eat", "Before Eat"),
+            ("After Eat", "After Eat")
+        ),
+        null=True, blank=True)
+    duration = models.PositiveIntegerField(verbose_name="Duration (in Days)", null=True, blank=True)
+    quantity = models.PositiveIntegerField(verbose_name="Quantity", null=True, blank=True)
+    instruction = models.CharField(verbose_name="Additional Instruction", max_length=50, null=True, blank=True)
     
     def __str__(self) -> str:
         return f"{self.pk}"
+
+
+
+class ClinicalNote(BaseModel):
+    prescription = models.ForeignKey(Prescription, on_delete=models.CASCADE)
+    added_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    note_type = models.CharField(
+        verbose_name="Note Type",
+        max_length=15,
+        choices=(
+            ("Complaints", "Complaints"),
+            ("Observation", "Observation"),
+            ("Diagnosis", "Diagnosis"),
+            ("Notes", "Notes"),
+        )
+    )
+    note = models.TextField()
+    image = models.ImageField(verbose_name="Photo", upload_to="clinical-notes/", null=True, blank=True)
+    
+    def __str__(self) -> str:
+        return str(self.pk) + " - " + self.note_type
 
 
 
@@ -685,21 +717,3 @@ class BillingPOS(BaseModel):
 # class BillingPOSDetail(BaseModel):
 #     pos = models.ForeignKey(BillingPOS, on_delete=models.CASCADE, related_name="details")
 #     medicine = models.ForeignKey
-
-class ClinicalNote(BaseModel):
-    added_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    note_type = models.CharField(
-        verbose_name="Note Type",
-        max_length=15,
-        choices=(
-            ("Complaints", "Complaints"),
-            ("Observation", "Observation"),
-            ("Diagnosis", "Diagnosis"),
-            ("Notes", "Notes"),
-        )
-    )
-    note = models.TextField()
-    image = models.ImageField(verbose_name="Photo", upload_to="clinical-notes/", null=True, blank=True)
-    
-    def __str__(self) -> str:
-        return str(self.pk) + " - " + self.note_type
