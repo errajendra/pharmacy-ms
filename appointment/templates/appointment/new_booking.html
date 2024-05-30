@@ -151,12 +151,14 @@
                                     
                                     <option value="Cash" {% if instance.payment_mode == "Cash" %} selected="" {% endif %}>Cash</option> 
                                     <option value="Upi" {% if instance.payment_mode == "Upi" %} selected="" {% endif %}>Upi</option> 
+                                    <option value="Card" {% if instance.payment_mode == "Card" %} selected="" {% endif %}>Card</option> 
                                     <option value="Bank Transfer" {% if instance.payment_mode == "Bank Transfer" %} selected="" {% endif %}>Bank Transfer</option> 
                                     <option value="Other" {% if instance.payment_mode == "Other" %} selected="" {% endif %}>Other</option>
                                     
                                     {% else %}
                                     <option value="Cash" selected="">Cash</option> 
                                     <option value="Upi">Upi</option> 
+                                    <option value="Card">Card</option> 
                                     <option value="Bank Transfer">Bank Transfer</option> 
                                     <option value="Other">Other</option>
                                     {% endif %}

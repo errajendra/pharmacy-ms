@@ -1,0 +1,365 @@
+{% extends 'hod_templates/base_template.html'%} {% load crispy_forms_tags %} {% block page_title %}
+<h5> {{title}} </h5>
+
+{% endblock page_title %} {% block main_content %}
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            {% include 'hod_templates/alert_messeges.html'%}
+
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title"> {{title}} </h3>
+                </div>
+
+                <form method="POST" style="font-size:13px;" class='px-3 py-2'>
+                    {% csrf_token %} 
+                    {% if messages %}
+                    <div class="form-group">
+                        <div class="col-12">
+                            {% for message in messages %} {% if message.tags == "error" %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% elif message.tags == "success" %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endif %} {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% comment %} <div class="card-body">
+
+
+                        {{form|crispy}}
+
+                    </div> {% endcomment %}
+                    <div class="card-body">
+                        <div class="row">
+                            <div id="div_id_patient" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6">
+                                <label for="id_patient" class="form-label requiredField"> Patient<span class="asteriskField">*</span> </label>
+                                <select name="patient" class="form-control w-auto select form-select" required="" id="id_patient">
+                                    <option value="" {% if request.GET.patient %} {% else %} selected="" {% endif %} >---------</option>
+                                    {% for pt in patients %}
+                                    <option value="{{pt.id}}" {% if request.GET.patient == pt.admin.username %} selected="" {% endif %}>{{pt}} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div id="div_id_department" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6">
+                                <label for="id_department" class="form-label requiredField"> Department<span class="asteriskField">*</span> </label>
+                                <select name="department" class="form-control w-auto select form-select" required="" id="id_department">
+                                    <option value="" selected="">---------</option>
+                                    {% for d in departments %}
+                                    <option value="{{d.id}}">{{d}} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div id="div_id_doctor" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6">
+                                <label for="id_doctor" class="form-label requiredField"> Doctor<span class="asteriskField">*</span> </label>
+                                <select name="doctor" class="form-control w-auto select form-select" required="" id="id_doctor">
+                                    <option value="" selected="">---------</option>
+                                    {% for dr in doctors %}
+                                    <option value="{{dr.id}}">{{dr}} </option>
+                                    {% endfor %}
+                                    
+                                </select>
+                            </div>
+                            <div id="div_id_reason" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6">
+                                <label for="id_reason" class="form-label">
+                                    Reason
+                                </label>
+                                <input type="text" name="reason" maxlength="100" class="textinput form-control" id="id_reason" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            
+                        </div>
+                        <div class="row">
+                            <div id="div_id_weight" class="mb-3 mx-0 col-lg-2 col-md-3 col-sm-6">
+                                <label for="id_weight" class="form-label">
+                                    Patient Weight
+                                </label>
+                                <input type="number" name="weight" class="form-control w-auto numberinput" step="any" id="id_weight" />
+                                <div id="id_weight_helptext" class="form-text">Enter Weight Reading</div>
+                            </div>
+                            <div id="div_id_bp_systolic" class="mb-3 mx-0 col-lg-2 col-md-3 col-sm-6">
+                                <label for="id_bp_systolic" class="form-label">
+                                    Blood Pressure (mmHg) - Systolic
+                                </label>
+                                <input type="text" name="bp_systolic" class="form-control w-auto textinput" maxlength="50" id="id_bp_systolic" />
+                                <div id="id_bp_systolic_helptext" class="form-text">Enter Systolic Reading</div>
+                            </div>
+                            <div id="div_id_bp_diastolic" class="mb-3 mx-0 col-lg-2 col-md-3 col-sm-6">
+                                <label for="id_bp_diastolic" class="form-label">
+                                    Blood Pressure (mmHg) - Diastolic
+                                </label>
+                                <input type="text" name="bp_diastolic" class="form-control w-auto textinput" maxlength="50" id="id_bp_diastolic" />
+                                <div id="id_bp_diastolic_helptext" class="form-text">Enter Diastolic Reading</div>
+                            </div>
+                            <div id="div_id_pulse" class="mb-3 mx-0 col-lg-2 col-md-3 col-sm-6">
+                                <label for="id_pulse" class="form-label">
+                                    Pulse (Heartbeats/min)
+                                </label>
+                                <input type="number" name="pulse" class="form-control w-auto numberinput" step="any" id="id_pulse" />
+                                <div id="id_pulse_helptext" class="form-text">Enter Reading (Sitting/Standing)</div>
+                            </div>
+                            <div id="div_id_respiration_rates" class="mb-3 mx-0 col-lg-2 col-md-3 col-sm-6">
+                                <label for="id_respiration_rates" class="form-label">
+                                    Respiration Rates (Heartbeats/min)
+                                </label>
+                                <input type="number" name="respiration_rates" class="form-control w-auto numberinput" step="any" id="id_respiration_rates" />
+                                <div id="id_respiration_rates_helptext" class="form-text">Enter Reading</div>
+                            </div>
+                            <div id="div_id_temp" class="mb-3 mx-0 col-lg-2 col-md-3 col-sm-6">
+                                <label for="id_temp" class="form-label">
+                                    Temperature (°F)
+                                </label>
+                                <input type="number" name="temp" class="form-control w-auto numberinput" step="any" id="id_temp" />
+                                <div id="id_temp_helptext" class="form-text">Enter Reading of Temperature (in °F)</div>
+                            </div>
+                            <div id="div_id_spo2" class="mb-3 mx-0 col-lg-2 col-md-3 col-sm-6">
+                                <label for="id_spo2" class="form-label">
+                                    SPO2 (%)
+                                </label>
+                                <input type="number" name="spo2" class="form-control w-auto numberinput" step="any" id="id_spo2" />
+                                <div id="id_spo2_helptext" class="form-text">Enter SPO2 (%) Reading</div>
+                            </div>
+                            <div id="div_id_fees" class="mb-3 mx-0 col-lg-2 col-md-3 col-sm-6">
+                                <label for="id_fees" class="form-label requiredField"> Fees<span class="asteriskField">*</span> </label> <input type="number" name="fees" value="0" class="form-control w-auto numberinput" step="any" required="" id="id_fees" />
+                            </div>
+                            <div id="div_id_purpose" class="mb-3 mx-0 col-lg-2 col-md-3 col-sm-6">
+                                <label for="id_purpose" class="form-label requiredField"> Purpose<span class="asteriskField">*</span> </label>
+                                <select name="purpose" class="form-control w-auto select form-select" id="id_purpose">
+                                    <option value="OPD" {% if request.GET.purpose == 'OPD' %} selected="" {% else %} {% endif %} >OPD</option>
+                                    <option value="IPD/Bed Addmission" {% if request.GET.purpose == 'IPD' %} selected="" {% else %} {% endif %} >IPD/Bed Addmission</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="div_id_guardian" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_guardian" class="form-label">
+                                    Guardian Name
+                                </label>
+                                <input type="text" name="guardian" class="form-control textinput" data-purpose="BedIPD" maxlength="36" id="id_guardian" />
+                            </div>
+                            <div id="div_id_advanced_fees" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_advanced_fees" class="form-label requiredField"> Advanced Fees<span class="asteriskField">*</span> </label>
+                                <input type="number" name="advanced_fees" value="0" class="form-control w-auto numberinput" data-purpose="BedIPD" step="any" required="" id="id_advanced_fees" />
+                            </div>
+                            <div id="div_id_bht_no" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_bht_no" class="form-label">
+                                    BHT No
+        0                     </label>
+                                <input type="text" name="bht_no" class="form-control textinput" data-purpose="BedIPD" maxlength="48" id="id_bht_no" />
+                            </div>
+                            <div id="div_id_addmission_time" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_addmission_time" class="form-label">
+                                    Date &amp; Time of Addmission
+                                </label>
+                                <input type="datetime-local" name="addmission_time" class="form-control w-auto textinput" data-purpose="BedIPD" id="id_addmission_time" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="div_id_discharge_time" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_discharge_time" class="form-label">
+                                    Date &amp; Time of Discharge
+                                </label>
+                                <input type="datetime-local" name="discharge_time" class="form-control w-auto textinput" data-purpose="BedIPD" id="id_discharge_time" />
+                            </div>
+                            <div id="div_id_ward_bed" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_ward_bed" class="form-label">
+                                    Ward/Bed No.
+                                </label>
+                                <input type="text" name="ward_bed" class="form-control textinput" data-purpose="BedIPD" maxlength="48" id="id_ward_bed" />
+                            </div>
+                            <div id="div_id_no_of_beds" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_no_of_beds" class="form-label">
+                                    No. of Beds
+                                </label>
+                                <input type="number" name="no_of_beds" value="1" class="form-control w-auto numberinput" data-purpose="BedIPD" min="0" id="id_no_of_beds" />
+                            </div>
+                            <div id="div_id_operation_date" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_operation_date" class="form-label">
+                                    Date &amp; Time of Operation
+                                </label>
+                                <input type="datetime-local" name="operation_date" class="form-control w-auto datetimeinput" data-purpose="BedIPD" id="id_operation_date" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div id="div_id_addmission_type" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_addmission_type" class="form-label requiredField"> Addmission type<span class="asteriskField">*</span> </label>
+                                <select name="addmission_type" class="form-control w-auto select form-select" data-purpose="BedIPD" id="id_addmission_type">
+                                    <option value="Routine" selected="">Routine</option>
+                                    <option value="Emergency">Emergency</option>
+                                    <option value="MLC">MLC</option>
+                                    <option value="Accident">Accident</option>
+                                </select>
+                            </div>
+                            <div id="div_id_mlc_no" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_mlc_no" class="form-label">
+                                    MLC No
+                                </label>
+                                <input type="text" name="mlc_no" class="form-control textinput" data-purpose="BedIPD" maxlength="48" id="id_mlc_no" />
+                            </div>
+                            <div id="div_id_icd" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_icd" class="form-label">
+                                    ICD
+                                </label>
+                                <input type="text" name="icd" class="form-control textinput" data-purpose="BedIPD" maxlength="48" id="id_icd" />
+                            </div>
+                            <div id="div_id_provisonal_diagnosis" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_provisonal_diagnosis" class="form-label">
+                                    Provisonal Diagnosis
+                                </label>
+                                <input type="text" name="provisonal_diagnosis" class="form-control textinput" data-purpose="BedIPD" maxlength="200" id="id_provisonal_diagnosis" />
+                            </div>
+                        </div>
+        
+                        <div class="row">
+                            <div id="div_id_final_diagnosis" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_final_diagnosis" class="form-label">
+                                    Final Diagnosis
+                                </label>
+                                <input type="text" name="final_diagnosis" class="form-control textinput" data-purpose="BedIPD" maxlength="200" id="id_final_diagnosis" />
+                            </div>
+                            <div id="div_id_summary_of_case" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_summary_of_case" class="form-label">
+                                    Summary of Case
+                                </label>
+                                <input type="text" name="summary_of_case" class="form-control textinput" data-purpose="BedIPD" id="id_summary_of_case" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div id="div_id_staff" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_staff" class="form-label">
+                                    Staff Nurse (Asigned)
+                                </label>
+                                <select name="staff" class="form-control select form-select" data-purpose="BedIPD" id="id_staff">
+                                    <option value="" selected="">---------</option>
+                                    {% for nurse in nurses %}
+                                    <option value="{{nurse.id}}">{{nurse}} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div id="div_id_facilities" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_facilities" class="form-label">
+                                    Facilities
+                                </label>
+                                <input type="text" name="facilities" class="form-control textinput" data-purpose="BedIPD" maxlength="200" id="id_facilities" />
+                            </div>
+                            <div id="div_id_days" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_days" class="form-label">
+                                    Days
+                                </label>
+                                <input type="number" name="days" class="form-control numberinput" data-purpose="BedIPD" min="0" id="id_days" />
+                            </div>
+                            <div id="div_id_condition" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_condition" class="form-label">
+                                    Condition
+                                </label>
+                                <input type="text" name="condition" class="form-control w-auto textinput" data-purpose="BedIPD" maxlength="200" id="id_condition" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div id="div_id_usages" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_usages" class="form-label">
+                                    Usages
+                                </label>
+                                <input type="text" name="usages" class="form-control textinput" data-purpose="BedIPD" maxlength="200" id="id_usages" />
+                            </div>
+                            <div id="div_id_result" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_result" class="form-label requiredField"> Result<span class="asteriskField">*</span> </label>
+                                <select name="result" class="form-control w-auto select form-select" data-purpose="BedIPD" id="id_result">
+                                    <option value="Recovered" selected="">Recovered</option>
+                                    <option value="Dorp">Dorp</option>
+                                    <option value="Unchanged">Unchanged</option>
+                                    <option value="LAMA">LAMA</option>
+                                    <option value="Abscond">Abscond</option>
+                                    <option value="Died">Died</option>
+                                </select>
+                            </div>
+                            <div id="div_id_couse_of_death" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
+                                <label for="id_couse_of_death" class="form-label">
+                                    Cause of Death
+                                </label>
+                                <input type="text" name="couse_of_death" class="form-control textinput" data-purpose="BedIPD" maxlength="200" id="id_couse_of_death" />
+                            </div>
+                            <div id="div_id_remark" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6">
+                                <label for="id_remark" class="form-label">
+                                    Remark
+                                </label>
+                                <input type="text" name="remark" maxlength="200" class="textinput form-control" id="id_remark" />
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <input type="submit" class="btn btn-info">
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% comment %} Scripts {% endcomment %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+    // Get the purpose select element
+    const purposeSelect = document.querySelector('#id_purpose');
+
+    // Get the elements you want to show or hide
+    const ipdElements = document.querySelectorAll('[data-purpose="BedIPD"]');
+    const opdElements = document.querySelectorAll('[data-purpose="FieldsOPD"]');
+
+    // Define a function to show or hide elements based on the selected purpose
+    function toggleElements() {
+
+        function hideElement(elementId) {
+            console.log(elementId);
+            $(`#${elementId}`).css('display', 'none');
+        }
+        function showElement(elementId) {
+            console.log(elementId);
+            $(`#${elementId}`).css('display', 'block');
+        }
+        // Hide all elements by default
+        ipdElements.forEach(element => hideElement(`div_id_${element.name}`));
+        opdElements.forEach(element => hideElement(`div_id_${element.name}`));
+
+        // Show elements based on the selected purpose
+        if (purposeSelect.value === 'IPD/Bed Addmission') {
+            console.log("Showing IPD fields");
+            ipdElements.forEach(element => showElement(`div_id_${element.name}`));
+        }
+        else if (purposeSelect.value === "OPD") {
+            console.log("Showing OPD fields");
+            opdElements.forEach(element => showElement(`div_id_${element.name}`));
+        }
+    }
+
+    // Call the function when the page loads to set the initial visibility
+    toggleElements();
+
+    // Attach an event listener to the purpose select element to call the function whenever the value changes
+    purposeSelect.addEventListener('change', toggleElements);
+
+</script>
+
+<script>
+    $(document).ready(function() {
+      $('#id_patient').select2({
+        allowClear: true,
+      });
+    });
+</script>
+{% endblock main_content %}

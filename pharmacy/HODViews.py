@@ -228,7 +228,7 @@ def createPatientNext(request):
                     forms_ins.save()
 
                     messages.success(request, f"{username} was Successfully Added")
-                    return redirect(reverse("add_addmission") + '?patient=' + f"{user.patients.id}")
+                    return redirect(reverse("add_addmission") + '?patient=' + f"{user.username}")
 
             except Exception as e:
                 messages.warning(request, f"{e}")
@@ -1552,13 +1552,6 @@ def manageIpdAddmission(request):
 
 @login_required
 def addAddmission(request):
-    patient = request.GET.get('patient', None)
-    
-    if patient:
-        patient = Patients.objects.get(id=patient)
-        form = AddmissionForm(request.POST or None, initial={'patient':patient})
-    else:
-        form = AddmissionForm(request.POST or None)
     
     if request.method == "POST":
         if form.is_valid():
@@ -1568,22 +1561,50 @@ def addAddmission(request):
             if purpose in ["OPD", "X-Ray"]:
                 return redirect(reverse("opd_slip", args=[Addmission.objects.latest('id').id])) # return to perticular slip of id
             return redirect("manage_addmission")
-    context = {"form": form, "title": "New Patient Addmission"}
-    return render(request, "hod_templates/addmission_patient.html", context)
+    
+    # patient = request.GET.get('patient', None)
+    # if patient:
+    #     # patient = Patients.objects.get(id=patient)
+    #     # form = AddmissionForm(request.POST or None, initial={'patient':patient})
+    #     request.session["admission_patient"] = patient
+        
+    # purpose = request.GET.get('purpose', None)
+    # if purpose:
+    #     request.session["admission_purpose"] = purpose
+    
+    form = AddmissionForm(request.POST or None)
+    
+    context = {
+        "form": form,
+        "patients": Patients.objects.all(),
+        "doctors": Doctor.objects.all(),
+        "departments": Department.objects.all(),
+        "nurses": Nurse.objects.all(),
+        "title": "New Patient Addmission"
+    }
+    return render(request, "hod_templates/admission/new-admission.html", context)
 
 
 @login_required
 def editAddmission(request, id):
-    cat = get_object_or_404(Addmission, id=id)
-    form = AddmissionForm(instance=cat, data=request.POST or None)
+    instance = get_object_or_404(Addmission, id=id)
+    form = AddmissionForm(instance=instance, data=request.POST or None)
     if request.method == "POST":
         if form.is_valid():
             form.save()
             messages.success(request, "Patient Addmission Updated Successfully!")
 
             return redirect("manage_addmission")
-    context = {"form": form, "title": "Update Addmission"}
-    return render(request, "hod_templates/addmission_patient.html", context)
+    context = {
+        "form": form,
+        "patients": Patients.objects.all(),
+        "doctors": Doctor.objects.all(),
+        "departments": Department.objects.all(),
+        "nurses": Nurse.objects.all(),
+        "ins": instance,
+        "title": "Update Addmission"
+    }
+    return render(request, "hod_templates/admission/update-admission.html", context)
 
 
 def printAddmission(request, id):
