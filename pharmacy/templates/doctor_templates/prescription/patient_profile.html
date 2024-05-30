@@ -1,0 +1,205 @@
+{% extends 'doctor_templates/base_template.html'%}
+{% block link %}
+
+{% endblock link%}
+{% block main_content %}
+<div class="content">
+        <div class="row pt">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <i class="fa fa-align-justify mr-2"></i> Patient's Information
+                            <!-- Buttons for Add Prescription and Add Clinical Notes -->
+                            <div class="ml-auto">
+                                <a href="{% url 'add_prescription_patient' data.id %}" class="btn btn-primary">+ Add Prescription</a>
+                                <a href="#" class="btn btn-secondary">+ Add Clinical Notes</a>
+                        </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="container">
+                          
+                                <table class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <th>Patient Name</th>
+                                            <td>{{ data.patient.admin.get_full_name|upper }}</td>
+                                            <th>Contact</th>
+                                            <td>{{ data.patient.phone_number }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Purpose</th>
+                                            <td>{{ data.purpose }}</td>
+                                            <th>Department</th>
+                                            <td>{{ data.department.name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Reason</th>
+                                            <td>{{ data.reason }}</td>
+                                            <th>Doctor</th>
+                                            <td>{{ data.doctor.admin.get_full_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Admission Time</th>
+                                            <td>{{ data.addmission_time }}</td>
+                                            <th>Discharge Time</th>
+                                            <td>{{ data.discharge_time }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Weight</th>
+                                            <td>{{ data.weight }}</td>
+                                            <th>BP Systolic</th>
+                                            <td>{{ data.bp_systolic }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>BP Diastolic</th>
+                                            <td>{{ data.bp_diastolic }}</td>
+                                            <th>Pulse</th>
+                                            <td>{{ data.pulse }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Respiration Rates</th>
+                                            <td>{{ data.respiration_rates }}</td>
+                                            <th>Temperature (°F)</th>
+                                            <td>{{ data.temp }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>SPO2 (%)</th>
+                                            <td>{{ data.spo2 }}</td>
+                                            <th>Fees</th>
+                                            <td>{{ data.fees }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Advanced Fees</th>
+                                            <td>{{ data.advanced_fees }}</td>
+                                            <th>BHT No</th>
+                                            <td>{{ data.bht_no }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>UID (Adhar Number)</th>
+                                            <td>{{ data.uid }}</td>
+                                            <th>Guardian Name</th>
+                                            <td>{{ data.guardian }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Ward/Bed No.</th>
+                                            <td>{{ data.ward_bed }}</td>
+                                            <th>No. of Beds</th>
+                                            <td>{{ data.no_of_beds }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Operation Date</th>
+                                            <td>{{ data.operation_date }}</td>
+                                            <th>Admission Type</th>
+                                            <td>{{ data.addmission_type }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>MLC No</th>
+                                            <td>{{ data.mlc_no }}</td>
+                                            <th>ICD</th>
+                                            <td>{{ data.icd }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Provisional Diagnosis</th>
+                                            <td>{{ data.provisonal_diagnosis }}</td>
+                                            <th>Final Diagnosis</th>
+                                            <td>{{ data.final_diagnosis }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Summary of Case</th>
+                                            <td>{{ data.summary_of_case }}</td>
+                                            <th>Staff Nurse (Assigned)</th>
+                                            <td>{{ data.staff.admin.get_full_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Facilities</th>
+                                            <td>{{ data.facilities }}</td>
+                                            <th>Result</th>
+                                            <td>{{ data.result }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Cause of Death</th>
+                                            <td>{{ data.couse_of_death }}</td>
+                                            <th>Remark</th>
+                                            <td>{{ data.remark }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+              
+                <!-- <div class="col-lg-5">
+                    <div class="card">
+                        <div class="card-header">
+                             <i class="fa fa-align-justify"></i> Teachers Personal Info
+                        </div>
+                        <div class="card-body">
+            
+                                <h6>Role: patient</h6>
+                               
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+     <!-- New table to show prescription details -->
+     <div class="row pt">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Prescription Details
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>Medicine Name</th>
+                                    <th>Route</th>
+                                    <th>Dosage & Frequency</th>
+                                    <th>Intake</th>
+                                    <th>Duration (in Days)</th>
+                                    <th>Quantity</th>
+                                    <th>Additional Instruction</th>
+                                    <th>Clinical Notes</th> <!-- New Column -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for prescription in prescriptions %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ prescription.drug_name }}</td>
+                                    <td>{{ prescription.route }}</td>
+                                    <td>{{ prescription.dose }}</td>
+                                    <td>{{ prescription.intake }}</td>
+                                    <td>{{ prescription.duration }}</td>
+                                    <td>{{ prescription.quantity }}</td>
+                                    <td>{{ prescription.instruction }}</td>
+                                    <td>
+                                        {% if prescription.clinicalnote_set.all %}
+                                        {% for note in prescription.clinicalnote_set.all %}
+                                            {{ forloop.counter }}
+                                            <strong> {{ note.note_type }}:</strong> {{ note.note }}<br> 
+                                            <strong>Image:-</strong>
+                                            {% if note.image %}
+                                                <img src="{{ note.image.url }}" alt="Clinical Note Image" width="50"><br>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% else %}
+                                        None
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

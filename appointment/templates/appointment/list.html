@@ -147,8 +147,8 @@
                             <td>{{appointment.address}}</td>
 
                             <td>
-                                <a href="{% url 'edit_appointment_admin' appointment.id %}" class="btn btn-sm btn-success">Edit</a>
-                                <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModalCenter{{appointment.id}}">Delete</button>
+                                <a href="{% url 'edit_appointment_admin' appointment.id %}" class="btn btn-sm btn-success" style="font-size: 12px;"><i class="fa fa-edit"></i></a>
+                                <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModalCenter{{appointment.id}}" style="font-size: 12px;"><i class="fa fa-trash"></i></button>
                                   
                             </td>
 

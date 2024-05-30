@@ -126,9 +126,9 @@
                                 {% comment %} {% endif %} {% endfor %} {% endcomment %}
                                 <!-- End Expire -->
                                 <td class="d-flex justify-content-center">
-                                    <a href="{%url 'edit_drug' stock.id %}" class="btn btn-sm btn-success">Edit</a> &nbsp;
-                                    <a href="{%url 'delete_drug' stock.id %}" class="btn btn-sm btn-danger">Delete</a> &nbsp;
-                                    <a href="{% url 'drug_detail' stock.id %}" class="btn btn-sm btn-warning">View</a>
+                                    <a href="{%url 'edit_drug' stock.id %}" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a> &nbsp;
+                                    <a href="{%url 'delete_drug' stock.id %}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a> &nbsp;
+                                    <a href="{% url 'drug_detail' stock.id %}" class="btn btn-sm btn-warning"><i class="fa fa-eye"></i></a>
                                     {% comment %} <a href="{%url 'receive_drug' stock.id %}" class="btn btn-sm btn-primary ml-2">Add</a> {% endcomment %}
                                 </td>
 

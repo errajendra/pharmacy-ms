@@ -1,0 +1,172 @@
+{% extends 'doctor_templates/base_template.html' %}
+
+{% block page_title %}
+<h5>Prescribe</h5>
+{% endblock page_title %}
+
+{% block link %}
+{% endblock link %}
+
+{% block main_content %}
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Prescribe Patient ({{ patient }})</h3>
+                </div>
+                <form method="POST" enctype="multipart/form-data" style="font-size:13px;" class="px-3 py-2">
+                    {% csrf_token %}
+                    {% if messages %}
+                    <div class="form-group">
+                        <div class="col-12">
+                            {% for message in messages %}
+                            {% if message.tags == "error" %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% elif message.tags == "success" %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="{{ form.drug_name.id_for_label }}">{{ form.drug_name.label }}</label>
+                                {{ form.drug_name }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.route.id_for_label }}">{{ form.route.label }}</label>
+                                {{ form.route }}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="{{ form.dose.id_for_label }}">{{ form.dose.label }}</label>
+                                {{ form.dose }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.intake.id_for_label }}">{{ form.intake.label }}</label>
+                                {{ form.intake }}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="{{ form.duration.id_for_label }}">{{ form.duration.label }}</label>
+                                {{ form.duration }}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ form.quantity.id_for_label }}">{{ form.quantity.label }}</label>
+                                {{ form.quantity }}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-12">
+                                <label for="{{ form.instruction.id_for_label }}">{{ form.instruction.label }}</label>
+                                {{ form.instruction }}
+                            </div>
+                        </div>
+
+                        <button type="button" id="add-clinical-note-btn" class="btn btn-secondary mt-2">+ Add Clinical Note</button>
+
+                        <div id="clinicalNoteSection" style="display: none;">
+                            <div id="clinical-note-forms">
+                                {{ clinical_note_formset.management_form }}
+                                {% for form in clinical_note_formset %}
+                                <div class="clinical-note-form" id="form-{{ forloop.counter0 }}">
+                                    <h5>Clinical Note {{ forloop.counter }}</h5>
+                                    <div class="form-group row">
+                                        <div class="col-md-6">  
+                                                <label class="col-form-label" for="{{ form.note_type.id_for_label }}">{{ form.note_type.label }}</label>
+                                                <select class="form-control" id="{{ form.note_type.id_for_label }}" name="{{ form.note_type.html_name }}">
+                                                    {% for value, label in form.note_type.field.choices %}
+                                                        <option value="{{ value }}">{{ label }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="col-form-label" for="{{ form.image.id_for_label }}">{{ form.image.label }}</label>
+                                            <input type="file" class="form-control" id="{{ form.image.id_for_label }}" name="{{ form.image.html_name }}">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-12">
+                                            <label class="col-form-label" for="{{ form.note.id_for_label }}">{{ form.note.label }}</label>
+                                            <textarea class="form-control" id="{{ form.note.id_for_label }}" name="{{ form.note.html_name }}"></textarea>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-danger remove-clinical-note">Remove</button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <button type="button" id="add-more-clinical-notes" class="btn btn-secondary mt-2">+ Add More Clinical Notes</button>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-danger" onClick="javascript:history.go(-1);" type="button">Cancel<i class="fa fa-window-close mx-2"></i></button>
+                        <button type="submit" class="btn btn-success">Prescribe<i class="fa fa-prescription-bottle mx-2"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.getElementById('add-clinical-note-btn').addEventListener('click', function() {
+        var clinicalNoteSection = document.getElementById('clinicalNoteSection');
+        if (clinicalNoteSection.style.display === 'none') {
+            clinicalNoteSection.style.display = 'block';
+        } else {
+            clinicalNoteSection.style.display = 'none';
+        }
+    });
+
+    document.getElementById('add-more-clinical-notes').addEventListener('click', function() {
+        var totalForms = document.querySelectorAll('.clinical-note-form').length;
+        var newForm = document.querySelector('.clinical-note-form').cloneNode(true);
+        newForm.id = 'form-' + totalForms;
+        newForm.querySelector('h5').innerText = 'Clinical Note ' + (totalForms + 1);
+        var formFields = newForm.querySelectorAll('input, select, textarea');
+        formFields.forEach(function(field) {
+            var name = field.name.replace(/-\d+-/, '-' + totalForms + '-');
+            var id = field.id.replace(/_\d+_/, '_' + totalForms + '_');
+            field.name = name;
+            field.id = id;
+            field.value = '';
+        });
+        newForm.querySelector('.remove-clinical-note').addEventListener('click', function() {
+            newForm.remove();
+            updateClinicalNoteLabels();
+        });
+        document.getElementById('clinical-note-forms').appendChild(newForm);
+        document.getElementById('id_clinicalnote_set-TOTAL_FORMS').value = totalForms + 1;
+    });
+
+    document.querySelectorAll('.remove-clinical-note').forEach(function(button) {
+        button.addEventListener('click', function() {
+            button.closest('.clinical-note-form').remove();
+            updateClinicalNoteLabels();
+        });
+    });
+
+    function updateClinicalNoteLabels() {
+        var forms = document.querySelectorAll('.clinical-note-form');
+        forms.forEach(function(form, index) {
+            form.querySelector('h5').innerText = 'Clinical Note ' + (index + 1);
+        });
+        document.getElementById('id_clinicalnote_set-TOTAL_FORMS').value = forms.length;
+    }
+</script>
+{% endblock main_content %}

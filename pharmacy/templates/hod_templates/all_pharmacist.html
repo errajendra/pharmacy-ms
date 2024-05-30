@@ -76,8 +76,8 @@
                             <td>{{staff.address}}</td>
                             <td>{{staff.admin.last_login}}</td>
 
-                            <td><a href="{% url 'edit_pharmacist' staff.admin.id %}" class="btn btn-sm btn-success">Edit</a>
-                                <a href="{% url 'delete_pharmacist' staff.id %}" class="btn btn-sm btn-danger">Delete</a>
+                            <td><a href="{% url 'edit_pharmacist' staff.admin.id %}" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
+                                <a href="{% url 'delete_pharmacist' staff.id %}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
                             </td>
 
                             <!-- <td>{{patient.dob|date:"F   d, Y"}}</td>

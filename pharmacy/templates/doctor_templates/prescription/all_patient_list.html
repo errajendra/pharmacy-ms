@@ -1,0 +1,76 @@
+{% extends 'doctor_templates/base_template.html'%} {% block page_title %}
+<h5>{{title}}</h5>
+{% endblock page_title %} {% block link %}
+{% endblock link %} {% block main_content %}
+
+<section class="content">
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <div class="card card-primry  sc">
+                <div class="card card-primar sc">
+                    <div class="card-header">
+                        <span>{{title}}</span>
+                        <div class="card-tools d-flex">
+
+                            <form role="form" method="POST" action="" enctype="multipart/form-data" class="mr-4 mt-1">
+                                {% csrf_token %}
+                                <div class="input-group input-group-sm" style="width: 150px;">
+                                    <input type="text" name="search" class="form-control float-right" placeholder="Search">
+
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+
+
+                        </div>
+
+                    </div>
+                    <table class="table table-bordered table-hover dataTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th class="text-center">Patient</th>
+                                <th class="text-center">Contact</th>
+                                <th class="text-center">Purpose</th>
+                                <th class="text-center">Department</th>
+                                <th class="text-center">Reason</th>
+
+                                <th class="text-center">Action</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for patient in patients %}
+                            <tr class="hov">
+                                <td class="text-center">{{ forloop.counter }}</td>
+                                <td class="text-center">{{ patient.patient.admin.get_full_name|upper }}</td>
+                                <td class="text-center">{{ patient.patient.phone_number }}</td>
+                                <td class="text-center">{{ patient.purpose }}</td>
+                                <td class="text-center">{{ patient.department }}</td>
+                                <td class="text-center">{{ patient.reason }}</td>
+
+                                <td class="text-center">
+                                    {% comment %}<a href="{% url 'doctor_prescribe2' patient.id %}" class="btn btn-sm btn-warning">Prescribe</a>
+
+                                    <a href="{% url 'patient_record_doctor' patient.id %}" class="btn btn-sm btn-success"><i class="fa fa-eye"></i></a></td> {% endcomment %}
+                                    <a href="{% url 'view_patient_profile' patient.id %}" class="btn btn-sm btn-success"><i class="fa fa-eye"></i></a></td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
