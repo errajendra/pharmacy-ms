@@ -164,7 +164,7 @@
                                 <label for="id_addmission_time" class="form-label">
                                     Date &amp; Time of Addmission
                                 </label>
-                                <input type="datetime-local" {% if ins.addmission_time %} value="{{ins.addmission_time}}" {% endif %} name="addmission_time" class="form-control w-auto textinput" data-purpose="BedIPD" id="id_addmission_time" />
+                                <input type="datetime-local" {% if ins.addmission_time %} value="{{ins.addmission_time|date:'Y-m-d H:i'}}" {% endif %} name="addmission_time" class="form-control w-auto textinput" data-purpose="BedIPD" id="id_addmission_time" />
                             </div>
                         </div>
                         <div class="row">
@@ -172,17 +172,22 @@
                                 <label for="id_discharge_time" class="form-label">
                                     Date &amp; Time of Discharge
                                 </label>
-                                <input type="datetime-local" {% if ins.discharge_time %} value="{{ins.discharge_time}}" {% endif %} name="discharge_time" class="form-control w-auto textinput" data-purpose="BedIPD" id="id_discharge_time" />
+                                <input type="datetime-local" {% if ins.discharge_time %} value="{{ins.discharge_time|date:'Y-m-d H:i'}}" {% endif %} name="discharge_time" class="form-control w-auto textinput" data-purpose="BedIPD" id="id_discharge_time" />
                             </div>
                             <div id="div_id_ward_bed" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
                                 <label for="id_ward_bed" class="form-label">
-                                    Ward/Bed No.
+                                    Ward Type
                                 </label>
-                                <input type="text" {% if ins.ward_bed %} value="{{ins.ward_bed}}" {% endif %} name="ward_bed" class="form-control textinput" data-purpose="BedIPD" maxlength="48" id="id_ward_bed" />
+                                <input type="text" list="bedTypes" {% if ins.ward_bed %} value="{{ins.ward_bed}}" {% endif %} name="ward_bed" class="form-control textinput" data-purpose="BedIPD" maxlength="48" id="id_ward_bed" />
+                                <datalist id="bedTypes">
+                                    <option value="General">
+                                    <option value="Private">
+                                    <option value="Semi Private">
+                                </datalist>
                             </div>
                             <div id="div_id_no_of_beds" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
                                 <label for="id_no_of_beds" class="form-label">
-                                    No. of Beds
+                                    Bed No.
                                 </label>
                                 <input type="number" {% if ins.no_of_beds %} value="{{ins.no_of_beds}}" {% endif %} name="no_of_beds" value="1" class="form-control w-auto numberinput" data-purpose="BedIPD" min="0" id="id_no_of_beds" />
                             </div>
@@ -190,7 +195,7 @@
                                 <label for="id_operation_date" class="form-label">
                                     Date &amp; Time of Operation
                                 </label>
-                                <input type="datetime-local" {% if ins.operation_date %} value="{{ins.operation_date}}" {% endif %} name="operation_date" class="form-control w-auto datetimeinput" data-purpose="BedIPD" id="id_operation_date" />
+                                <input type="datetime-local" {% if ins.operation_date %} value="{{ins.operation_date|date:'Y-m-d H:i'}}" {% endif %} name="operation_date" class="form-control w-auto datetimeinput" data-purpose="BedIPD" id="id_operation_date" />
                             </div>
                         </div>
 

@@ -175,13 +175,18 @@
                             </div>
                             <div id="div_id_ward_bed" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
                                 <label for="id_ward_bed" class="form-label">
-                                    Ward/Bed No.
+                                    Ward Type
                                 </label>
-                                <input type="text" name="ward_bed" class="form-control textinput" data-purpose="BedIPD" maxlength="48" id="id_ward_bed" />
+                                <input type="text" list="bedTypes" name="ward_bed" class="form-control textinput" data-purpose="BedIPD" maxlength="48" id="id_ward_bed" />
+                                <datalist id="bedTypes">
+                                    <option value="General">
+                                    <option value="Private">
+                                    <option value="Semi Private">
+                                </datalist>
                             </div>
                             <div id="div_id_no_of_beds" class="mb-3 mx-0 col-lg-3 col-md-3 col-sm-6" style="display: none;">
                                 <label for="id_no_of_beds" class="form-label">
-                                    No. of Beds
+                                    Bed No.
                                 </label>
                                 <input type="number" name="no_of_beds" value="1" class="form-control w-auto numberinput" data-purpose="BedIPD" min="0" id="id_no_of_beds" />
                             </div>
