@@ -223,8 +223,8 @@ class StockForm(forms.ModelForm):
             "category", "type", "manufacture", "vender",
             "drug_name", "generic_drug_name", "drug_description",
             "batch", "actual_price", "price", "unit", "unit_quantity", "quantity", "total_price",
-            "discount", "gst", "valid_to", "drug_pic")
-                
+            "discount", "gst", "hsn", "valid_to", "drug_pic")
+            
         widgets = {
             "category": forms.Select(attrs={"class":"form-control w-auto"}),
             "type": forms.Select(attrs={"class":"form-control w-auto"}),
@@ -237,6 +237,7 @@ class StockForm(forms.ModelForm):
             "actual_price": forms.NumberInput(attrs={"class":"form-control w-auto"}),
             "price": forms.NumberInput(attrs={"class":"form-control w-auto"}),
             "quantity": forms.NumberInput(attrs={"class":"form-control w-auto"}),
+            "hsn": forms.TextInput(attrs={"class":"form-control"}),
             "discount": forms.NumberInput(attrs={"class":"form-control w-auto"}),
             "valid_to": forms.DateInput(attrs={"class":"form-control w-auto", "type": "date"}), 
         }
@@ -265,6 +266,7 @@ class StockFormPharmacist(forms.ModelForm):
             "vat": forms.NumberInput(attrs={"class":"form-control"}),
             "quantity": forms.NumberInput(attrs={"class":"form-control"}),
             "batch": forms.TextInput(attrs={"class":"form-control"}),
+            "hsn": forms.TextInput(attrs={"class":"form-control"}),
             "price": forms.NumberInput(attrs={"class":"form-control"}),
             "actual_price": forms.NumberInput(attrs={"class":"form-control"}),
             "discount": forms.NumberInput(attrs={"class":"form-control"}),

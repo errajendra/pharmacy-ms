@@ -185,8 +185,7 @@ class Patients(BaseModel):
     first_name = models.CharField(max_length=36, null=True, blank=True)
     last_name = models.CharField(max_length=36, null=True, blank=True)
     age = models.CharField(
-        max_length=2,
-        choices=[(i, i) for i in range(100)], null=True, blank=True
+        max_length=3, null=True, blank=True
     )
     phone_number = models.CharField(verbose_name="Mobile Number",max_length=15, null=True, blank=True)
     phone_number2 = models.CharField(verbose_name="Alternate Mobile Number",  max_length=15, null=True, blank=True)
@@ -500,14 +499,14 @@ class Stock(BaseModel):
     unit = models.PositiveIntegerField(
         default=1, null=True, blank=True,
     )
-    unit_quantity = models.PositiveIntegerField(verbose_name="Per Unit Quantity", default=10)
+    unit_quantity = models.PositiveIntegerField(verbose_name="Quantity in Strip", default=10)
     quantity = models.IntegerField(verbose_name="Total Quantity", default=0, blank=True, null=True)
     batch = models.CharField(max_length=50, blank=True, null=True)
     actual_price = models.FloatField(default=0, blank=True, null=True, verbose_name="Actual Price")
     price = models.FloatField(default=0, blank=True, null=True, verbose_name="M.R.P")
     
     # drug_color = models.CharField(max_length=50, blank=True, null=True)
-    # batch_number = models.CharField(max_length=50, blank=True, null=True)
+    hsn = models.CharField(max_length=50, verbose_name="HSN Code", blank=True, null=True)
     discount = models.FloatField(default=0, blank=True, null=True,)
     gst = models.IntegerField(
         # 0, 5, 12, 18, 28
@@ -717,6 +716,6 @@ class BillingPOS(BaseModel):
         return str(self.pk)
     
     
-# class BillingPOSDetail(BaseModel):
-#     pos = models.ForeignKey(BillingPOS, on_delete=models.CASCADE, related_name="details")
-#     medicine = models.ForeignKey
+class Inventory(BaseModel):
+    cat = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="details")
+    name = models.CharField(verbose_name="Name", max_length=50)
