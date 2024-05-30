@@ -75,6 +75,7 @@
                                     <option value="" selected="">All</option> 
                                     <option value="Cash" {% if request.GET.payment_mode == "Cash" %} selected="" {% endif %}>Cash</option> 
                                     <option value="Upi" {% if request.GET.payment_mode == "Upi" %} selected="" {% endif %}>Upi</option> 
+                                    <option value="Card" {% if request.GET.payment_mode == "Card" %} selected="" {% endif %}>Card</option> 
                                     <option value="Bank Transfer" {% if request.GET.payment_mode == "Bank Transfer" %} selected="" {% endif %}>Bank Transfer</option> 
                                     <option value="Other" {% if request.GET.payment_mode == "Other" %} selected="" {% endif %}>Other</option>
                                 
