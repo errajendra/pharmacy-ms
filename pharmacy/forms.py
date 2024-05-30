@@ -11,8 +11,8 @@ from django.core.validators import RegexValidator
 from phonenumber_field.formfields import PhoneNumberField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Field
-from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit
-from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Row, Column
+
 
 
 import json
@@ -313,10 +313,26 @@ class DrugUnitForm(forms.ModelForm):
         fields = "__all__"
 
 
-class PrescriptionForm(forms.ModelForm):
+# class PrescriptionForm(forms.ModelForm):
+#     class Meta:
+#         model = Prescription
+#         fields = "__all__"
+class PrescriptionForm(ModelForm):
     class Meta:
         model = Prescription
-        fields = "__all__"
+        fields = [
+           'drug_name', 'route', 
+            'dose', 'intake', 'duration', 'quantity', 'instruction'
+        ]
+        widgets = {
+            'drug_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'route': forms.TextInput(attrs={'class': 'form-control'}),
+            'dose': forms.TextInput(attrs={'class': 'form-control'}),
+            'intake': forms.Select(attrs={'class': 'form-control'}),
+            'duration': forms.NumberInput(attrs={'class': 'form-control'}),
+            'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
+            'instruction': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
 
 class CustomerForm(ModelForm):
@@ -583,15 +599,22 @@ class ReceptionistForm(forms.ModelForm):
         exclude = [ "admin"]
 
 
-
-class ClinicalNoteForm(ModelForm):
+from django.forms import modelformset_factory
+class ClinicalNoteForm(forms.ModelForm):
     class Meta:
         model = ClinicalNote
-        fields = "__all__"
-        
+        fields = ['note_type', 'note', 'image']
         widgets = {
-            "note_type": forms.Select(attrs={"class":"form-control w-auto"})
+            'note_type': forms.Select(attrs={'class': 'form-control'}),
+            'note': forms.TextInput(attrs={'class': 'form-control'}),
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
         }
+        
+    def __init__(self, *args, **kwargs):
+        super(ClinicalNoteForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.required = False
+ClinicalNoteFormSet = modelformset_factory(ClinicalNote, form=ClinicalNoteForm, extra=1, can_delete=True)
 
 
 class PatientRecordForm(forms.ModelForm):

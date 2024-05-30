@@ -426,7 +426,7 @@ class Addmission(BaseModel):
     )
     mlc_no = models.CharField(verbose_name="MLC No", max_length=48, null=True, blank=True)
     icd = models.CharField(verbose_name="ICD", max_length=48, null=True, blank=True)
-    provisonal_diagnosis = models.CharField(verbose_name="Provisonal Diagnosis", max_length=200, null=True, blank=True)
+    provisonal_diagnosis = models.CharField(verbose_name="Provisional Diagnosis", max_length=200, null=True, blank=True)
     final_diagnosis = models.CharField(verbose_name="Final Diagnosis", max_length=200, null=True, blank=True)
     summary_of_case = models.TextField(verbose_name="Summary of Case", null=True, blank=True)
     staff = models.ForeignKey(Nurse, on_delete=models.SET_NULL, verbose_name="Staff Nurse (Asigned)", null=True, blank=True)
@@ -503,7 +503,7 @@ class Stock(BaseModel):
     quantity = models.IntegerField(verbose_name="Total Quantity", default=0, blank=True, null=True)
     batch = models.CharField(max_length=50, blank=True, null=True)
     actual_price = models.FloatField(default=0, blank=True, null=True, verbose_name="Actual Price")
-    price = models.FloatField(default=0, blank=True, null=True, verbose_name="M.R.P")
+    price = models.FloatField(default=0, verbose_name="M.R.P/Unit")
     
     # drug_color = models.CharField(max_length=50, blank=True, null=True)
     hsn = models.CharField(max_length=50, verbose_name="HSN Code", blank=True, null=True)
@@ -566,7 +566,7 @@ class Stock(BaseModel):
     def quantity_price(self):
         if self.price:
             try:
-                return self.price/self.unit
+                return self.price/self.unit_quantity
             except:
                 pass
         return 0

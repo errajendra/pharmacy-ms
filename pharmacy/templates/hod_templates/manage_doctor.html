@@ -1,5 +1,5 @@
 {% extends 'hod_templates/base_template.html'%} {% block page_title %}
-<h5>All patients</h5>
+<h5>{{title}}</h5>
 
 {% endblock page_title %} {% block main_content %}
 <section class="content">
@@ -79,9 +79,9 @@
 
 
                                 <td>
-                                    <a href="{% url 'edit_doctor' staff.admin.id %}" class="btn btn-sm btn-success">Edit</a>
+                                    <a href="{% url 'edit_doctor' staff.admin.id %}" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
 
-                                    <a href="{% url 'delete_doctor' staff.id %}" class="btn btn-sm btn-danger">Delete</a>
+                                    <a href="{% url 'delete_doctor' staff.id %}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a>
                                 </td>
                                 <!-- <td>{{patient.dob|date:"F   d, Y"}}</td>
                                         <td>{{patient.mobile}}</td> -->
