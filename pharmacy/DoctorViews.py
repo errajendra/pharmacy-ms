@@ -10,6 +10,7 @@ from appointment.models import Appointment
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.forms import inlineformset_factory
 
 def doctorHome(request): 
     prescip = Prescription.objects.all().count()
@@ -241,37 +242,52 @@ def view_patient_profile(request, id):
     addmission = Addmission.objects.get(id=id)
     doctor = Doctor.objects.get(id=addmission.doctor.id)
     patient = Patients.objects.get(id=addmission.patient_id)
-    prescriptions = Prescription.objects.filter(patient_id=patient, doctor=doctor)
-    print(prescriptions)
+    prescriptions = Prescription.objects.filter(patient_id=patient, doctor=doctor).prefetch_related('clinicalnote_set')
     context = {
         "data":addmission,
         "prescriptions":prescriptions
     }
     return render(request, "doctor_templates/prescription/patient_profile.html", context)
  
+
 @login_required 
 def add_prescription_patient(request, id):
     addmission = get_object_or_404(Addmission, id=id)
-    patient = Patients.objects.get(id=addmission.patient_id)
-    doctor = Doctor.objects.get(id=addmission.doctor.id)
+    patient = get_object_or_404(Patients, id=addmission.patient_id)
+    doctor = get_object_or_404(Doctor, id=addmission.doctor.id)
+
+    ClinicalNoteFormSet = inlineformset_factory(
+        Prescription, ClinicalNote, fields=('note_type', 'note', 'image'), extra=1
+    )
+
     if request.method == 'POST':
         form = PrescriptionForm(request.POST)
-        if form.is_valid():
+        clinical_note_formset = ClinicalNoteFormSet(request.POST, request.FILES)
+        if form.is_valid() and clinical_note_formset.is_valid():
             prescription = form.save(commit=False)
             prescription.patient_id = patient
             prescription.doctor = doctor
             prescription.save()
-            messages.success(request, 'Prescription added successfully')
+            for clinical_note_form in clinical_note_formset:
+                if clinical_note_form.cleaned_data.get('note'):
+                    clinical_note = clinical_note_form.save(commit=False)
+                    clinical_note.prescription = prescription
+                    clinical_note.added_by = request.user
+                    clinical_note.save()
+            messages.success(request, 'Prescription and clinical notes added successfully.')
             return redirect(reverse('view_patient_profile', kwargs={'id': id}))
+        else:
+            messages.error(request, 'Failed to add prescription or clinical notes. Please check the form data.')
     else:
-        form = PrescriptionForm()
-    
+        form = PrescriptionForm(initial={'patient': patient})
+        clinical_note_formset = ClinicalNoteFormSet(queryset=ClinicalNote.objects.none())
+
     context = {
-        "form": form
+        "form": form,
+        "clinical_note_formset": clinical_note_formset,
+        "patient": patient
     }
     return render(request, 'doctor_templates/prescription/add_prescription.html', context)
-
-
         
 @login_required
 def clinical_notes_doctor(request):
