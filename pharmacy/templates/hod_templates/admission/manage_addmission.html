@@ -1,0 +1,117 @@
+{% extends 'hod_templates/base_template.html'%} {% block page_title %}
+<h5>{{title}} </h5>
+{% load static %}
+{% csrf_token %}
+{% endblock page_title %} {% block main_content %}
+<section class="content">
+    {% if messages %}
+    <div class="form-group">
+        <div class="col-12">
+            {% for message in messages %} {% if message.tags == "error" %}
+            <div class="col-sm-12">
+                <div class="alert fade alert-simple alert-danger alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show mt-1 " role="alert" data-brk-library="component__alert">
+                    <button type="button" class="close font__size-18" data-dismiss="alert">
+                        <span aria-hidden="true">
+                            <i class="fa fa-times danger "></i>
+                        </span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <i class="start-icon far fa-times-circle faa-pulse animated"></i>
+                    <strong class="font__weight-semibold">Oh snap!</strong> {{message}}
+                </div>
+            </div>
+            {% elif message.tags == "success" %}
+            <div class="alert fade alert-simple alert-success alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show mt-1">
+                <button type="button" class="close font__size-18" data-dismiss="alert">
+                    <span aria-hidden="true">
+                    <i class="fa fa-times greencross"></i>
+                    </a></span>
+                    <span class="sr-only">Close</span> 
+                </button>
+                <i class="start-icon far fa-check-circle faa-tada animated"></i>
+                <strong class="font__weight-semibold">Well done!</strong> {{message}}
+            </div>
+            {% endif %} {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="card manage sc">
+                <div class="card-header">
+                    <span>{{title}} </span>
+                    <div class="card-tools d-flex">
+                        <!--                
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                       
+                        <div class="input-group-append">
+                        <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div> -->
+                        <!-- <input type="search" name="search" id="filter" class="form-control float-right" placeholder="Search"> -->
+
+
+                        <a class="btn btn-sm btn-info mr-2" href="{% url 'add_addmission' %}?purpose=OPD" role="button">+ Add Addmission</a>
+
+                    </div>
+
+                </div>
+                
+                <div class="card-body table-responsive">
+                    <table class="table table-bordered table-hover dataTable" id="plist">
+                        <thead>
+
+                            <tr>
+                                <th>No</th>
+                                <th>Patient</th>
+                                <th>Contact</th>
+                                <th>Purpose</th>
+                                <th>Department</th>
+                                <th>Doctor</th>
+                                <th>Reason</th>
+                                <th>Transfer</th>
+                                <th class="text-center">Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for addmission in addmissions %}
+                            <tr class="hov">
+                                <td>{{forloop.counter}}</td>
+                                <td>{{addmission.patient}}</td>
+                                <td>{{addmission.patient.phone_number}}</td>
+                                <td>{{addmission.purpose}}</td>
+                                <td>{{addmission.department}}</td>
+                                <td>{{addmission.doctor.admin.get_full_name}}</td>
+                                <td>{{addmission.reason}}</td>
+                                <td>
+                                    <select class="purpose_transfer" style="border:none;" data-admission-id="{{addmission.id}}">
+                                        <option value="OPD" {% if addmission.purpose == 'OPD' %} selected="" {% endif %}>OPD</option>
+                                        <option value="IPD/Bed Addmission" {% if addmission.purpose == 'IPD/Bed Addmission' %} selected=""{% endif %}>IPD/Bed Admission</option>
+                                    </select>
+                                </td>
+
+                                <!-- End Expire -->
+                                <td class="d-flex justify-content-center">
+                                    <a href="{%url 'print_addmission' addmission.id %}" class="btn btn-sm btn-warning" target="_blank"><i class="fa fa-print"></i></a> &nbsp;
+                                    <a href="{%url 'edit_addmission' addmission.id %}" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a> &nbsp;
+                                    <a href="{%url 'delete_addmission' addmission.id %}" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a> &nbsp;
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+<script src="{% static "new/admission/transfer-pupoose.js" %}"></script>
+{% endblock %}

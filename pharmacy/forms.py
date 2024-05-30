@@ -486,11 +486,14 @@ class AddmissionForm(ModelForm):
             "icd": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
             "provisonal_diagnosis": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
             "final_diagnosis": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
-            "summary_of_case": forms.Textarea(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
+            "summary_of_case": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
             "staff": forms.Select(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
             "facilities": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
             "result": forms.Select(attrs={"class":"form-control w-auto", "data-purpose":"BedIPD"}),
             "couse_of_death": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
+            "days": forms.NumberInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
+            "condition": forms.TextInput(attrs={"class":"form-control w-auto", "data-purpose":"BedIPD"}),
+            "usages": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
         }
 
 

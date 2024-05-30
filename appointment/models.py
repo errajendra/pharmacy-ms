@@ -44,6 +44,7 @@ class Appointment(BaseModel):
         choices=[
             ("Cash", "Cash"),
             ("Upi", "Upi"),
+            ("Card", "Card"),
             ("Bank Transfer", "Bank Transfer"),
             ("Other", "Other"),
         ],

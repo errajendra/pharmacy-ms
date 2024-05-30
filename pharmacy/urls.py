@@ -74,9 +74,10 @@ urlpatterns=[
     path('admin_user/edit_drug_type/<int:id>/',HODViews.editDrugType, name='edit_drug_type'), 
     path('admin_user/delete_drug_type/<int:id>/',HODViews.deleteDrugType, name='delete_drug_type'), 
     
-    # Patient Addmission Urls
-    path('admin_user/add_addmission/',HODViews.addAddmission, name='add_addmission'), 
-    path('admin_user/manage_addmission/',HODViews.manageAddmission, name='manage_addmission'), 
+    # Patient Admission Urls
+    path('admin_user/add_admission/',HODViews.addAddmission, name='add_addmission'), 
+    path('admin_user/manage-opd-admission/',HODViews.manageAddmission, name='manage_addmission'), 
+    path('admin_user/manage-ipd-admission/',HODViews.manageIpdAddmission, name='manage_ipd_admission'), 
     path('admin_user/edit_addmission/<int:id>/',HODViews.editAddmission, name='edit_addmission'), 
     path('admin_user/print_addmission/<int:id>/',HODViews.printAddmission, name='print_addmission'), 
     path('admin_user/delete_addmission/<int:id>/',HODViews.deleteAddmission, name='delete_addmission'), 
