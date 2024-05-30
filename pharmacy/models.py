@@ -413,8 +413,8 @@ class Addmission(BaseModel):
     guardian = models.CharField(max_length=36, verbose_name="Guardian Name", null=True, blank=True)
     addmission_time = models.DateTimeField(verbose_name="Date & Time of Addmission", null=True, blank=True)
     discharge_time = models.DateTimeField(verbose_name="Date & Time of Discharge", null=True, blank=True)
-    ward_bed = models.CharField(verbose_name="Ward/Bed No.", max_length=48, null=True, blank=True)
-    no_of_beds = models.PositiveIntegerField(verbose_name="No. of Beds", default=1, null=True, blank=True)
+    ward_bed = models.CharField(verbose_name="Ward Type.", max_length=48, null=True, blank=True)
+    no_of_beds = models.PositiveIntegerField(verbose_name="Bed No.", null=True, blank=True)
     operation_date = models.DateTimeField(verbose_name="Date & Time of Operation", null=True, blank=True)
     addmission_type = models.CharField(
         choices=(
