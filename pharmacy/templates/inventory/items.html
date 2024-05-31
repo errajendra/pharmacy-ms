@@ -1,0 +1,52 @@
+{% extends 'inventory/base.html'%} {% block page_title %}
+<h5>{{title}}</h5>
+
+{% endblock page_title %}
+
+{% block content %}
+
+    <div class="col-md-12">
+
+        <div class="card card-body manage table-responsive w-100">
+            <div class="card-header">
+                <span>{{title}} </span>
+                <div class="card-tools d-flex">
+                
+                    <a class="btn btn-sm btn-info mr-2" href="#" role="button">+ Add Category</a>
+
+                </div>
+
+            </div>
+            <table class="table table-bordered table-hover dataTable" id="plist">
+                <thead>
+
+                    <tr>
+                        <th>S.No</th>
+                        <th>Name</th>
+                        <th class="text-center">Action</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr class="hov">
+                        <td>{{forloop.counter}}</td>
+                        <td>{{category.name}}</td>
+
+                        <!-- End Expire -->
+                        <td class="d-flex justify-content-center">
+                            <a href="#" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a> &nbsp;
+                            <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a> &nbsp;
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

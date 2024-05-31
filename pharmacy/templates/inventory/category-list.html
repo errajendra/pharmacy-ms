@@ -1,0 +1,101 @@
+{% extends 'inventory/base.html'%} {% block page_title %}
+<h5>{{title}}</h5>
+
+{% endblock page_title %}
+
+{% block content %}
+
+    <div class="col-md-12">
+
+        <div class="card card-body manage table-responsive w-100">
+            <div class="card-header">
+                <span>{{title}} </span>
+                <div class="card-tools d-flex">
+                    <button type="button" class="btn btn-sm btn-info mr-2" data-bs-toggle="modal" data-bs-target="#addCategoryModel">
+                        + Add Category
+                    </button>
+
+                </div>
+
+            </div>
+            <table class="table table-bordered table-hover dataTable" id="plist">
+                <thead>
+
+                    <tr>
+                        <th>S.No</th>
+                        <th>Name</th>
+                        <th class="text-center">Action</th>
+
+                    </tr>
+                    
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr class="hov">
+                        <td>{{forloop.counter}}</td>
+                        <td>{{category.name}}</td>
+
+                        <!-- End Expire -->
+                        <td class="d-flex justify-content-center">
+                            <button type="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editCategoryModel{{category.id}}">
+                                <i class="fa fa-edit"></i>
+                            </button> &nbsp;
+                            <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></a> &nbsp;
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            <!-- Add Modal -->
+            <div class="modal fade" id="addCategoryModel" tabindex="-1" aria-labelledby="addCategoryModelLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="addCategoryModelLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    ...
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Launch demo modal
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+            </div>
+        </div>
+        </div>
+    
+    </div>
+</section>
+
+{% endblock %}

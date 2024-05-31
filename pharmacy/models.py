@@ -432,6 +432,7 @@ class Addmission(BaseModel):
     staff = models.ForeignKey(Nurse, on_delete=models.SET_NULL, verbose_name="Staff Nurse (Asigned)", null=True, blank=True)
     facilities = models.CharField(max_length=200, null=True, blank=True)
     days = models.PositiveIntegerField(null=True, blank=True)
+    any_known_allergy = models.CharField(verbose_name="Any Known Allergy", max_length=200, null=True, blank=True)
     condition = models.CharField(verbose_name="Condition", max_length=200, null=True, blank=True)
     usages = models.CharField(verbose_name="Usages", max_length=200, null=True, blank=True)
     result = models.CharField(
@@ -715,7 +716,75 @@ class BillingPOS(BaseModel):
     def __str__(self) -> str:
         return str(self.pk)
     
+  
+
+"""
+Inventory Management Models
+"""  
+
+class InventoryCategory(BaseModel):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return str(self.name)
+
+
+
+class InventoryStore(BaseModel):
+    name = models.CharField(max_length=50, unique=True)
+    code = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return str(self.name)
+
+
+
+class InventorySupplier(BaseModel):
+    name = models.CharField(verbose_name="Name", max_length=50, unique=True)
+    phone = models.CharField(verbose_name="Phone", max_length=15, unique=True)
+    email = models.EmailField(verbose_name="Email", blank=True, null=True)
+    contact_person = models.CharField(verbose_name="Contact Person Name", max_length=50, blank=True, null=True)
+    address = models.CharField(verbose_name="Address", max_length=150, blank=True)
+    contact_person_phone = models.CharField(verbose_name="Contact Person Phone", max_length=15, blank=True, null=True)
+    contact_person_email = models.EmailField(verbose_name="Contact Person Email", max_length=50, blank=True, null=True)
+    description = models.CharField(verbose_name="Description", max_length=250, blank=True, null=True)
+    objects = models.Manager()
     
-class Inventory(BaseModel):
-    cat = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="details")
-    name = models.CharField(verbose_name="Name", max_length=50)
+    class Meta:
+        verbose_name = "Inventory Supplier"
+        verbose_name_plural = "Inventory Suppliers"
+        ordering = ('-id',)
+
+    def __str__(self):
+        return self.name
+
+        
+
+
+class InventoryItem(BaseModel):
+    category = models.ForeignKey(InventoryCategory, on_delete=models.CASCADE, related_name="inventories")
+    name = models.CharField(verbose_name="Item Name", max_length=50, unique=True)
+    unit = models.CharField(verbose_name="Unit", max_length=50, blank=True)
+    description = models.CharField(verbose_name="Description", max_length=400, blank=True)
+        
+    class Meta:
+        verbose_name = "Inventory Item"
+        ordering = ('-created_at',) 
+
+    def __str__(self):
+        return self.name     
+
+
+
+class InventoryStock(BaseModel):
+    item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE, related_name="stocks")
+    store = models.ForeignKey(InventoryStore, on_delete=models.CASCADE, related_name="stocks")
+    supplier = models.ForeignKey(InventorySupplier, on_delete=models.CASCADE, related_name="stocks")
+    quantity = models.IntegerField()
+    purchase_price = models.FloatField()
+    date = models.DateField(default=timezone.now)
+    description = models.CharField(verbose_name="Description", max_length=400, null=True, blank=True)
+    file = models.FileField(upload_to="inventory-stock-files/", null=True, blank=True)
+    
+    def __str__(self):
+        return str(self.item.name) + " - " + str(self.store.name)

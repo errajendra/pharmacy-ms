@@ -237,4 +237,12 @@ urlpatterns=[
 
     # Pathologists Template View urls
     path('pathologist-home/',pathologistsViews.pathologistsHome,name='pathologist_home'),
+    
+    
+    # Inventory Views Urls
+    path('inventory/category-list/', HODViews.inventory_categories, name='inventory_category_list'),
+    path('inventory/store-list/', HODViews.inventory_stores, name='inventory_store_list'),
+    path('inventory/supplier-list/', HODViews.inventory_suppliers, name='inventory_supplier_list'),
+    path('inventory/item-list/', HODViews.inventory_items, name='inventory_item_list'),
+    
 ]
