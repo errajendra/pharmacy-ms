@@ -420,6 +420,32 @@
                             </ul>
                         </div>
                     </li>
+
+                    
+                    {% comment %} Setting {% endcomment %}
+                    <li class="nav-item">
+                        <a class="nav-link collapsed text-truncate" href="#settingMenuHod" data-toggle="collapse" data-target="#settingMenuHod">
+                            <i class="fas fa-cog mr-2"></i>
+                            <span class="d-none d-sm-inline text-white">Setting</span>
+                            <i class="fas fa-angle-down text-white float-right"></i>
+                        </a>
+                        <div class="collapse{% if request.resolver_match.url_name == 'inventory_category_list' or request.resolver_match.url_name == 'inventory_store_list' or request.resolver_match.url_name == 'inventory_supplier_list' or request.resolver_match.url_name == 'inventory_item_list' %}show{% endif %}" id="settingMenuHod">
+                            <ul class="flex-column nav pl-3">
+                                <li class="nav-item {% if request.resolver_match.url_name == 'inventory_category_list' or request.resolver_match.url_name == 'inventory_store_list' or request.resolver_match.url_name == 'inventory_supplier_list' or request.resolver_match.url_name == 'inventory_item_list' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'inventory_category_list' %}">
+                                        <i class="fas fa-inventory"></i>
+                                        <span class="nav-link-text text-white">Inventory Management</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {% if request.resolver_match.url_name == 'clinical_note_list' %}active{% endif %}">
+                                    <a class="nav-link" href="#">
+                                        <i class="fas fa-bed"></i>
+                                        <span class="nav-link-text text-white">Bed Management</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                     
                 </ul>
             </nav>

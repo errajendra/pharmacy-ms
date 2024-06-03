@@ -1893,3 +1893,43 @@ def delete_clinical_note(request, id):
     instance = get_object_or_404(ClinicalNote, id=id)
     instance.delete()
     return redirect("clinical_note_list")
+
+
+
+"""
+Inventory Management Views
+"""
+def inventory_categories(request):
+    categories = InventoryCategory.objects.all()
+    context = {
+        "categories": categories,
+        "title": "Inventory Categories"
+    }
+    return render(request, "inventory/category-list.html", context)
+
+
+def inventory_stores(request):
+    stores = InventoryStore.objects.all()
+    context = {
+        "stores": stores,
+        "title": "Inventory Stores"
+    }
+    return render(request, "inventory/stores.html", context)
+
+
+def inventory_suppliers(request):
+    suppliers = InventorySupplier.objects.all()
+    context = {
+        "suppliers": suppliers,
+        "title": "Inventory Suppliers"
+    }
+    return render(request, "inventory/suppliers.html", context)
+
+
+def inventory_items(request):
+    items = InventoryItem.objects.all()
+    context = {
+        "items": items,
+        "title": "Inventory Items"
+    }
+    return render(request, "inventory/items.html", context)

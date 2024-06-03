@@ -104,3 +104,35 @@ class NurseAdmin(admin.ModelAdmin):
 class ClinicalNoteAdmin(admin.ModelAdmin):
     list_display = ("note_type", "note", "created_at")
     list_filter = ("note_type", "created_at")
+
+
+# Inventory related models
+@admin.register(InventoryCategory)
+class InventoryCategoryAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "created_at")
+    search_fields = ('name', )
+
+
+@admin.register(InventoryStore)
+class InventoryStoreAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "code", "created_at")
+    
+
+@admin.register(InventorySupplier)
+class InventorySupplierAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "phone", "email", "contact_person", "contact_person_phone", "address", "created_at")
+    search_fields = ("name", "phone", "email", "contact_person", "contact_person_phone", "address",)
+    
+
+@admin.register(InventoryItem)
+class InventoryItemAdmin(admin.ModelAdmin):
+    list_display = ("id", "name", "category", "created_at")
+    list_filter = ("category", "created_at", )
+    search_fields = ("name", )
+    
+
+@admin.register(InventoryStock)
+class InventoryStockAdmin(admin.ModelAdmin):
+    list_display = ("item", "store", "supplier", "quantity", "purchase_price", "date")
+    search_fields = ("description", "item__name",)
+    list_filter = ("item", "store", "supplier", "date")
