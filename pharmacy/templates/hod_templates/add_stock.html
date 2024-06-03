@@ -1,6 +1,11 @@
-{% extends 'hod_templates/base_template.html'%} {% load crispy_forms_tags %} {% block page_title %}
+{% extends 'hod_templates/base_template.html' %}
+{% load crispy_forms_tags %}
+
+{% block page_title %}
 <h5>Add New Drug</h5>
-{% endblock page_title %} {% block main_content %}
+{% endblock page_title %}
+
+{% block main_content %}
 <section class="content">
     <div class="row">
         <div class="col-md-12">
@@ -13,14 +18,15 @@
                     {% if messages %}
                     <div class="form-group">
                         <div class="col-12">
-                            {% for message in messages %} {% if message.tags == "error" %}
+                            {% for message in messages %}
+                            {% if message.tags == "error" %}
                             <div class="col-sm-12">
                                 <div class="alert fade alert-simple alert-danger alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show mt-1 " role="alert" data-brk-library="component__alert">
                                     <button type="button" class="close font__size-18" data-dismiss="alert">
-                                    <span aria-hidden="true">
-                                    <i class="fa fa-times danger "></i>
-                                    </span>
-                                    <span class="sr-only">Close</span>
+                                        <span aria-hidden="true">
+                                            <i class="fa fa-times danger "></i>
+                                        </span>
+                                        <span class="sr-only">Close</span>
                                     </button>
                                     <i class="start-icon far fa-times-circle faa-pulse animated"></i>
                                     <strong class="font__weight-semibold">Oh snap!</strong> {{message}}
@@ -29,21 +35,126 @@
                             {% elif message.tags == "success" %}
                             <div class="alert fade alert-simple alert-success alert-dismissible text-left font__family-montserrat font__size-16 font__weight-light brk-library-rendered rendered show mt-1">
                                 <button type="button" class="close font__size-18" data-dismiss="alert">
-                                <span aria-hidden="true">
-                                <i class="fa fa-times greencross"></i>
-                                </a></span>
-                                <span class="sr-only">Close</span> 
+                                    <span aria-hidden="true">
+                                        <i class="fa fa-times greencross"></i>
+                                    </span>
+                                    <span class="sr-only">Close</span>
                                 </button>
                                 <i class="start-icon far fa-check-circle faa-tada animated"></i>
                                 <strong class="font__weight-semibold">Well done!</strong> {{message}}
                             </div>
-                            {% endif %} {% endfor %}
+                            {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                     {% endif %}
                     
                     <div class="card-body">
-                        {{form|crispy}}
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {{ form.category.label_tag }} {{ form.category }}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {{ form.type.label_tag }} {{ form.type }}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {{ form.manufacture.label_tag }} {{ form.manufacture }}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {{ form.vender.label_tag }} {{ form.vender }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.drug_name.label_tag }} {{ form.drug_name }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.generic_drug_name.label_tag }} {{ form.generic_drug_name }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    {{ form.drug_description.label_tag }} {{ form.drug_description }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {{ form.batch.label_tag }} {{ form.batch }}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    {{ form.actual_price.label_tag }} {{ form.actual_price }}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    {{ form.price.label_tag }} {{ form.price }}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    {{ form.unit.label_tag }} {{ form.unit }}
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    {{ form.unit_quantity.label_tag }} {{ form.unit_quantity }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.quantity.label_tag }} {{ form.quantity }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.total_price.label_tag }} {{ form.total_price }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.discount.label_tag }} {{ form.discount }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.gst.label_tag }} {{ form.gst }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.valid_to.label_tag }} {{ form.valid_to }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {{ form.drug_pic.label_tag }} {{ form.drug_pic }}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <input type="submit" class="btn btn-primary">
                 </form>
@@ -67,22 +178,21 @@
       
         // Define the function to calculate the total price
         function calculateTotalPrice() {
-          // Get the current values of the quantity and MRP input fields
-          const unitQuantity = parseFloat(unitQuantityInput.value) || 0;
-          const unit = parseFloat(unitInput.value) || 0;
-
-          const totalQty = unitQuantity * unit;
-
-          quantityInput.value = totalQty;
-
-          const quantity = parseFloat(quantityInput.value) || 0;
-          const mrp = parseFloat(mrpInput.value) || 0;
-      
-          // Calculate the total price
-          const totalPrice = quantity * mrp;
-      
-          // Set the value of the total price input field
-          totalPriceInput.value = totalPrice.toFixed(2);
+            // Get the current values of the quantity and MRP input fields
+            const unitQuantity = parseFloat(unitQuantityInput.value) || 0;
+            const unit = parseFloat(unitInput.value) || 0;
+            
+            const totalQty = unitQuantity * unit;
+            quantityInput.value = totalQty;
+            
+            const quantity = parseFloat(quantityInput.value) || 0;
+            const mrp = parseFloat(mrpInput.value) || 0;
+            
+            // Calculate the total price
+            const totalPrice = quantity * mrp;
+            
+            // Set the value of the total price input field
+            totalPriceInput.value = totalPrice.toFixed(2);
         }
     </script>
 
