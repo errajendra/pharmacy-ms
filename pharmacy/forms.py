@@ -214,7 +214,7 @@ class EditPatientForm(forms.Form):
 class StockForm(forms.ModelForm):
     total_price = forms.FloatField(
         required=False,
-        widget=forms.NumberInput(attrs={'readonly': 'true', "class":"form-control w-auto"}),
+        widget=forms.NumberInput(attrs={'readonly': 'true', "class":"form-control"}),
     )
     
     class Meta:
@@ -226,20 +226,25 @@ class StockForm(forms.ModelForm):
             "discount", "gst", "hsn", "valid_to", "drug_pic")
             
         widgets = {
-            "category": forms.Select(attrs={"class":"form-control w-auto"}),
-            "type": forms.Select(attrs={"class":"form-control w-auto"}),
-            "manufacture": forms.Select(attrs={"class":"form-control w-auto"}),
-            "supplier": forms.Select(attrs={"class":"form-control w-auto"}),
-            "vender": forms.Select(attrs={"class":"form-control w-auto"}),
-            "gst": forms.Select(attrs={"class":"form-control w-auto"}),
-            "unit": forms.NumberInput(attrs={"class":"form-control w-auto"}),
-            "unit_quantity": forms.NumberInput(attrs={"class":"form-control w-auto"}),
-            "actual_price": forms.NumberInput(attrs={"class":"form-control w-auto"}),
-            "price": forms.NumberInput(attrs={"class":"form-control w-auto"}),
-            "quantity": forms.NumberInput(attrs={"class":"form-control w-auto"}),
+            "category": forms.Select(attrs={"class":"form-control"}),
+            "type": forms.Select(attrs={"class":"form-control "}),
+            "manufacture": forms.Select(attrs={"class":"form-control "}),
+            "supplier": forms.Select(attrs={"class":"form-control "}),
+            "vender": forms.Select(attrs={"class":"form-control "}),
+            "gst": forms.Select(attrs={"class":"form-control "}),
+            "unit": forms.NumberInput(attrs={"class":"form-control "}),
+            "unit_quantity": forms.NumberInput(attrs={"class":"form-control "}),
+            "actual_price": forms.NumberInput(attrs={"class":"form-control "}),
+            "price": forms.NumberInput(attrs={"class":"form-control "}),
+            "quantity": forms.NumberInput(attrs={"class":"form-control "}),
+            "discount": forms.NumberInput(attrs={"class":"form-control "}),
+            "drug_name": forms.TextInput(attrs={"class":"form-control "}),
+            "generic_drug_name": forms.TextInput(attrs={"class":"form-control "}),
+            "drug_description": forms.TextInput(attrs={"class":"form-control "}),
+            "batch": forms.TextInput(attrs={"class":"form-control "}),
             "hsn": forms.TextInput(attrs={"class":"form-control"}),
-            "discount": forms.NumberInput(attrs={"class":"form-control w-auto"}),
-            "valid_to": forms.DateInput(attrs={"class":"form-control w-auto", "type": "date"}), 
+            "valid_to": forms.DateInput(attrs={"class":"form-control ", "type": "date"}),
+             "drug_pic": forms.ClearableFileInput(attrs={"class": "form-control", "id": "id_drug_pic"}), 
         }
 
 

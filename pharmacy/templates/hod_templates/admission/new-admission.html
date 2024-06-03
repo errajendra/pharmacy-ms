@@ -43,27 +43,27 @@
                     </div> {% endcomment %}
                     <div class="card-body">
                         <div class="row">
-                            <div id="div_id_patient" class="mb-3 mx-0 col-lg-4 col-md-5 col-sm-6">
+                            <div class="col-md-3" id="div_id_patient">
                                 <label for="id_patient" class="form-label requiredField"> Patient<span class="asteriskField">*</span> </label>
-                                <select name="patient" class="form-control w-auto select form-select" required="" id="id_patient">
+                                <select name="patient" class="form-control select form-select" required="" id="id_patient">
                                     <option value="" {% if request.GET.patient %} {% else %} selected="" {% endif %} >---------</option>
                                     {% for pt in patients %}
                                     <option value="{{pt.id}}" {% if request.GET.patient == pt.admin.username %} selected="" {% endif %}>{{pt}} </option>
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div id="div_id_department" class="mb-3 mx-0 col-lg-2 col-md-3 col-sm-6">
+                            <div id="div_id_department" class="col-md-3">
                                 <label for="id_department" class="form-label requiredField"> Department<span class="asteriskField">*</span> </label>
-                                <select name="department" class="form-control w-auto select form-select" required="" id="id_department">
+                                <select name="department" class="form-control  select form-select" required="" id="id_department">
                                     <option value="" selected="">---------</option>
                                     {% for d in departments %}
                                     <option value="{{d.id}}">{{d}} </option>
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div id="div_id_doctor" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6">
+                            <div id="div_id_doctor" class="col-md-3">
                                 <label for="id_doctor" class="form-label requiredField"> Doctor<span class="asteriskField">*</span> </label>
-                                <select name="doctor" class="form-control w-auto select form-select" required="" id="id_doctor">
+                                <select name="doctor" class="form-control select form-select" required="" id="id_doctor">
                                     <option value="" selected="">---------</option>
                                     {% for dr in doctors %}
                                     <option value="{{dr.id}}">{{dr}} </option>
@@ -71,7 +71,7 @@
                                     
                                 </select>
                             </div>
-                            <div id="div_id_reason" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6">
+                            <div id="div_id_reason" class="col-md-3">
                                 <label for="id_reason" class="form-label">
                                     Reason
                                 </label>
@@ -82,61 +82,63 @@
                             
                         </div>
                         <div class="row">
-                            <div id="div_id_weight" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6">
+                            <div id="div_id_weight" class="col-3">
                                 <label for="id_weight" class="form-label">
                                     Patient Weight
                                 </label>
-                                <input type="number" name="weight" class="form-control w-auto numberinput" step="any" id="id_weight" />
+                                <input type="number" name="weight" class="form-control  numberinput" step="any" id="id_weight" />
                                 <div id="id_weight_helptext" class="form-text">Enter Weight Reading</div>
                             </div>
-                            <div id="div_id_bp_systolic" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6">
+                            <div id="div_id_bp_systolic" class="col-3">
                                 <label for="id_bp_systolic" class="form-label">
                                     Blood Pressure (mmHg) - Systolic
                                 </label>
-                                <input type="text" name="bp_systolic" class="form-control w-auto textinput" maxlength="50" id="id_bp_systolic" />
+                                <input type="text" name="bp_systolic" class="form-control textinput" maxlength="50" id="id_bp_systolic" />
                                 <div id="id_bp_systolic_helptext" class="form-text">Enter Systolic Reading</div>
                             </div>
                             <div id="div_id_bp_diastolic" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6">
                                 <label for="id_bp_diastolic" class="form-label">
                                     Blood Pressure (mmHg) - Diastolic
                                 </label>
-                                <input type="text" name="bp_diastolic" class="form-control w-auto textinput" maxlength="50" id="id_bp_diastolic" />
+                                <input type="text" name="bp_diastolic" class="form-control  textinput" maxlength="50" id="id_bp_diastolic" />
                                 <div id="id_bp_diastolic_helptext" class="form-text">Enter Diastolic Reading</div>
                             </div>
-                            <div id="div_id_pulse" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6">
+                            <div id="div_id_pulse" class="col-3">
                                 <label for="id_pulse" class="form-label">
                                     Pulse (Heartbeats/min)
                                 </label>
-                                <input type="number" name="pulse" class="form-control w-auto numberinput" step="any" id="id_pulse" />
+                                <input type="number" name="pulse" class="form-control numberinput" step="any" id="id_pulse" />
                                 <div id="id_pulse_helptext" class="form-text">Enter Reading (Sitting/Standing)</div>
                             </div>
-                            <div id="div_id_respiration_rates" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6">
+                        </div>
+                        <div class="row">
+                            <div id="div_id_respiration_rates" class="col-3">
                                 <label for="id_respiration_rates" class="form-label">
                                     Respiration Rates (Heartbeats/min)
                                 </label>
-                                <input type="number" name="respiration_rates" class="form-control w-auto numberinput" step="any" id="id_respiration_rates" />
+                                <input type="number" name="respiration_rates" class="form-control numberinput" step="any" id="id_respiration_rates" />
                                 <div id="id_respiration_rates_helptext" class="form-text">Enter Reading</div>
                             </div>
-                            <div id="div_id_temp" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6">
+                            <div id="div_id_temp" class="col-3">
                                 <label for="id_temp" class="form-label">
                                     Temperature (°F)
                                 </label>
-                                <input type="number" name="temp" class="form-control w-auto numberinput" step="any" id="id_temp" />
+                                <input type="number" name="temp" class="form-control numberinput" step="any" id="id_temp" />
                                 <div id="id_temp_helptext" class="form-text">Enter Reading of Temperature (in °F)</div>
                             </div>
-                            <div id="div_id_spo2" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6">
+                            <div id="div_id_spo2" class="col-3">
                                 <label for="id_spo2" class="form-label">
                                     SPO2 (%)
                                 </label>
-                                <input type="number" name="spo2" class="form-control w-auto numberinput" step="any" id="id_spo2" />
+                                <input type="number" name="spo2" class="form-control  numberinput" step="any" id="id_spo2" />
                                 <div id="id_spo2_helptext" class="form-text">Enter SPO2 (%) Reading</div>
                             </div>
-                            <div id="div_id_fees" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6">
-                                <label for="id_fees" class="form-label requiredField"> Fees<span class="asteriskField">*</span> </label> <input type="number" name="fees" value="0" class="form-control w-auto numberinput" step="any" required="" id="id_fees" />
+                            <div id="div_id_fees" class="col-3">
+                                <label for="id_fees" class="form-label requiredField"> Fees<span class="asteriskField">*</span> </label> <input type="number" name="fees" value="0" class="form-control  numberinput" step="any" required="" id="id_fees" />
                             </div>
-                            <div id="div_id_purpose" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6">
+                            <div id="div_id_purpose" class="col-3">
                                 <label for="id_purpose" class="form-label requiredField"> Purpose<span class="asteriskField">*</span> </label>
-                                <select name="purpose" class="form-control w-auto select form-select" id="id_purpose">
+                                <select name="purpose" class="form-control  select form-select" id="id_purpose">
                                     <option value="OPD" {% if request.GET.purpose == 'OPD' %} selected="" {% else %} {% endif %} >OPD</option>
                                     <option value="IPD/Bed Addmission" {% if request.GET.purpose == 'IPD' %} selected="" {% else %} {% endif %} >IPD/Bed Addmission</option>
                                 </select>
@@ -144,37 +146,37 @@
                         </div>
 
                         <div class="row">
-                            <div id="div_id_guardian" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_guardian" class="col-3" style="display: none;">
                                 <label for="id_guardian" class="form-label">
                                     Guardian Name
                                 </label>
                                 <input type="text" name="guardian" class="form-control textinput" data-purpose="BedIPD" maxlength="36" id="id_guardian" />
                             </div>
-                            <div id="div_id_advanced_fees" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_advanced_fees" class="col-3" style="display: none;">
                                 <label for="id_advanced_fees" class="form-label requiredField"> Advanced Fees<span class="asteriskField">*</span> </label>
-                                <input type="number" name="advanced_fees" value="0" class="form-control w-auto numberinput" data-purpose="BedIPD" step="any" required="" id="id_advanced_fees" />
+                                <input type="number" name="advanced_fees" value="0" class="form-control  numberinput" data-purpose="BedIPD" step="any" required="" id="id_advanced_fees" />
                             </div>
-                            <div id="div_id_bht_no" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_bht_no" class="col-3" style="display: none;">
                                 <label for="id_bht_no" class="form-label">
                                     BHT No
                                 </label>
                                 <input type="text" name="bht_no" class="form-control textinput" data-purpose="BedIPD" maxlength="48" id="id_bht_no" />
                             </div>
-                            <div id="div_id_addmission_time" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_addmission_time" class="col-3" style="display: none;">
                                 <label for="id_addmission_time" class="form-label">
-                                    Date &amp; Time of Addmission
+                                    Date &amp; Time of Admission
                                 </label>
-                                <input type="datetime-local" name="addmission_time" class="form-control w-auto textinput" data-purpose="BedIPD" id="id_addmission_time" />
+                                <input type="datetime-local" name="addmission_time" class="form-control textinput" data-purpose="BedIPD" id="id_addmission_time" />
                             </div>
                         </div>
                         <div class="row">
-                            <div id="div_id_discharge_time" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_discharge_time" class="col-3" style="display: none;">
                                 <label for="id_discharge_time" class="form-label">
                                     Date &amp; Time of Discharge
                                 </label>
-                                <input type="datetime-local" name="discharge_time" class="form-control w-auto textinput" data-purpose="BedIPD" id="id_discharge_time" />
+                                <input type="datetime-local" name="discharge_time" class="form-control textinput" data-purpose="BedIPD" id="id_discharge_time" />
                             </div>
-                            <div id="div_id_ward_bed" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_ward_bed" class="col-3" style="display: none;">
                                 <label for="id_ward_bed" class="form-label">
                                     Ward Type
                                 </label>
@@ -185,58 +187,58 @@
                                     <option value="Semi Private">
                                 </datalist>
                             </div>
-                            <div id="div_id_no_of_beds" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_no_of_beds" class="col-3" style="display: none;">
                                 <label for="id_no_of_beds" class="form-label">
                                     Bed No.
                                 </label>
-                                <input type="number" name="no_of_beds" value="1" class="form-control w-auto numberinput" data-purpose="BedIPD" min="0" id="id_no_of_beds" />
+                                <input type="number" name="no_of_beds" value="1" class="form-control numberinput" data-purpose="BedIPD" min="0" id="id_no_of_beds" />
                             </div>
-                            <div id="div_id_operation_date" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_operation_date" class="col-3" style="display: none;">
                                 <label for="id_operation_date" class="form-label">
                                     Date &amp; Time of Operation
                                 </label>
-                                <input type="datetime-local" name="operation_date" class="form-control w-auto datetimeinput" data-purpose="BedIPD" id="id_operation_date" />
+                                <input type="datetime-local" name="operation_date" class="form-control  datetimeinput" data-purpose="BedIPD" id="id_operation_date" />
                             </div>
                         </div>
 
                         <div class="row">
-                            <div id="div_id_addmission_type" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
-                                <label for="id_addmission_type" class="form-label requiredField"> Addmission type<span class="asteriskField">*</span> </label>
-                                <select name="addmission_type" class="form-control w-auto select form-select" data-purpose="BedIPD" id="id_addmission_type">
+                            <div id="div_id_addmission_type" class="col-3" style="display: none;">
+                                <label for="id_addmission_type" class="form-label requiredField"> Admission type<span class="asteriskField">*</span> </label>
+                                <select name="addmission_type" class="form-control  select form-select" data-purpose="BedIPD" id="id_addmission_type">
                                     <option value="Routine" selected="">Routine</option>
                                     <option value="Emergency">Emergency</option>
                                     <option value="MLC">MLC</option>
                                     <option value="Accident">Accident</option>
                                 </select>
                             </div>
-                            <div id="div_id_mlc_no" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_mlc_no" class="col-3" style="display: none;">
                                 <label for="id_mlc_no" class="form-label">
                                     MLC No
                                 </label>
                                 <input type="text" name="mlc_no" class="form-control textinput" data-purpose="BedIPD" maxlength="48" id="id_mlc_no" />
                             </div>
-                            <div id="div_id_icd" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_icd" class="col-3" style="display: none;">
                                 <label for="id_icd" class="form-label">
                                     ICD
                                 </label>
                                 <input type="text" name="icd" class="form-control textinput" data-purpose="BedIPD" maxlength="48" id="id_icd" />
                             </div>
-                            <div id="div_id_provisonal_diagnosis" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_provisonal_diagnosis" class="col-3" style="display: none;">
                                 <label for="id_provisonal_diagnosis" class="form-label">
-                                    Provisonal Diagnosis
+                                    Provisional Diagnosis
                                 </label>
                                 <input type="text" name="provisonal_diagnosis" class="form-control textinput" data-purpose="BedIPD" maxlength="200" id="id_provisonal_diagnosis" />
                             </div>
                         </div>
         
                         <div class="row">
-                            <div id="div_id_final_diagnosis" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_final_diagnosis" class="col-6" style="display: none;">
                                 <label for="id_final_diagnosis" class="form-label">
                                     Final Diagnosis
                                 </label>
                                 <input type="text" name="final_diagnosis" class="form-control textinput" data-purpose="BedIPD" maxlength="200" id="id_final_diagnosis" />
                             </div>
-                            <div id="div_id_summary_of_case" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_summary_of_case" class="col-6" style="display: none;">
                                 <label for="id_summary_of_case" class="form-label">
                                     Summary of Case
                                 </label>
@@ -245,9 +247,9 @@
                         </div>
 
                         <div class="row">
-                            <div id="div_id_staff" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_staff" class="col-4" style="display: none;">
                                 <label for="id_staff" class="form-label">
-                                    Staff Nurse (Asigned)
+                                    Staff Nurse (Assigned)
                                 </label>
                                 <select name="staff" class="form-control select form-select" data-purpose="BedIPD" id="id_staff">
                                     <option value="" selected="">---------</option>
@@ -256,42 +258,42 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div id="div_id_facilities" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_facilities" class="col-4" style="display: none;">
                                 <label for="id_facilities" class="form-label">
                                     Facilities
                                 </label>
                                 <input type="text" name="facilities" class="form-control textinput" data-purpose="BedIPD" maxlength="200" id="id_facilities" />
                             </div>
-                            <div id="div_id_days" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_days" class="col-4" style="display: none;">
                                 <label for="id_days" class="form-label">
                                     Days
                                 </label>
                                 <input type="number" name="days" class="form-control numberinput" data-purpose="BedIPD" min="0" id="id_days" />
                             </div>
-                            <div id="div_id_condition" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_condition" class="col-6" style="display: none;">
                                 <label for="id_condition" class="form-label">
                                     Condition
                                 </label>
-                                <input type="text" name="condition" class="form-control w-auto textinput" data-purpose="BedIPD" maxlength="200" id="id_condition" />
+                                <input type="text" name="condition" class="form-control textinput" data-purpose="BedIPD" maxlength="200" id="id_condition" />
                             </div>
-                            <div id="div_id_any_known_allergy" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_any_known_allergy" class="col-6" style="display: none;">
                                 <label for="id_any_known_allergy" class="form-label">
                                     Any Known Allergy
                                 </label>
-                                <input type="text" name="any_known_allergy" class="form-control w-auto textinput" data-purpose="BedIPD" maxlength="200" id="id_any_known_allergy" />
+                                <input type="text" name="any_known_allergy" class="form-control  textinput" data-purpose="BedIPD" maxlength="200" id="id_any_known_allergy" />
                             </div>
                         </div>
 
                         <div class="row">
-                            <div id="div_id_usages" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_usages" class="col-6" style="display: none;">
                                 <label for="id_usages" class="form-label">
                                     Usages
                                 </label>
                                 <input type="text" name="usages" class="form-control textinput" data-purpose="BedIPD" maxlength="200" id="id_usages" />
                             </div>
-                            <div id="div_id_result" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_result" class="col-6" style="display: none;">
                                 <label for="id_result" class="form-label requiredField"> Result<span class="asteriskField">*</span> </label>
-                                <select name="result" class="form-control w-auto select form-select" data-purpose="BedIPD" id="id_result">
+                                <select name="result" class="form-control  select form-select" data-purpose="BedIPD" id="id_result">
                                     <option value="Recovered" selected="">Recovered</option>
                                     <option value="Dorp">Dorp</option>
                                     <option value="Unchanged">Unchanged</option>
@@ -300,13 +302,13 @@
                                     <option value="Died">Died</option>
                                 </select>
                             </div>
-                            <div id="div_id_couse_of_death" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <div id="div_id_couse_of_death" class="col-6" style="display: none;">
                                 <label for="id_couse_of_death" class="form-label">
                                     Cause of Death
                                 </label>
                                 <input type="text" name="couse_of_death" class="form-control textinput" data-purpose="BedIPD" maxlength="200" id="id_couse_of_death" />
                             </div>
-                            <div id="div_id_remark" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6">
+                            <div id="div_id_remark" class="col-6">
                                 <label for="id_remark" class="form-label">
                                     Remark
                                 </label>
