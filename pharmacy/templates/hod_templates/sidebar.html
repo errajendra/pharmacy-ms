@@ -5,6 +5,7 @@
     font-weight: bold; /* Optionally, make the text bold to emphasize the active state */
 }
 </style>
+
 {% if request.user.user_type == 'AdminHOD' %}
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
@@ -429,16 +430,16 @@
                             <span class="d-none d-sm-inline text-white">Setting</span>
                             <i class="fas fa-angle-down text-white float-right"></i>
                         </a>
-                        <div class="collapse{% if request.resolver_match.url_name == 'inventory_category_list' or request.resolver_match.url_name == 'inventory_store_list' or request.resolver_match.url_name == 'inventory_supplier_list' or request.resolver_match.url_name == 'inventory_item_list' %}show{% endif %}" id="settingMenuHod">
+                        <div class="collapse{% if request.resolver_match.url_name == 'inventory_category_list' or request.resolver_match.url_name == 'inventory_store_list' or request.resolver_match.url_name == 'inventory_supplier_list' or request.resolver_match.url_name == 'inventory_item_list' or request.resolver_match.url_name == 'bed_list' %}show{% endif %}" id="settingMenuHod">
                             <ul class="flex-column nav pl-3">
                                 <li class="nav-item {% if request.resolver_match.url_name == 'inventory_category_list' or request.resolver_match.url_name == 'inventory_store_list' or request.resolver_match.url_name == 'inventory_supplier_list' or request.resolver_match.url_name == 'inventory_item_list' %}active{% endif %}">
                                     <a class="nav-link" href="{% url 'inventory_category_list' %}">
-                                        <i class="fas fa-inventory"></i>
-                                        <span class="nav-link-text text-white">Inventory Management</span>
+                                        <i class="fa fa-list"></i>
+                                        <span class="nav-link-text text-white" style="font-size: 13px;">Inventory Management</span>
                                     </a>
                                 </li>
-                                <li class="nav-item {% if request.resolver_match.url_name == 'clinical_note_list' %}active{% endif %}">
-                                    <a class="nav-link" href="#">
+                                <li class="nav-item {% if request.resolver_match.url_name == 'bed_list' %}active{% endif %}">
+                                    <a class="nav-link" href="{% url 'bed_list' %}">
                                         <i class="fas fa-bed"></i>
                                         <span class="nav-link-text text-white">Bed Management</span>
                                     </a>

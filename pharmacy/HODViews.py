@@ -1933,3 +1933,111 @@ def inventory_items(request):
         "title": "Inventory Items"
     }
     return render(request, "inventory/items.html", context)
+
+
+@login_required
+def bed_type_list(request):
+    
+    context = {
+        "title": "Bed Type List",
+        "bed": BedType.objects.all()
+    }
+    return render(request, 'hod_templates/bed_management/bed_type.html', context)
+
+
+def add_bed_type(request):
+    if request.method == 'POST':
+        form = BedTypeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Bed type added successfully!')
+            return redirect('bed_type_list')
+        else:
+            messages.error(request, 'Error adding bed type. Please check the form.')
+    else:
+        form = BedTypeForm()
+    
+    bed_types = BedType.objects.all()
+    context = {
+        'title': 'Bed Type List',
+        'bed': bed_types,
+        'form': form,
+    }
+    return render(request, 'hod_templates/bed_management/bed_type.html', context)
+
+
+@login_required
+def floor_list(request):
+    
+    context = {
+        "title": "Floor List",
+        "bed": Floor.objects.all()
+    }
+    return render(request, 'hod_templates/bed_management/floor.html', context)
+
+
+def add_floor(request):
+    if request.method == 'POST':
+        form = FloorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Floor added successfully!')
+            return redirect('floor_list')
+        else:
+            messages.error(request, 'Error adding floor. Please check the form.')
+    else:
+        form = FloorForm()
+    
+    context = {
+        'form': form,
+    }
+    return render(request, 'hod_templates/bed_management/floor.html', context)
+
+
+@login_required
+def bed_list(request):
+    bed = Bed.objects.all()
+    bed_types = BedType.objects.all()
+    floors = Floor.objects.all()
+    context = {
+        "title": "Bed List",
+        "bed": bed,
+        "bed_types": bed_types,
+        'floors': floors
+    }
+    return render(request, 'hod_templates/bed_management/bed.html', context)
+
+
+def add_bed(request):
+    if request.method == 'POST':
+        form = BedForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Bed added successfully!')
+            return redirect('bed_list')
+        else:
+            messages.error(request, 'Error adding bed. Please check the form.')
+    else:
+        form = BedForm()
+    
+    beds = Bed.objects.all()
+    bed_types = BedType.objects.all()
+    floors = Floor.objects.all()
+    context = {
+        'title': 'Bed List',
+        'bed': beds,
+        'bed_types': bed_types,
+        'floors': floors,
+        'form': form,
+    }
+    return render(request, 'hod_templates/bed_management/bed.html', context)
+
+
+@login_required
+def bed_status(request):
+    bed = Bed.objects.all()
+    context = {
+        "title": "Bed Status",
+        "bed": bed,
+    }
+    return render(request, 'hod_templates/bed_management/bed_status.html', context)

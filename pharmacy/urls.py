@@ -245,4 +245,15 @@ urlpatterns=[
     path('inventory/supplier-list/', HODViews.inventory_suppliers, name='inventory_supplier_list'),
     path('inventory/item-list/', HODViews.inventory_items, name='inventory_item_list'),
     
+    
+    # Bed Management Views Urls
+    path('admin_user/bed-type-list/',HODViews.bed_type_list, name='bed_type_list'), 
+    path('admin_user/add-bed-type/', HODViews.add_bed_type, name='add_bed_type'),
+    
+    path('admin_user/floor-list/',HODViews.floor_list, name='floor_list'), 
+    path('admin_user/add-floor/', HODViews.add_floor, name='add_floor'),
+    
+    path('admin_user/bed-list/',HODViews.bed_list, name='bed_list'), 
+    path('admin_user/add-bed/', HODViews.add_bed, name='add_bed'),
+    path('admin_user/bed-status/', HODViews.bed_status, name='bed_status'),
 ]
