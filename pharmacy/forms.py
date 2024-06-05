@@ -685,3 +685,36 @@ class PatientRecordForm(forms.ModelForm):
                 Submit('submit', 'Save', css_class='btn btn-info')
             )
         )
+
+class BedTypeForm(forms.ModelForm):
+    class Meta:
+        model = BedType
+        fields = ['bed_type']
+        labels = {
+            'bed_type': 'Bed Type',
+        }
+
+class FloorForm(forms.ModelForm):
+    class Meta:
+        model = Floor
+        fields = ['name', 'floor', 'desc']
+        labels = {
+            'name': 'Bed Group',
+            'floor': 'Floor',
+            'desc': 'Description',
+        }
+        widgets = {
+            'desc': forms.Textarea(attrs={'rows': 3}),
+        }
+
+
+class BedForm(forms.ModelForm):
+    class Meta:
+        model = Bed
+        fields = ['bed_no', 'bed_type', 'floor', 'status']
+        labels = {
+            'bed_no': 'Bed Number',
+            'bed_type': 'Bed Type',
+            'floor': 'Floor',
+            'status': 'Status',
+        }

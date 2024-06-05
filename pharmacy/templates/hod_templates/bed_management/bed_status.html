@@ -1,0 +1,110 @@
+{% extends 'hod_templates/base_template.html'%} 
+{% block page_title %}
+<h5>{{ title }} </h5>
+{% endblock page_title %} 
+
+{% block main_content %}
+<style>
+    a.active{
+        color: blue !important;
+    }
+</style>
+<section class="content">
+    {% if messages %}
+    <div class="form-group">
+        <div class="col-12">
+            {% for message in messages %} 
+                {% if message.tags == "error" %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% elif message.tags == "success" %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endif %} 
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card card-body table-responsive w-100">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>
+                                <a href="{% url 'bed_status' %}" class="btn btn-primary {% if request.resolver_match.url_name == 'bed_status' %}active{% endif %}" style="width: 100%; background-color:rgb(232, 222, 222); color:black;font-weight:600">Bed Status</a>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <a href="{% url 'bed_list' %}" class="btn btn-primary {% if request.resolver_match.url_name == 'bed_list' %}active{% endif %}" style="width: 100%; background-color:rgb(232, 222, 222); color:black;font-weight:600">Bed</a>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <a href="{% url 'bed_type_list' %}" class="btn btn-primary {% if request.resolver_match.url_name == 'bed_type_list' %}active{% endif %}" style="width: 100%;background-color:rgb(232, 222, 222); color:black;font-weight:600">Bed Type</a>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <a href="{% url 'floor_list' %}" class="btn btn-primary {% if request.resolver_match.url_name == 'floor_list' %}active{% endif %}" style="width: 100%;background-color:rgb(232, 222, 222); color:black;font-weight:600">Floor</a>
+                            </th>
+                        </tr>
+                      </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-9">
+
+            <div class="card card-body table-responsive w-100">
+                <div class="card-header">
+                    <span> {{ title }} </span>
+                    <div class="card-tools d-flex">
+                       
+                    </div>
+                </div>
+                <table class="table table-bordered table-hover dataTable" id="plist">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Bed Type</th>
+                            <th>Bed Group</th>
+                            <th>Floor</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for b in bed %}
+                        <tr class="hov" {% if b.status %}style="background-color: #ff00002b !important;"{% else %}style="background-color: #0080004a !important;"{% endif %}>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ b.bed_no }}</td>
+                            <td>{{ b.bed_type.bed_type }}</td>
+                            <td>{{ b.floor.name }}</td>
+                            <td>{{ b.floor.floor }}</td>
+                            <td>
+                                {% if b.status %}
+                                    Alloted
+                                {% else %}
+                                    Available
+                                {% endif %}
+                            </td>
+                           
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,165 @@
+{% extends 'hod_templates/base_template.html'%} 
+{% block page_title %}
+<h5>{{title}} </h5>
+{% endblock page_title %} 
+
+{% block main_content %}
+<style>
+    a.active{
+        color: blue !important;
+    }
+</style>
+<section class="content">
+    {% if messages %}
+    <div class="form-group">
+        <div class="col-12">
+            {% for message in messages %} 
+                {% if message.tags == "error" %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% elif message.tags == "success" %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endif %} 
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card card-body table-responsive w-100">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>
+                                <a href="{% url 'bed_status' %}" class="btn btn-primary {% if request.resolver_match.url_name == 'bed_status' %}active{% endif %}" style="width: 100%; background-color:rgb(232, 222, 222); color:black;font-weight:600">Bed Status</a>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <a href="{% url 'bed_list' %}" class="btn btn-primary {% if request.resolver_match.url_name == 'bed_list' %}active{% endif %}" style="width: 100%; background-color:rgb(232, 222, 222); color:black;font-weight:600">Bed</a>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <a href="{% url 'bed_type_list' %}" class="btn btn-primary {% if request.resolver_match.url_name == 'bed_type_list' %}active{% endif %}" style="width: 100%;background-color:rgb(232, 222, 222); color:black;font-weight:600">Bed Type</a>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <a href="{% url 'floor_list' %}" class="btn btn-primary {% if request.resolver_match.url_name == 'floor_list' %}active{% endif %}" style="width: 100%;background-color:rgb(232, 222, 222); color:black;font-weight:600">Floor</a>
+                            </th>
+                        </tr>
+                      </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card card-body table-responsive w-100">
+                <div class="card-header">
+                    <span>{{title}}</span>
+                    <div class="card-tools d-flex">
+                        <!-- Button trigger modal for adding floor -->
+                        <button type="button" class="btn btn-sm btn-info mr-2" data-toggle="modal" data-target="#addFloorModal">
+                            + Add Floor
+                        </button>
+                    </div>
+                </div>
+                <table class="table table-bordered table-hover dataTable" id="plist">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Floor</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for b in bed %}
+                        <tr class="hov">
+                            <td>{{forloop.counter}}</td>
+                            <td>{{b.name}}</td>
+                            <td>{{b.floor}}</td>
+                            <td>{{b.desc}}</td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
+                                <!-- Button trigger modal for delete confirmation -->
+                                <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal{{forloop.counter}}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                                <!-- Modal for delete confirmation -->
+                                <div class="modal fade" id="deleteModal{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle{{forloop.counter}}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalTitle{{forloop.counter}}">Delete Floor Detail</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure to delete?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <a href="#" type="button" class="btn btn-danger">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding floor -->
+    <div class="modal fade" id="addFloorModal" tabindex="-1" role="dialog" aria-labelledby="addFloorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="post" action="{% url 'add_floor' %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addFloorModalLabel">Add Floor</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="floorName">Bed Group</label>
+                            <input type="text" class="form-control" id="id_name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="floorName">Floor</label>
+                            <input type="text" class="form-control" id="id_floor" name="floor" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="floorDescription">Description</label>
+                            <textarea class="form-control" id="id_desc" name="desc" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Floor</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</section>
+{% endblock %}
