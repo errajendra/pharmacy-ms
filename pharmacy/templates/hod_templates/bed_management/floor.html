@@ -85,35 +85,72 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for b in bed %}
+                        {% for floor in floors %}
                         <tr class="hov">
-                            <td>{{forloop.counter}}</td>
-                            <td>{{b.name}}</td>
-                            <td>{{b.floor}}</td>
-                            <td>{{b.desc}}</td>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ floor.name }}</td>
+                            <td>{{ floor.floor }}</td>
+                            <td>{{ floor.desc }}</td>
                             <td>
-                                <a href="#" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a>
+                                <!-- Button trigger modal for edit floor -->
+                                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#editFloorModal{{ floor.id }}">
+                                    <i class="fa fa-edit"></i>
+                                </button>
                                 <!-- Button trigger modal for delete confirmation -->
-                                <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal{{forloop.counter}}">
+                                <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteModal{{ floor.id }}">
                                     <i class="fa fa-trash"></i>
                                 </button>
                                 <!-- Modal for delete confirmation -->
-                                <div class="modal fade" id="deleteModal{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle{{forloop.counter}}" aria-hidden="true">
+                                <div class="modal fade" id="deleteModal{{ floor.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle{{ floor.id }}" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="deleteModalTitle{{forloop.counter}}">Delete Floor Detail</h5>
+                                                <h5 class="modal-title" id="deleteModalTitle{{ floor.id }}">Delete Floor Detail</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                Are you sure to delete?
+                                                Are you sure you want to delete {{ floor.name }} ?
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <a href="#" type="button" class="btn btn-danger">Delete</a>
+                                                <a href="{% url 'delete_floor' floor.id %}" type="button" class="btn btn-danger">Delete</a>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal for edit floor -->
+                                <div class="modal fade" id="editFloorModal{{ floor.id }}" tabindex="-1" role="dialog" aria-labelledby="editFloorModalLabel{{ floor.id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <form method="post" action="{% url 'edit_floor' floor.id %}">
+                                                {% csrf_token %}
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="editFloorModalLabel{{ floor.id }}">Edit Floor</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label for="floorName{{ floor.id }}">Bed Group</label>
+                                                        <input type="text" class="form-control" id="floorName{{ floor.id }}" name="name" value="{{ floor.name }}" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="floorFloor{{ floor.id }}">Floor</label>
+                                                        <input type="text" class="form-control" id="floorFloor{{ floor.id }}" name="floor" value="{{ floor.floor }}" required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="floorDescription{{ floor.id }}">Description</label>
+                                                        <textarea class="form-control" id="floorDescription{{ floor.id }}" name="desc" rows="3" required>{{ floor.desc }}</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-success">Save</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -128,7 +165,7 @@
 
     <!-- Modal for adding floor -->
     <div class="modal fade" id="addFloorModal" tabindex="-1" role="dialog" aria-labelledby="addFloorModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <form method="post" action="{% url 'add_floor' %}">
                     {% csrf_token %}
@@ -153,8 +190,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add Floor</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Add Floor</button>
                     </div>
                 </form>
             </div>

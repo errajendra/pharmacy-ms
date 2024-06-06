@@ -1945,6 +1945,7 @@ def bed_type_list(request):
     return render(request, 'hod_templates/bed_management/bed_type.html', context)
 
 
+@login_required
 def add_bed_type(request):
     if request.method == 'POST':
         form = BedTypeForm(request.POST)
@@ -1967,15 +1968,37 @@ def add_bed_type(request):
 
 
 @login_required
+def edit_bed_type(request, id):
+    bed_type = get_object_or_404(BedType, id=id)
+    if request.method == 'POST':
+        form = BedTypeForm(request.POST, instance=bed_type)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Bed Type updated successfully.')
+            return redirect('bed_type_list')
+        else:
+            messages.error(request, 'Failed to update Bed Type.')
+    return redirect('bed_type_list')
+
+
+@login_required
+def delete_bed_type(request, id):
+    bed_type = get_object_or_404(BedType, id=id)
+    bed_type.delete()
+    messages.success(request, 'Bed Type deleted successfully.')
+    return redirect('bed_type_list')
+
+@login_required
 def floor_list(request):
-    
+    floors = Floor.objects.all()
     context = {
         "title": "Floor List",
-        "bed": Floor.objects.all()
+        "floors": floors
     }
     return render(request, 'hod_templates/bed_management/floor.html', context)
 
 
+@login_required
 def add_floor(request):
     if request.method == 'POST':
         form = FloorForm(request.POST)
@@ -1995,6 +2018,28 @@ def add_floor(request):
 
 
 @login_required
+def edit_floor(request, id):
+    floor = get_object_or_404(Floor, id=id)
+    if request.method == 'POST':
+        form = FloorForm(request.POST, instance=floor)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Floor updated successfully.')
+            return redirect('floor_list')
+        else:
+            messages.error(request, 'Failed to update Floor.')
+    return redirect('floor_list')
+
+
+@login_required
+def delete_floor(request, id):
+    floor = get_object_or_404(Floor, id=id)
+    floor.delete()
+    messages.success(request, 'Floor deleted successfully.')
+    return redirect('floor_list')
+
+
+@login_required
 def bed_list(request):
     bed = Bed.objects.all()
     bed_types = BedType.objects.all()
@@ -2008,6 +2053,7 @@ def bed_list(request):
     return render(request, 'hod_templates/bed_management/bed.html', context)
 
 
+@login_required
 def add_bed(request):
     if request.method == 'POST':
         form = BedForm(request.POST)
@@ -2031,6 +2077,28 @@ def add_bed(request):
         'form': form,
     }
     return render(request, 'hod_templates/bed_management/bed.html', context)
+
+
+@login_required
+def edit_bed(request, id):
+    bed = get_object_or_404(Bed, id=id)
+    if request.method == 'POST':
+        form = BedForm(request.POST, instance=bed)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Bed updated successfully.')
+            return redirect('bed_list')
+        else:
+            messages.error(request, 'Failed to update bed.')
+    return redirect('bed_list')
+
+
+@login_required
+def delete_bed(request, id):
+    bed = get_object_or_404(Bed, id=id)
+    bed.delete()
+    messages.success(request, 'Bed deleted successfully.')
+    return redirect('bed_list')
 
 
 @login_required
