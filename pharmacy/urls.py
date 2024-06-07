@@ -240,10 +240,10 @@ urlpatterns=[
     
     
     # Inventory Views Urls
-    path('inventory/category-list/', HODViews.inventory_categories, name='inventory_category_list'),
+    path('inventory/category-list/', HODViews.inventory_categories, name='inventory_category'),
     path('inventory/store-list/', HODViews.inventory_stores, name='inventory_store_list'),
-    path('inventory/supplier-list/', HODViews.inventory_suppliers, name='inventory_supplier_list'),
-    path('inventory/item-list/', HODViews.inventory_items, name='inventory_item_list'),
+    path('inventory/supplier-list/', HODViews.inventory_suppliers, name='inventory_supplier'),
+    path('inventory/item-list/', HODViews.inventory_items, name='inventory_item'),
     
     
     # Bed Management Views Urls
@@ -262,4 +262,26 @@ urlpatterns=[
     path('admin_user/edit-bed/<int:id>/', HODViews.edit_bed, name='edit_bed'),
     path('admin_user/delete-bed/<int:id>/', HODViews.delete_bed, name='delete_bed'),
     path('admin_user/bed-status/', HODViews.bed_status, name='bed_status'),
+    
+    path('admin_user/add-inventory-category/', HODViews.add_inventory_category, name='add_inventory_category'),
+    path('admin_user/list-inventory-category/', HODViews.inventory_category_list, name='inventory_category_list'),
+    path('admin_user/edit-inventory-category/<int:pk>/', HODViews.edit_inventory_category, name='edit_inventory_category'),
+    path('admin_user/delete-inventory-category/<int:pk>/', HODViews.delete_inventory_category, name='delete_inventory_category'),
+    
+    path('admin_user/add-inventory-store/', HODViews.add_inventory_store, name='add_inventory_store'),
+    path('admin_user/list-inventory-store/', HODViews.inventory_store_list, name='inventory_store_list'),
+    path('admin_user/edit-inventory-store/<int:pk>/', HODViews.edit_inventory_store, name='edit_inventory_store'),
+    path('admin_user/delete-inventory-store/<int:pk>/', HODViews.delete_inventory_store, name='delete_inventory_store'),
+    
+    # URL for adding a new inventory supplier
+    path('admin_user/add-inventory-supplier/', HODViews.add_inventory_supplier, name='add_inventory_supplier'),
+    path('admin_user/edit-inventory-supplier/<int:pk>/', HODViews.edit_inventory_supplier, name='edit_inventory_supplier'),
+    path('admin_user/delete-inventory-supplier//<int:pk>/', HODViews.delete_inventory_supplier, name='delete_inventory_supplier'),
+    path('admin_user/list-inventory-supplier/', HODViews.inventory_supplier_list, name='inventory_supplier_list'),
+
+    # URL patterns for inventory items
+    path('inventory/list-inventory-items/', HODViews.inventory_item_list, name='inventory_item_list'),
+    path('inventory/add-inventory-items/', HODViews.add_inventory_item, name='add_inventory_item'),
+    path('inventory/edit-inventory-items/<int:pk>/', HODViews.edit_inventory_item, name='edit_inventory_item'),
+    path('inventory/delete-inventory-items/<int:pk>/', HODViews.delete_inventory_item, name='delete_inventory_item'),
 ]

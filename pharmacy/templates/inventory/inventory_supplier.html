@@ -1,0 +1,261 @@
+{% extends 'hod_templates/base_template.html'%} 
+{% block page_title %}
+<h5>{{ title }} </h5>
+{% endblock page_title %} 
+
+{% block main_content %}
+<style>
+    a.active {
+        color: blue !important;
+    }
+</style>
+<section class="content">
+    {% if messages %}
+    <div class="form-group">
+        <div class="col-12">
+            {% for message in messages %} 
+                {% if message.tags == "error" %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% elif message.tags == "success" %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endif %} 
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card card-body table-responsive w-100">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>
+                                <a href="{% url 'inventory_category_list' %}" class="btn btn-primary {% if request.resolver_match.url_name == 'inventory_category_list' %}active{% endif %}" style="width: 100%; background-color:rgb(232, 222, 222); color:black;font-weight:600">Inventory Category</a>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <a href="{% url 'inventory_store_list' %}" class="btn btn-primary {% if request.resolver_match.url_name == 'inventory_store_list' %}active{% endif %}" style="width: 100%; background-color:rgb(232, 222, 222); color:black;font-weight:600">Inventory Store</a>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <a href="{% url 'inventory_supplier_list' %}" class="btn btn-primary {% if request.resolver_match.url_name == 'inventory_supplier_list' %}active{% endif %}" style="width: 100%;background-color:rgb(232, 222, 222); color:black;font-weight:600">Inventory Supplier</a>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <a href="{% url 'inventory_item_list' %}" class="btn btn-primary {% if request.resolver_match.url_name == 'inventory_item_list' %}active{% endif %}" style="width: 100%;background-color:rgb(232, 222, 222); color:black;font-weight:600">Inventory Items</a>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card card-body table-responsive w-100">
+                <div class="card-header">
+                    <span>{{ title }}</span>
+                    <div class="card-tools d-flex">
+                        <!-- Button trigger modal for adding inventory supplier -->
+                        <button type="button" class="btn btn-sm btn-info mr-2" data-toggle="modal" data-target="#addSupplierModal">
+                            + Add Inventory Supplier
+                        </button>
+                    </div>
+                </div>
+                <table class="table table-bordered table-hover dataTable" id="supplierList">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Contact Person</th>
+                            <th>Contact Person Phone</th>
+                            <th>Contact Person Email</th>
+                            <th>Address</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for supplier in suppliers %}
+                        <tr class="hov">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ supplier.name }}</td>
+                            <td>{{ supplier.phone }}</td>
+                            <td>{{ supplier.email }}</td>
+                            <td>{{ supplier.contact_person }}</td>
+                            <td>{{ supplier.contact_person_phone }}</td>
+                            <td>{{ supplier.contact_person_email }}</td>
+                            <td>{{ supplier.address }}</td>
+                            <td>{{ supplier.description }}</td>
+                            <td>
+                                <!-- Button trigger modal for edit inventory supplier -->
+                                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#editSupplierModal{{ supplier.id }}">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <!-- Button trigger modal for delete confirmation -->
+                                <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteSupplierModal{{ supplier.id }}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding inventory supplier -->
+    <div class="modal fade" id="addSupplierModal" tabindex="-1" role="dialog" aria-labelledby="addSupplierModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" action="{% url 'add_inventory_supplier' %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addSupplierModalLabel">Add Inventory Supplier</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="supplierName">Name</label>
+                            <input type="text" class="form-control" id="supplierName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="supplierPhone">Phone</label>
+                            <input type="text" class="form-control" id="supplierPhone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="supplierEmail">Email</label>
+                            <input type="email" class="form-control" id="supplierEmail" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactPerson">Contact Person Name</label>
+                            <input type="text" class="form-control" id="contactPerson" name="contact_person">
+                       
+                        </div>
+                        <div class="form-group">
+                            <label for="supplierAddress">Address</label>
+                            <input type="text" class="form-control" id="supplierAddress" name="address">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactPersonPhone">Contact Person Phone</label>
+                            <input type="text" class="form-control" id="contactPersonPhone" name="contact_person_phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactPersonEmail">Contact Person Email</label>
+                            <input type="email" class="form-control" id="contactPersonEmail" name="contact_person_email">
+                        </div>
+                        <div class="form-group">
+                            <label for="supplierDescription">Description</label>
+                            <input type="text" class="form-control" id="supplierDescription" name="description">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Add Inventory Supplier</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for editing inventory supplier -->
+    {% for supplier in suppliers %}
+    <div class="modal fade" id="editSupplierModal{{ supplier.id }}" tabindex="-1" role="dialog" aria-labelledby="editSupplierModalLabel{{ supplier.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" action="{% url 'edit_inventory_supplier' supplier.id %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editSupplierModalLabel{{ supplier.id }}">Edit Inventory Supplier</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="editSupplierName">Name</label>
+                            <input type="text" class="form-control" id="editSupplierName" name="name" value="{{ supplier.name }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editSupplierPhone">Phone</label>
+                            <input type="text" class="form-control" id="editSupplierPhone" name="phone" value="{{ supplier.phone }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editSupplierEmail">Email</label>
+                            <input type="email" class="form-control" id="editSupplierEmail" name="email" value="{{ supplier.email }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="editContactPerson">Contact Person Name</label>
+                            <input type="text" class="form-control" id="editContactPerson" name="contact_person" value="{{ supplier.contact_person }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="editSupplierAddress">Address</label>
+                            <input type="text" class="form-control" id="editSupplierAddress" name="address" value="{{ supplier.address }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="editContactPersonPhone">Contact Person Phone</label>
+                            <input type="text" class="form-control" id="editContactPersonPhone" name="contact_person_phone" value="{{ supplier.contact_person_phone }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="editContactPersonEmail">Contact Person Email</label>
+                            <input type="email" class="form-control" id="editContactPersonEmail" name="contact_person_email" value="{{ supplier.contact_person_email }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="editSupplierDescription">Description</label>
+                            <input type="text" class="form-control" id="editSupplierDescription" name="description" value="{{ supplier.description }}">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Modal for deleting inventory supplier -->
+    {% for supplier in suppliers %}
+    <div class="modal fade" id="deleteSupplierModal{{ supplier.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteSupplierModalLabel{{ supplier.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" action="{% url 'delete_inventory_supplier' supplier.id %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteSupplierModalLabel{{ supplier.id }}">Delete Inventory Supplier</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete the inventory supplier "{{ supplier.name }}"?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</section>
+{% endblock %}

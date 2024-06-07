@@ -187,12 +187,23 @@
                                     <option value="Semi Private">
                                 </datalist>
                             </div>
-                            <div id="div_id_no_of_beds" class="col-3" style="display: none;">
-                                <label for="id_no_of_beds" class="form-label">
+                            <div id="div_id_bed" class="col-3" style="display: none;">
+                            <!-- <label for="id_no_of_beds" class="form-label">
                                     Bed No.
+                                </label> -->
+                                <!-- <input type="number" name="no_of_beds" value="1" class="form-control numberinput" data-purpose="BedIPD" min="0" id="id_no_of_beds" /> -->
+                            
+                                <label for="id_bed" class="form-label requiredField">
+                                    Bed Number<span class="asteriskField">*</span>
                                 </label>
-                                <input type="number" name="no_of_beds" value="1" class="form-control numberinput" data-purpose="BedIPD" min="0" id="id_no_of_beds" />
-                            </div>
+                                <select name="bed" class="form-control select form-select" data-purpose="BedIPD" id="id_bed">
+                                    <option value="" selected="">---------</option>
+                                    {% for bed in beds %}
+                                        <option value="{{ bed.id }}">{{ bed.bed_no }} - {{ bed.floor }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div> 
+                            
                             <div id="div_id_operation_date" class="col-3" style="display: none;">
                                 <label for="id_operation_date" class="form-label">
                                     Date &amp; Time of Operation

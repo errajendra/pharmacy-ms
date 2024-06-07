@@ -485,8 +485,9 @@ class AddmissionForm(ModelForm):
             "guardian": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
             "addmission_time": forms.TextInput(attrs={"class":"form-control w-auto", 'type':'datetime-local', "data-purpose":"BedIPD"}),
             "discharge_time": forms.TextInput(attrs={"class":"form-control w-auto", 'type':'datetime-local', "data-purpose":"BedIPD"}),
-            "ward_bed": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
-            "no_of_beds": forms.NumberInput(attrs={"class":"form-control w-auto", "data-purpose":"BedIPD"}),
+            # "ward_bed": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
+            # "no_of_beds": forms.NumberInput(attrs={"class":"form-control w-auto", "data-purpose":"BedIPD"}),
+            "bed": forms.Select(attrs={"class":"form-control w-auto"}),
             "operation_date": forms.DateTimeInput(attrs={"class":"form-control w-auto", 'type':'datetime-local', "data-purpose":"BedIPD"}),
             "addmission_type": forms.Select(attrs={"class":"form-control w-auto", "data-purpose":"BedIPD"}),
             "mlc_no": forms.TextInput(attrs={"class":"form-control", "data-purpose":"BedIPD"}),
@@ -718,3 +719,28 @@ class BedForm(forms.ModelForm):
             'floor': 'Floor',
             'status': 'Status',
         }
+
+
+class InventoryCategoryForm(forms.ModelForm):
+    class Meta:
+        model = InventoryCategory
+        fields = ['name']
+
+
+
+class InventoryStoreForm(forms.ModelForm):
+    class Meta:
+        model = InventoryStore
+        fields = ['name', 'code']
+
+
+class InventorySupplierForm(forms.ModelForm):
+    class Meta:
+        model = InventorySupplier
+        fields = '__all__'
+
+
+class InventoryItemForm(forms.ModelForm):
+    class Meta:
+        model = InventoryItem
+        fields = '__all__'

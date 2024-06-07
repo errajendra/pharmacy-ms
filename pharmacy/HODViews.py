@@ -1552,11 +1552,20 @@ def manageIpdAddmission(request):
 
 @login_required
 def addAddmission(request):
-    
+    form = AddmissionForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
             form.save()
             messages.success(request, "Patient Addmission added Successfully!")
+            bed_id = form.cleaned_data.get('bed')
+            if bed_id:
+                try:
+                    bed = Bed.objects.get(id=bed_id.id)
+                    bed.status = True
+                    bed.save()
+                except Bed.DoesNotExist:
+                    messages.error(request, "Selected bed does not exist.")
+                    return redirect("manage_admission")
             purpose = request.POST.get('purpose', None)
             if purpose in ["OPD", "X-Ray"]:
                 return redirect(reverse("opd_slip", args=[Addmission.objects.latest('id').id])) # return to perticular slip of id
@@ -1580,6 +1589,7 @@ def addAddmission(request):
         "doctors": Doctor.objects.all(),
         "departments": Department.objects.all(),
         "nurses": Nurse.objects.all(),
+        "beds": Bed.objects.filter(status=False),
         "title": "New Patient Addmission"
     }
     return render(request, "hod_templates/admission/new-admission.html", context)
@@ -1588,12 +1598,21 @@ def addAddmission(request):
 @login_required
 def editAddmission(request, id):
     instance = get_object_or_404(Addmission, id=id)
+    if instance.bed:
+        instance.bed.status = False
+        instance.save()
     form = AddmissionForm(instance=instance, data=request.POST or None)
     if request.method == "POST":
         if form.is_valid():
-            form.save()
-            messages.success(request, "Patient Addmission Updated Successfully!")
+            new_instance = form.save(commit=False)
+            new_instance.save()
+            
+            new_bed = new_instance.bed
+            if new_bed:
+                new_bed.status = True
+                new_bed.save()
 
+            messages.success(request, "Patient Addmission Updated Successfully!")
             return redirect("manage_addmission")
     context = {
         "form": form,
@@ -1601,6 +1620,7 @@ def editAddmission(request, id):
         "doctors": Doctor.objects.all(),
         "departments": Department.objects.all(),
         "nurses": Nurse.objects.all(),
+        "beds": Bed.objects.filter(status=False),
         "ins": instance,
         "title": "Update Addmission"
     }
@@ -2109,3 +2129,164 @@ def bed_status(request):
         "bed": bed,
     }
     return render(request, 'hod_templates/bed_management/bed_status.html', context)
+
+
+@login_required
+def add_inventory_category(request):
+    if request.method == 'POST':
+        form = InventoryCategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('inventory_category_list')
+    else:
+        form = InventoryCategoryForm()
+    return render(request, 'inventory/inventory_category.html', {'form': form})
+
+
+@login_required
+def inventory_category_list(request):
+    categories = InventoryCategory.objects.all()
+    return render(request, 'inventory/inventory_category.html', { "title": "Inventory Category",'categories': categories})
+
+
+@login_required
+def edit_inventory_category(request, pk):
+    category = get_object_or_404(InventoryCategory, pk=pk)
+    if request.method == 'POST':
+        form = InventoryCategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            form.save()
+            return redirect('inventory_category_list')
+    else:
+        form = InventoryCategoryForm(instance=category)
+    return render(request, 'inventory/inventory_category.html', {'form': form})
+
+
+@login_required
+def delete_inventory_category(request, pk):
+    category = get_object_or_404(InventoryCategory, pk=pk)
+    if request.method == 'POST':
+        category.delete()
+        return redirect('inventory_category_list')
+    return render(request, 'inventory/inventory_category.html', {'category': category})
+
+
+@login_required
+def add_inventory_store(request):
+    if request.method == 'POST':
+        form = InventoryStoreForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Inventory store added successfully.')
+            return redirect('inventory_store_list')
+    else:
+        form = InventoryStoreForm()
+    return render(request, 'inventory/inventory_store.html', {'form': form, 'title': 'Add Inventory Store'})
+
+
+@login_required
+def inventory_store_list(request):
+    stores = InventoryStore.objects.all()
+    return render(request, 'inventory/inventory_store.html', {'stores': stores, 'title': 'Inventory Stores'})
+
+
+@login_required
+def edit_inventory_store(request, pk):
+    store = get_object_or_404(InventoryStore, pk=pk)
+    if request.method == 'POST':
+        form = InventoryStoreForm(request.POST, instance=store)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Inventory store updated successfully.')
+            return redirect('inventory_store_list')
+    else:
+        form = InventoryStoreForm(instance=store)
+    return render(request, 'inventory/inventory_store.html', {'form': form, 'title': 'Edit Inventory Store'})
+
+
+@login_required
+def delete_inventory_store(request, pk):
+    store = get_object_or_404(InventoryStore, pk=pk)
+    if request.method == 'POST':
+        store.delete()
+        messages.success(request, 'Inventory store deleted successfully.')
+        return redirect('inventory_store_list')
+    return render(request, 'inventory/inventory_store.html', {'store': store, 'title': 'Delete Inventory Store'})
+
+
+@login_required
+def add_inventory_supplier(request):
+    if request.method == 'POST':
+        form = InventorySupplierForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('inventory_supplier_list')
+    else:
+        form = InventorySupplierForm()
+    return render(request, 'inventory/inventory_supplier.html', {'form': form})
+
+
+@login_required
+def inventory_supplier_list(request):
+    suppliers = InventorySupplier.objects.all()
+    return render(request, 'inventory/inventory_supplier.html', {"title":"Inventory Supplier",'suppliers': suppliers})
+
+
+@login_required
+def edit_inventory_supplier(request, pk):
+    supplier = get_object_or_404(InventorySupplier, pk=pk)
+    if request.method == 'POST':
+        form = InventorySupplierForm(request.POST, instance=supplier)
+        if form.is_valid():
+            form.save()
+            return redirect('inventory_supplier_list')
+    else:
+        form = InventorySupplierForm(instance=supplier)
+    return render(request, 'inventory/inventory_supplier.html', {'form': form})
+
+
+@login_required
+def delete_inventory_supplier(request, pk):
+    supplier = get_object_or_404(InventorySupplier, pk=pk)
+    if request.method == 'POST':
+        supplier.delete()
+        return redirect('inventory_supplier_list')
+    return render(request, 'inventory/inventory_supplier.html', {'supplier': supplier})
+
+
+@login_required
+def add_inventory_item(request):
+    if request.method == 'POST':
+        form = InventoryItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('inventory_item_list')
+    else:
+        form = InventoryItemForm()
+    return render(request, 'inventory/inventory_items.html', {'form': form})
+
+@login_required
+def inventory_item_list(request):
+    items = InventoryItem.objects.all()
+    categories = InventoryCategory.objects.all()
+    return render(request, 'inventory/inventory_items.html', {'categories':categories,'title': 'Inventory Items', 'items': items})
+
+@login_required
+def edit_inventory_item(request, pk):
+    item = get_object_or_404(InventoryItem, pk=pk)
+    if request.method == 'POST':
+        form = InventoryItemForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect('inventory_item_list')
+    else:
+        form = InventoryItemForm(instance=item)
+    return render(request, 'inventory/inventory_items.html', {'form': form})
+
+@login_required
+def delete_inventory_item(request, pk):
+    item = get_object_or_404(InventoryItem, pk=pk)
+    if request.method == 'POST':
+        item.delete()
+        return redirect('inventory_item_list')
+    return render(request, 'inventory/inventory_items.html', {'item': item})

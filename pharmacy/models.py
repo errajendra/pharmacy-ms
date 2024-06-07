@@ -377,6 +377,24 @@ class ClinicalNote(BaseModel):
         return str(self.pk) + " - " + self.note_type
 
 
+class BedType(BaseModel):
+    bed_type = models.CharField(verbose_name="Bed Type", max_length=100)
+    
+    
+class Floor(BaseModel):
+    name = models.CharField(verbose_name="Bed Group", max_length=100)
+    floor = models.CharField(verbose_name="Floor", max_length=100)
+    desc = models.CharField(verbose_name="Description", max_length=400, null=True, blank=True)
+    
+    def __str__(self) -> str:
+        return self.name + " - " + self.floor
+    
+class Bed(BaseModel):
+    bed_no = models.IntegerField()
+    bed_type = models.ForeignKey(BedType, on_delete=models.CASCADE, related_name="Bed_Type")
+    floor = models.ForeignKey(Floor, on_delete=models.CASCADE, related_name="Floor")
+    status = models.BooleanField(default=False)
+
 
 class Addmission(BaseModel):
     patient = models.ForeignKey(Patients, on_delete=models.CASCADE)
@@ -414,6 +432,7 @@ class Addmission(BaseModel):
     discharge_time = models.DateTimeField(verbose_name="Date & Time of Discharge", null=True, blank=True)
     ward_bed = models.CharField(verbose_name="Ward Type.", max_length=48, null=True, blank=True)
     no_of_beds = models.PositiveIntegerField(verbose_name="Bed No.", null=True, blank=True)
+    bed = models.ForeignKey(Bed, on_delete=models.SET_NULL, null=True, blank=True)
     operation_date = models.DateTimeField(verbose_name="Date & Time of Operation", null=True, blank=True)
     addmission_type = models.CharField(
         choices=(
@@ -790,18 +809,3 @@ class InventoryStock(BaseModel):
         return str(self.item.name) + " - " + str(self.store.name)
 
 
-class BedType(BaseModel):
-    bed_type = models.CharField(verbose_name="Bed Type", max_length=100)
-    
-    
-class Floor(BaseModel):
-    name = models.CharField(verbose_name="Bed Group", max_length=100)
-    floor = models.CharField(verbose_name="Floor", max_length=100)
-    desc = models.CharField(verbose_name="Description", max_length=400, null=True, blank=True)
-    
-    
-class Bed(BaseModel):
-    bed_no = models.IntegerField()
-    bed_type = models.ForeignKey(BedType, on_delete=models.CASCADE, related_name="Bed_Type")
-    floor = models.ForeignKey(Floor, on_delete=models.CASCADE, related_name="Floor")
-    status = models.BooleanField(default=False)
