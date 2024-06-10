@@ -212,7 +212,7 @@ class Patients(BaseModel):
         max_length=15,
         choices=[
             ("Single", "Single"),
-            ("Married ", "Married "),
+            ("Married", "Married"),
             ("Separated", "Separated"),
             ("Widow", "Widow"),
         ],
