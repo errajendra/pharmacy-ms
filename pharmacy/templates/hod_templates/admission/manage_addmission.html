@@ -52,13 +52,14 @@
                         <!-- <input type="search" name="search" id="filter" class="form-control float-right" placeholder="Search"> -->
 
 
-                        <a class="btn btn-sm btn-info mr-2" href="{% url 'add_addmission' %}?purpose=OPD" role="button">+ Add Addmission</a>
+                        <a class="btn btn-sm btn-info mr-2" href="{% url 'add_addmission' %}?purpose=OPD" role="button">+ Add Admission</a>
 
                     </div>
 
                 </div>
                 
                 <div class="card-body table-responsive">
+                    <input type="text" id="filter" class="form-control mb-3" placeholder="Search OPD Patient..." style="width: 30%; float:right">
                     <table class="table table-bordered table-hover dataTable" id="plist">
                         <thead>
 

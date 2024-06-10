@@ -37,77 +37,80 @@
 
                     </div>
                 </div>
-                <table class="table table-bordered table-hover dataTable" id="plist">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Profile</th>
-                            <th>UserName/Email</th>
-                            <th>FirstName</th>
-                            <th>LastName</th>
-                            <th>Mobile</th>
-                            <th>Department</th>
-                            <th>Address</th>
-                            <th class="text-center">Action</th>
+                <div class="card-body table-responsive">
+                    <input type="text" id="filter" class="form-control mb-3" placeholder="Search Nurse..." style="width: 30%; float:right">
+                    <table class="table table-bordered table-hover dataTable" id="plist">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Profile</th>
+                                <th>UserName/Email</th>
+                                <th>FirstName</th>
+                                <th>LastName</th>
+                                <th>Mobile</th>
+                                <th>Department</th>
+                                <th>Address</th>
+                                <th class="text-center">Action</th>
 
-                        </tr>
-                    </thead>
+                            </tr>
+                        </thead>
 
-                    <tbody>
-                        {% for staff in nurses %}
+                        <tbody>
+                            {% for staff in nurses %}
 
-                        <tr class="hov">
-                            <td>{{forloop.counter}}</td>
-                            <td> <img src="{{staff.profile_pic.url}}" class="" width="35" height="35" alt=""></td>
+                            <tr class="hov">
+                                <td>{{forloop.counter}}</td>
+                                <td> <img src="{{staff.profile_pic.url}}" class="" width="35" height="35" alt=""></td>
 
-                            <td>{{staff.admin.email}}</td>
-                            <td>{{staff.admin.first_name}}</td>
-                            <td>{{staff.admin.last_name}}</td>
+                                <td>{{staff.admin.email}}</td>
+                                <td>{{staff.admin.first_name}}</td>
+                                <td>{{staff.admin.last_name}}</td>
 
-                            <td>{{staff.mobile}}</td>
-                            <td>{{staff.department}}</td>
+                                <td>{{staff.mobile}}</td>
+                                <td>{{staff.department}}</td>
 
-                            <td>{{staff.address}}</td>
+                                <td>{{staff.address}}</td>
 
 
-                            <td>
-                                <a href="{% url 'edit_nurse' staff.id %}" class="btn btn-sm btn-success"> <i class="fa fa-edit"></i></a>
+                                <td>
+                                    <a href="{% url 'edit_nurse' staff.id %}" class="btn btn-sm btn-success"> <i class="fa fa-edit"></i></a>
 
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModalCenter">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                                <!-- Modal -->
-                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle"> Delete Nurse Confirm </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#exampleModalCenter">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle"> Delete Nurse Confirm </h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure to delete
+                                            </div>
+                                            <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <a href="{% url 'delete_nurse' staff.id %}" type="button" class="btn btn-danger">Delete</a>
+                                            </div>
                                         </div>
-                                        <div class="modal-body">
-                                            Are you sure to delete
-                                        </div>
-                                        <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <a href="{% url 'delete_nurse' staff.id %}" type="button" class="btn btn-danger">Delete</a>
                                         </div>
                                     </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <!-- <td>{{patient.dob|date:"F   d, Y"}}</td>
-                                    <td>{{patient.mobile}}</td> -->
-                            <!-- <td>{{patient.date_admitted}}</td> -->
+                                </td>
+                                <!-- <td>{{patient.dob|date:"F   d, Y"}}</td>
+                                        <td>{{patient.mobile}}</td> -->
+                                <!-- <td>{{patient.date_admitted}}</td> -->
 
-                        </tr>
+                            </tr>
 
 
-                        {% endfor %}
-                    </tbody>
-                </table>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
