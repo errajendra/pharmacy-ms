@@ -1622,7 +1622,7 @@ def editAddmission(request, id):
         "nurses": Nurse.objects.all(),
         "beds": Bed.objects.filter(status=False),
         "ins": instance,
-        "title": "Update Addmission"
+        "title": "Update Admission"
     }
     return render(request, "hod_templates/admission/update-admission.html", context)
 

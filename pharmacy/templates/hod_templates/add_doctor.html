@@ -106,7 +106,7 @@
                                                 <i class="fas fa-envelope"></i>
                                             </span>
                                         </span>
-                                        <select name="department" class="form-control select form-select" id="id_department">
+                                        <select name="department" class="form-control select form-select" id="id_department" required>
                                             <option value="" selected >--Select-- </option>
                                             {% for d in departments %}
                                             <option value="{{d.id}}">{{d}} </option>

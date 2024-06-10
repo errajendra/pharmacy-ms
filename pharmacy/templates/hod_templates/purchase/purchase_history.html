@@ -1,4 +1,5 @@
-{% extends 'hod_templates/base_template.html'%} {% block page_title %}
+{% extends 'hod_templates/base_template.html'%}{% block page_title %}
+<h5>Purchase List</h5>
 {% endblock page_title %} {% block main_content %}
 <section class="content">
     {% if messages %}
@@ -37,57 +38,60 @@
 
             <div class="card manage sc">
                 <div class="card-header">
-                    <span>Purchase Lis</span>
+                    <span>Purchase List</span>
                     <div class="card-tools d-flex">
                         <a class="btn btn-sm btn-info mr-2" href="{% url 'new_purchase' %}" role="button">+ New Purchase</a>
                     </div>
 
                 </div>
-                <table class="table table-bordered table-hover dataTable">
-                    <thead>
+                <div class="card-body table-responsive">
+                    <input type="text" id="filter" class="form-control mb-3" placeholder="Search Invoice..." style="width: 30%; float:right">
+                    <table class="table table-bordered table-hover dataTable" id="plist">
+                        <thead>
 
-                        <tr>
-                            <th>#</th>
-                            <th>Invoice No</th>
-                            <th>Manufacture</th>
-                            <th>Date</th>
-                            <th>Quantity</th>
-                            <th>Sub Total</th>
-                            <th>Discount</th>
-                            <th>Total</th>
-                            <th>Paid</th>
-                            <th>Due</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for purchase_his in all_history %}
-                        <tr class="hov">
-                            <td>{{forloop.counter}}</td>
-                            <td>{{purchase_his.invoice_no}}</td>
-                            <td>{{purchase_his.manufacture}}</td>
-                            <td>{{purchase_his.date}}</td>
-                            <td>{{purchase_his.quantity}}</td>
-                            <td>{{purchase_his.sub_total}}</td>
-                            <td>{{purchase_his.discount}}</td>
-                            <td>{{purchase_his.total}}</td>
-                            <td>{{purchase_his.paid}}</td>
-                            <td>{{purchase_his.due}}</td>
-                            <td>
-                                <a href="{% url 'parched_invoice_detail' purchase_his.id %}" class="btn btn-sm btn-primary" title="Update" style="font-size: smaller;">
-                                    <i class="fa fa-eye"></i> Views
-                                </a>
-                                <!-- Delete action with icon -->
-                                <a href="#" class="btn btn-sm btn-danger" title="Delete" style="font-size: smaller;">
-                                    <i class="fa fa-trash"></i> Delete
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
+                            <tr>
+                                <th>#</th>
+                                <th>Invoice No</th>
+                                <th>Manufacture</th>
+                                <th>Date</th>
+                                <th>Quantity</th>
+                                <th>Sub Total</th>
+                                <th>Discount</th>
+                                <th>Total</th>
+                                <th>Paid</th>
+                                <th>Due</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for purchase_his in all_history %}
+                            <tr class="hov">
+                                <td>{{forloop.counter}}</td>
+                                <td>{{purchase_his.invoice_no}}</td>
+                                <td>{{purchase_his.manufacture}}</td>
+                                <td>{{purchase_his.date}}</td>
+                                <td>{{purchase_his.quantity}}</td>
+                                <td>{{purchase_his.sub_total}}</td>
+                                <td>{{purchase_his.discount}}</td>
+                                <td>{{purchase_his.total}}</td>
+                                <td>{{purchase_his.paid}}</td>
+                                <td>{{purchase_his.due}}</td>
+                                <td>
+                                    <a href="{% url 'parched_invoice_detail' purchase_his.id %}" class="btn btn-sm btn-primary" title="Update" style="font-size: smaller;">
+                                        <i class="fa fa-eye"></i> Views
+                                    </a>
+                                    <!-- Delete action with icon -->
+                                    <a href="#" class="btn btn-sm btn-danger" title="Delete" style="font-size: smaller;">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
 
-                    </tbody>
+                        </tbody>
 
-                </table>
+                    </table>
+                   </div> 
             </div>
         </div>
     </div>
