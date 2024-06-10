@@ -1,0 +1,201 @@
+{% extends 'hod_templates/base_template.html'%} 
+{% block page_title %}
+<h5>{{ title }} </h5>
+{% endblock page_title %} 
+
+{% block main_content %}
+<style>
+    a.active {
+        color: blue !important;
+    }
+</style>
+<section class="content">
+    {% if messages %}
+    <div class="form-group">
+        <div class="col-12">
+            {% for message in messages %} 
+                {% if message.tags == "error" %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% elif message.tags == "success" %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endif %} 
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card card-body table-responsive w-100">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>
+                                <a href="{% url 'inventory_category_list' %}" class="btn btn-primary {% if request.resolver_match.url_name == 'inventory_category_list' %}active{% endif %}" style="width: 100%; background-color:rgb(232, 222, 222); color:black;font-weight:600">Inventory Category</a>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <a href="{% url 'inventory_store_list' %}" class="btn btn-primary {% if request.resolver_match.url_name == 'inventory_store_list' %}active{% endif %}" style="width: 100%; background-color:rgb(232, 222, 222); color:black;font-weight:600">Inventory Store</a>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <a href="{% url 'inventory_supplier_list' %}" class="btn btn-primary {% if request.resolver_match.url_name == 'inventory_supplier_list' %}active{% endif %}" style="width: 100%;background-color:rgb(232, 222, 222); color:black;font-weight:600">Inventory Supplier</a>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                <a href="{% url 'inventory_item_list' %}" class="btn btn-primary {% if request.resolver_match.url_name == 'inventory_item_list' %}active{% endif %}" style="width: 100%;background-color:rgb(232, 222, 222); color:black;font-weight:600">Inventory Items</a>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card card-body table-responsive w-100">
+                <div class="card-header">
+                    <span>{{ title }}</span>
+                    <div class="card-tools d-flex">
+                        <!-- Button trigger modal for adding inventory store -->
+                        <button type="button" class="btn btn-sm btn-info mr-2" data-toggle="modal" data-target="#addStoreModal">
+                            + Add Inventory Store
+                        </button>
+                    </div>
+                </div>
+                <table class="table table-bordered table-hover dataTable" id="storeList">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for store in stores %}
+                        <tr class="hov">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ store.name }}</td>
+                            <td>{{ store.code }}</td>
+                            <td>
+                                <!-- Button trigger modal for edit inventory store -->
+                                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#editStoreModal{{ store.id }}">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <!-- Button trigger modal for delete confirmation -->
+                                <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteStoreModal{{ store.id }}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding inventory store -->
+    <div class="modal fade" id="addStoreModal" tabindex="-1" role="dialog" aria-labelledby="addStoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" action="{% url 'add_inventory_store' %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addStoreModalLabel">Add Inventory Store</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="storeName">Name</label>
+                            <input type="text" class="form-control" id="storeName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="storeCode">Code</label>
+                            <input type="text" class="form-control" id="storeCode" name="code" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Add Inventory Store</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for editing inventory store -->
+    {% for store in stores %}
+    <div class="modal fade" id="editStoreModal{{ store.id }}" tabindex="-1" role="dialog" aria-labelledby="editStoreModalLabel{{ store.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" action="{% url 'edit_inventory_store' store.id %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editStoreModalLabel{{ store.id }}">Edit Inventory Store</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="editStoreName">Name</label>
+                            <input type="text" class="form-control" id="editStoreName" name="name" value="{{ store.name }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editStoreCode">Code</label>
+                            <input type="text" class="form-control" id="editStoreCode" name="code" value="{{ store.code }}" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Modal for deleting inventory store -->
+    {% for store in stores %}
+    <div class="modal fade" id="deleteStoreModal{{ store.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteStoreModalLabel{{ store.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form method="post" action="{% url 'delete_inventory_store' store.id %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteStoreModalLabel{{ store.id }}">Delete Inventory Store</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete the inventory store "{{ store.name }}"?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</section>
+{% endblock %}
+

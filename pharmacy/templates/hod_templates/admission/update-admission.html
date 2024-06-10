@@ -185,11 +185,23 @@
                                     <option value="Semi Private">
                                 </datalist>
                             </div>
-                            <div id="div_id_no_of_beds" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
+                            <!-- <div id="div_id_no_of_beds" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
                                 <label for="id_no_of_beds" class="form-label">
                                     Bed No.
                                 </label>
                                 <input type="number" {% if ins.no_of_beds %} value="{{ins.no_of_beds}}" {% endif %} name="no_of_beds" value="1" class="form-control w-auto numberinput" data-purpose="BedIPD" min="0" id="id_no_of_beds" />
+                            </div> -->
+                            <div id="div_id_bed" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6">
+                                <label for="id_bed" class="form-label requiredField">Bed Number<span class="asteriskField">*</span></label>
+                                <select name="bed" class="form-control select form-select" data-purpose="BedIPD" id="id_bed">
+                                    <option value="{{ ins.bed.id }}" {% if ins.bed_id %} selected {% endif %}> {{ ins.bed.bed_no }} - {{ ins.bed.floor }}</option>
+                                    {% for bed in beds %}
+                                        <option value="{{ bed.id }}" {% if ins.bed_id == bed.id  %} selected {% endif %}>
+                                            {{ bed.bed_no }} - {{ bed.floor }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                
                             </div>
                             <div id="div_id_operation_date" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6" style="display: none;">
                                 <label for="id_operation_date" class="form-label">
