@@ -424,7 +424,8 @@ class Addmission(BaseModel):
     fees = models.FloatField(verbose_name="Fees", default=0)
     
     # open these bellow fields on  form when choose purpose of IPD or Bed Addmission option
-    advanced_fees = models.FloatField(verbose_name="Advanced Fees", default=0)
+    # advanced_fees = models.FloatField(verbose_name="Advanced Fees", default=0)
+    advanced_fee = models.JSONField(null=True, blank=True)
     bht_no = models.CharField(verbose_name="BHT No", max_length=48, null=True, blank=True)
     # uid = models.CharField(max_length=15, verbose_name="Adhar Number", null=True, blank=True)
     guardian = models.CharField(max_length=36, verbose_name="Guardian Name", null=True, blank=True)
