@@ -1555,7 +1555,24 @@ def addAddmission(request):
     form = AddmissionForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
-            form.save()
+            # form.save()
+            addmission_instance = form.save(commit=False)
+            
+            # Extract advanced fees data from the form
+            advanced_fees_date = request.POST.get('advanced_fees_date')
+            advanced_fees = request.POST.get('advanced_fees')
+            
+            # Create a dictionary to store advanced fees data
+            advanced_fees_data = {
+                'date': advanced_fees_date,
+                'fees': advanced_fees
+            }
+            
+            # Update the advanced_fee field with the JSON data
+            addmission_instance.advanced_fee = advanced_fees_data
+            
+            # Save the Addmission instance
+            addmission_instance.save()
             messages.success(request, "Patient Addmission added Successfully!")
             bed_id = form.cleaned_data.get('bed')
             if bed_id:
@@ -1590,7 +1607,7 @@ def addAddmission(request):
         "departments": Department.objects.all(),
         "nurses": Nurse.objects.all(),
         "beds": Bed.objects.filter(status=False),
-        "title": "New Patient Addmission"
+        "title": "New Patient Admission"
     }
     return render(request, "hod_templates/admission/new-admission.html", context)
 
@@ -1598,13 +1615,23 @@ def addAddmission(request):
 @login_required
 def editAddmission(request, id):
     instance = get_object_or_404(Addmission, id=id)
+    advanced_fee_data = instance.advanced_fee or {}
     if instance.bed:
         instance.bed.status = False
         instance.save()
     form = AddmissionForm(instance=instance, data=request.POST or None)
     if request.method == "POST":
         if form.is_valid():
+            # new_instance = form.save(commit=False)
+            # new_instance.save()
             new_instance = form.save(commit=False)
+            
+            # Update the specific fields in the JSON object
+            advanced_fee_data['date'] = request.POST.get('advanced_fees_date')
+            advanced_fee_data['fees'] = request.POST.get('advanced_fees')
+            
+            # Serialize the updated JSON object back to a string
+            new_instance.advanced_fee = advanced_fee_data
             new_instance.save()
             
             new_bed = new_instance.bed
@@ -1614,6 +1641,7 @@ def editAddmission(request, id):
 
             messages.success(request, "Patient Addmission Updated Successfully!")
             return redirect("manage_addmission")
+     
     context = {
         "form": form,
         "patients": Patients.objects.all(),

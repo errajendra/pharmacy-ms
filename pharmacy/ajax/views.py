@@ -120,6 +120,10 @@ def cart_item_update(request):
         discount = request.POST.get("discount")
         
         cart.quantity = quantity
+        if discount is None:
+            discount = 0.0
+        else:
+            discount = float(discount)
         cart.discount = float(discount)
         cart.save()
         

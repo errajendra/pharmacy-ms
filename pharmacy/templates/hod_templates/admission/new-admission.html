@@ -82,28 +82,28 @@
                             
                         </div>
                         <div class="row">
-                            <div id="div_id_weight" class="col-3">
+                            <div id="div_id_weight" class="col-4">
                                 <label for="id_weight" class="form-label">
                                     Patient Weight
                                 </label>
                                 <input type="number" name="weight" class="form-control  numberinput" step="any" id="id_weight" />
                                 <div id="id_weight_helptext" class="form-text">Enter Weight Reading</div>
                             </div>
-                            <div id="div_id_bp_systolic" class="col-3">
+                            <div id="div_id_bp_systolic" class="col-4">
                                 <label for="id_bp_systolic" class="form-label">
-                                    Blood Pressure (mmHg) - Systolic
+                                    Blood Pressure (mmHg) - Systolic/ Diastolic
                                 </label>
-                                <input type="text" name="bp_systolic" class="form-control textinput" maxlength="50" id="id_bp_systolic" />
-                                <div id="id_bp_systolic_helptext" class="form-text">Enter Systolic Reading</div>
+                                <div class="d-flex">
+                                    <input type="text" name="bp_systolic" class="form-control textinput" maxlength="50" id="id_bp_systolic" placeholder="systolic"/>
+                                    <input type="text" name="bp_diastolic" class="form-control textinput" maxlength="50" id="id_bp_diastolic"  placeholder="diastolic"/>
+                                </div>
+                                <div class="d-flex">
+                                    <div id="id_bp_systolic_helptext" class="form-text">Enter Systolic and Diastolic Reading</div>
+                                    
+                                </div>
                             </div>
-                            <div id="div_id_bp_diastolic" class="mb-3 mx-0 col-lg-3 col-md-4 col-sm-6">
-                                <label for="id_bp_diastolic" class="form-label">
-                                    Blood Pressure (mmHg) - Diastolic
-                                </label>
-                                <input type="text" name="bp_diastolic" class="form-control  textinput" maxlength="50" id="id_bp_diastolic" />
-                                <div id="id_bp_diastolic_helptext" class="form-text">Enter Diastolic Reading</div>
-                            </div>
-                            <div id="div_id_pulse" class="col-3">
+                            
+                            <div id="div_id_pulse" class="col-4">
                                 <label for="id_pulse" class="form-label">
                                     Pulse (Heartbeats/min)
                                 </label>
@@ -152,9 +152,12 @@
                                 </label>
                                 <input type="text" name="guardian" class="form-control textinput" data-purpose="BedIPD" maxlength="36" id="id_guardian" />
                             </div>
-                            <div id="div_id_advanced_fees" class="col-3" style="display: none;">
+                            <div id="div_id_advanced_fees" class="col-3 " style="display: none;">
                                 <label for="id_advanced_fees" class="form-label requiredField"> Advanced Fees<span class="asteriskField">*</span> </label>
-                                <input type="number" name="advanced_fees" value="0" class="form-control  numberinput" data-purpose="BedIPD" step="any" required="" id="id_advanced_fees" />
+                                <div class="d-flex">
+                                <input type="date" name="advanced_fees_date" value="0" class="form-control numberinput" data-purpose="BedIPD" step="any"  id="id_advanced_fees" />
+                                <input type="number" name="advanced_fees" value="0" class="form-control  numberinput" data-purpose="BedIPD" step="any" placeholder="0"  id="id_advanced_fees" />
+                                </div>
                             </div>
                             <div id="div_id_bht_no" class="col-3" style="display: none;">
                                 <label for="id_bht_no" class="form-label">
@@ -387,4 +390,26 @@
       });
     });
 </script>
+<script>
+    $(document).ready(function() {
+        // Function to update the hidden input field with JSON data
+        function updateAdvancedFee() {
+            var date = $('#id_addmission_time').val();
+            var fees = $('#id_advanced_fees').val();
+            var data = JSON.stringify({ 'date': date, 'fees': fees });
+            $('#advanced-fee-data').val(data);
+        }
+
+        // Call the update function whenever the date or fees change
+        $('#id_addmission_time, #id_advanced_fees').on('input', updateAdvancedFee);
+
+        // Optionally, you can also populate the display field with the formatted date and fees
+        $('#id_addmission_time, #id_advanced_fees').on('input', function() {
+            var date = $('#id_addmission_time').val();
+            var fees = $('#id_advanced_fees').val();
+            $('#id_advanced_fee_display').val(date + ' - ' + fees);
+        });
+    });
+</script>
+
 {% endblock main_content %}
