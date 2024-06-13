@@ -2,6 +2,56 @@
 <h5> {{title}} </h5>
 
 {% endblock page_title %} {% block main_content %}
+<style>
+    .dropdown-content {
+        background-color: #f9f9f9;
+        min-width: 160px;
+        border: 1px solid #ccc;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        position: absolute;
+    }
+
+    .dropdown-item {
+        padding: 8px 16px;
+        cursor: pointer;
+    }
+
+    .dropdown-item:hover {
+        background-color: #f1f1f1;
+    }
+    #advanced_fees_dropdown {
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-top: 5px;
+        display: none;
+    }
+    
+    .dropdown-item {
+        padding: 5px;
+        cursor: pointer;
+    }
+    
+    .dropdown-item:hover {
+        background-color: #f1f1f1;
+    }
+    
+    .fee-key {
+        font-weight: bold ;
+        color: #333;
+        text-transform: capitalize; 
+    }
+    
+    .fee-value {
+        color: #666;
+    }
+</style>
+
 <section class="content">
     <div class="row">
         <div class="col-md-12">
@@ -90,7 +140,7 @@
                                 <input type="number" {% if ins.weight %} value="{{ins.weight}}" {% endif %} name="weight"  class="form-control  numberinput" step="any" id="id_weight" />
                                 <div id="id_weight_helptext" class="form-text">Enter Weight Reading</div>
                             </div>
-                            <div id="div_id_bp_systolic" class="col-md-4">
+                            {% comment %} <div id="div_id_bp_systolic" class="col-md-4">
                                 <label for="id_bp_systolic" class="form-label">
                                     Blood Pressure (mmHg) - Systolic/ Diastolic
                                 </label>
@@ -99,6 +149,16 @@
                                     <input type="text" {% if ins.bp_diastolic %} value="{{ins.bp_diastolic}}" {% endif %} name="bp_diastolic" class="form-control textinput" maxlength="50" id="id_bp_diastolic" placeholder="diastolic"/>
                                 </div>
                                 <div id="id_bp_systolic_helptext" class="form-text">Enter Systolic and Diastolic Readings</div>
+                            </div> {% endcomment %}
+                            <div id="div_id_bp" class="col-md-4">
+                                <label for="bp" class="form-label">
+                                    Blood Pressure (mmHg) - Systolic/Diastolic
+                                </label>
+                                <div class="d-flex align-items-center">
+                                    <input type="text" id="bp" name="bp" class="form-control textinput" maxlength="7"
+                                           value="{% if ins.bp_systolic and ins.bp_diastolic %}{{ ins.bp_systolic }}/{{ ins.bp_diastolic }}{% endif %}" />
+                                </div>
+                                <div id="bp_helptext" class="form-text">Enter Systolic and Diastolic Readings (e.g., 120/80)</div>
                             </div>
                             <div id="div_id_pulse" class="col-md-4">
                                 <label for="id_pulse" class="form-label">
@@ -148,19 +208,21 @@
                                 </label>
                                 <input type="text" {% if ins.guardian %} value="{{ins.guardian}}" {% endif %} name="guardian" class="form-control textinput" data-purpose="BedIPD" maxlength="36" id="id_guardian" />
                             </div>
-                           
-                           
-                            <div id="div_id_advanced_fees" class="col-3 " style="display: none;">
-                                <label for="id_advanced_fees_date" class="form-label requiredField">Advanced Fees <span class="asteriskField">*</span></label>
+                            <div id="div_id_advanced_fees" class="col-3">
+                                <label for="id_advanced_fees_date" class="form-label requiredField" onclick="toggleDropdown()">Advanced Fees <span class="asteriskField">*</span></label>
                                 <div class="d-flex">
-                                    <input type="date" name="advanced_fees_date" class="form-control numberinput" data-purpose="BedIPD" step="any" id="id_advanced_fees_date" 
-                                        {% if ins.advanced_fee %} value="{{ ins.advanced_fee.date }}" {% endif %}/>
-                                    <input type="number" name="advanced_fees" class="form-control numberinput" data-purpose="BedIPD" step="any" placeholder="0"  id="id_advanced_fees" 
-                                        {% if ins.advanced_fee %} value="{{ ins.advanced_fee.fees }}" {% endif %}/>
+                                    <input type="number" name="advanced_fees" class="form-control numberinput" data-purpose="BedIPD" step="any" placeholder="0" id="id_advanced_fees"/>
+                                </div>
+                                <div id="advanced_fees_dropdown" class="dropdown-content" style="display: none;">
+                                    {% for fee_dict in ins.advanced_fee %}
+                                    <div class="dropdown-item">
+                                        {% for key, value in fee_dict.items %}
+                                        <span class="fee-key mx-2"> {{ key }}: </span><span>{{ value }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    {% endfor %}
                                 </div>
                             </div>
-                           
-                         
                             <div id="div_id_bht_no" class="col-md-3" style="display: none;">
                                 <label for="id_bht_no" class="form-label">
                                     BHT No
@@ -400,5 +462,82 @@
       });
     });
 </script>
-
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const bpInput = document.getElementById("bp");
+    
+        // Ensure the '/' is present and the cursor starts on the left side
+        bpInput.addEventListener("focus", function() {
+            if (bpInput.value === "") {
+                bpInput.value = "/";
+                setCursorPosition(bpInput, 0);
+            } else {
+                const parts = bpInput.value.split('/');
+                if (parts.length < 2) {
+                    bpInput.value = "/";
+                    setCursorPosition(bpInput, 0);
+                }
+            }
+        });
+    
+        bpInput.addEventListener("input", function() {
+            let value = bpInput.value.replace(/\s/g, '');  // Remove spaces
+    
+            // Ensure the '/' is always present
+            if (!value.includes('/')) {
+                value = value.slice(0, 3) + '/' + value.slice(3);
+            }
+    
+            // Prevent multiple slashes
+            const parts = value.split('/');
+            if (parts.length > 2) {
+                value = parts[0] + '/' + parts.slice(1).join('');
+            }
+    
+            // Update the input value
+            bpInput.value = value;
+    
+            // Validate the input
+            const [systolic, diastolic] = value.split('/');
+            if (isValidBP(systolic, diastolic)) {
+                bpInput.setCustomValidity("");
+            } else {
+                bpInput.setCustomValidity("Please enter valid blood pressure readings in the format systolic/diastolic.");
+            }
+        });
+    
+        bpInput.addEventListener("blur", function() {
+            if (bpInput.value === "/") {
+                bpInput.value = "";
+            }
+        });
+    
+        function isValidBP(systolic, diastolic) {
+            return !isNaN(systolic) && !isNaN(diastolic) && Number(systolic) > 0 && Number(diastolic) > 0;
+        }
+    
+        function setCursorPosition(elem, pos) {
+            if (elem.setSelectionRange) {
+                elem.focus();
+                elem.setSelectionRange(pos, pos);
+            } else if (elem.createTextRange) {
+                const range = elem.createTextRange();
+                range.collapse(true);
+                range.moveEnd('character', pos);
+                range.moveStart('character', pos);
+                range.select();
+            }
+        }
+    });
+    </script>
+    <script>
+        function toggleDropdown() {
+            var dropdown = document.getElementById("advanced_fees_dropdown");
+            if (dropdown.style.display === "none") {
+                dropdown.style.display = "block";
+            } else {
+                dropdown.style.display = "none";
+            }
+        }
+    </script>
 {% endblock main_content %}

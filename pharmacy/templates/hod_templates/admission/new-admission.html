@@ -89,7 +89,7 @@
                                 <input type="number" name="weight" class="form-control  numberinput" step="any" id="id_weight" />
                                 <div id="id_weight_helptext" class="form-text">Enter Weight Reading</div>
                             </div>
-                            <div id="div_id_bp_systolic" class="col-4">
+                            {% comment %} <div id="div_id_bp_systolic" class="col-4">
                                 <label for="id_bp_systolic" class="form-label">
                                     Blood Pressure (mmHg) - Systolic/ Diastolic
                                 </label>
@@ -101,8 +101,17 @@
                                     <div id="id_bp_systolic_helptext" class="form-text">Enter Systolic and Diastolic Reading</div>
                                     
                                 </div>
+                            </div> {% endcomment %}
+                            <div id="div_id_bp" class="col-md-4">
+                                <label for="bp" class="form-label">
+                                    Blood Pressure (mmHg) - Systolic/Diastolic
+                                </label>
+                                <div class="d-flex align-items-center">
+                                    <input type="text" id="bp" name="bp" class="form-control textinput text-center" maxlength="7" placeholder="Systolic/Diastolic"
+                                           value="{% if ins.bp_systolic and ins.bp_diastolic %}{{ ins.bp_systolic }}/{{ ins.bp_diastolic }}{% endif %}" />
+                                </div>
+                                <div id="bp_helptext" class="form-text">Enter Systolic and Diastolic Readings (e.g., 120/80)</div>
                             </div>
-                            
                             <div id="div_id_pulse" class="col-4">
                                 <label for="id_pulse" class="form-label">
                                     Pulse (Heartbeats/min)
@@ -155,7 +164,6 @@
                             <div id="div_id_advanced_fees" class="col-3 " style="display: none;">
                                 <label for="id_advanced_fees" class="form-label requiredField"> Advanced Fees<span class="asteriskField">*</span> </label>
                                 <div class="d-flex">
-                                <input type="date" name="advanced_fees_date" value="0" class="form-control numberinput" data-purpose="BedIPD" step="any"  id="id_advanced_fees" />
                                 <input type="number" name="advanced_fees" value="0" class="form-control  numberinput" data-purpose="BedIPD" step="any" placeholder="0"  id="id_advanced_fees" />
                                 </div>
                             </div>
@@ -391,25 +399,140 @@
     });
 </script>
 <script>
-    $(document).ready(function() {
-        // Function to update the hidden input field with JSON data
-        function updateAdvancedFee() {
-            var date = $('#id_addmission_time').val();
-            var fees = $('#id_advanced_fees').val();
-            var data = JSON.stringify({ 'date': date, 'fees': fees });
-            $('#advanced-fee-data').val(data);
-        }
-
-        // Call the update function whenever the date or fees change
-        $('#id_addmission_time, #id_advanced_fees').on('input', updateAdvancedFee);
-
-        // Optionally, you can also populate the display field with the formatted date and fees
-        $('#id_addmission_time, #id_advanced_fees').on('input', function() {
-            var date = $('#id_addmission_time').val();
-            var fees = $('#id_advanced_fees').val();
-            $('#id_advanced_fee_display').val(date + ' - ' + fees);
+    document.addEventListener("DOMContentLoaded", function() {
+        const bpInput = document.getElementById("bp");
+    
+        // Ensure the '/' is present and the cursor starts on the left side
+        bpInput.addEventListener("focus", function() {
+            if (bpInput.value === "") {
+                bpInput.value = "/";
+                setCursorPosition(bpInput, 0);
+            } else {
+                const parts = bpInput.value.split('/');
+                if (parts.length < 2) {
+                    bpInput.value = "/";
+                    setCursorPosition(bpInput, 0);
+                }
+            }
         });
+    
+        bpInput.addEventListener("input", function() {
+            let value = bpInput.value.replace(/\s/g, '');  // Remove spaces
+    
+            // Ensure the '/' is always present
+            if (!value.includes('/')) {
+                value = value.slice(0, 3) + '/' + value.slice(3);
+            }
+    
+            // Prevent multiple slashes
+            const parts = value.split('/');
+            if (parts.length > 2) {
+                value = parts[0] + '/' + parts.slice(1).join('');
+            }
+    
+            // Update the input value
+            bpInput.value = value;
+    
+            // Validate the input
+            const [systolic, diastolic] = value.split('/');
+            if (isValidBP(systolic, diastolic)) {
+                bpInput.setCustomValidity("");
+            } else {
+                bpInput.setCustomValidity("Please enter valid blood pressure readings in the format systolic/diastolic.");
+            }
+        });
+    
+        bpInput.addEventListener("blur", function() {
+            if (bpInput.value === "/") {
+                bpInput.value = "";
+            }
+        });
+    
+        function isValidBP(systolic, diastolic) {
+            return !isNaN(systolic) && !isNaN(diastolic) && Number(systolic) > 0 && Number(diastolic) > 0;
+        }
+    
+        function setCursorPosition(elem, pos) {
+            if (elem.setSelectionRange) {
+                elem.focus();
+                elem.setSelectionRange(pos, pos);
+            } else if (elem.createTextRange) {
+                const range = elem.createTextRange();
+                range.collapse(true);
+                range.moveEnd('character', pos);
+                range.moveStart('character', pos);
+                range.select();
+            }
+        }
     });
-</script>
-
+    </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const bpInput = document.getElementById("bp");
+    
+        // Ensure the '/' is present and the cursor starts on the left side
+        bpInput.addEventListener("focus", function() {
+            if (bpInput.value === "") {
+                bpInput.value = "/";
+                setCursorPosition(bpInput, 0);
+            } else {
+                const parts = bpInput.value.split('/');
+                if (parts.length < 2) {
+                    bpInput.value = "/";
+                    setCursorPosition(bpInput, 0);
+                }
+            }
+        });
+    
+        bpInput.addEventListener("input", function() {
+            let value = bpInput.value.replace(/\s/g, '');  // Remove spaces
+    
+            // Ensure the '/' is always present
+            if (!value.includes('/')) {
+                value = value.slice(0, 3) + '/' + value.slice(3);
+            }
+    
+            // Prevent multiple slashes
+            const parts = value.split('/');
+            if (parts.length > 2) {
+                value = parts[0] + '/' + parts.slice(1).join('');
+            }
+    
+            // Update the input value
+            bpInput.value = value;
+    
+            // Validate the input
+            const [systolic, diastolic] = value.split('/');
+            if (isValidBP(systolic, diastolic)) {
+                bpInput.setCustomValidity("");
+            } else {
+                bpInput.setCustomValidity("Please enter valid blood pressure readings in the format systolic/diastolic.");
+            }
+        });
+    
+        bpInput.addEventListener("blur", function() {
+            if (bpInput.value === "/") {
+                bpInput.value = "";
+            }
+        });
+    
+        function isValidBP(systolic, diastolic) {
+            return !isNaN(systolic) && !isNaN(diastolic) && Number(systolic) > 0 && Number(diastolic) > 0;
+        }
+    
+        function setCursorPosition(elem, pos) {
+            if (elem.setSelectionRange) {
+                elem.focus();
+                elem.setSelectionRange(pos, pos);
+            } else if (elem.createTextRange) {
+                const range = elem.createTextRange();
+                range.collapse(true);
+                range.moveEnd('character', pos);
+                range.moveStart('character', pos);
+                range.select();
+            }
+        }
+    });
+    </script>
+    
 {% endblock main_content %}
