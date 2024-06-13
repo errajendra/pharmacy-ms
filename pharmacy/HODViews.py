@@ -14,7 +14,7 @@ from .models import *
 
 from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
-
+from datetime import date
 
 @for_admin
 def adminDashboard(request):
@@ -1558,20 +1558,22 @@ def addAddmission(request):
             # form.save()
             addmission_instance = form.save(commit=False)
             
-            # Extract advanced fees data from the form
-            advanced_fees_date = request.POST.get('advanced_fees_date')
+            bp = request.POST.get('bp', '').replace(' ', '')  # Remove spaces
+            if '/' in bp:
+                parts = bp.split('/')
+                if len(parts) == 2:
+                    addmission_instance.bp_systolic = parts[0].strip()
+                    addmission_instance.bp_diastolic = parts[1].strip()
+            if not addmission_instance.advanced_fee:
+                addmission_instance.advanced_fee = []
+
             advanced_fees = request.POST.get('advanced_fees')
             
-            # Create a dictionary to store advanced fees data
-            advanced_fees_data = {
-                'date': advanced_fees_date,
-                'fees': advanced_fees
-            }
-            
-            # Update the advanced_fee field with the JSON data
-            addmission_instance.advanced_fee = advanced_fees_data
-            
-            # Save the Addmission instance
+            addmission_instance.advanced_fee.append({
+                'date0': date.today().isoformat(),
+                'fees0': advanced_fees
+            })
+
             addmission_instance.save()
             messages.success(request, "Patient Addmission added Successfully!")
             bed_id = form.cleaned_data.get('bed')
@@ -1615,7 +1617,7 @@ def addAddmission(request):
 @login_required
 def editAddmission(request, id):
     instance = get_object_or_404(Addmission, id=id)
-    advanced_fee_data = instance.advanced_fee or {}
+    advanced_fees = instance.advanced_fee or []
     if instance.bed:
         instance.bed.status = False
         instance.save()
@@ -1625,13 +1627,30 @@ def editAddmission(request, id):
             # new_instance = form.save(commit=False)
             # new_instance.save()
             new_instance = form.save(commit=False)
+            new_advanced_fees = request.POST.get('advanced_fees')
             
-            # Update the specific fields in the JSON object
-            advanced_fee_data['date'] = request.POST.get('advanced_fees_date')
-            advanced_fee_data['fees'] = request.POST.get('advanced_fees')
-            
-            # Serialize the updated JSON object back to a string
-            new_instance.advanced_fee = advanced_fee_data
+            if new_advanced_fees:
+                # Determine the next index for new fee entries
+                next_index = len(advanced_fees)
+                
+                # Append new fee with current date and index
+                advanced_fees.append({
+                    f'date{next_index}': date.today().isoformat(),
+                    f'fees{next_index}': new_advanced_fees
+                })
+                
+                # Update advanced_fee field with appended fees
+                new_instance.advanced_fee = advanced_fees
+            new_instance.advanced_fee = advanced_fees
+                      
+            bp = request.POST.get('bp', '').replace(' ', '') 
+            if bp and '/' in bp:
+                parts = bp.split('/')
+                if len(parts) == 2:
+                    bp_systolic = parts[0].strip()
+                    bp_diastolic = parts[1].strip()
+                    new_instance.bp_systolic = bp_systolic
+                    new_instance.bp_diastolic = bp_diastolic
             new_instance.save()
             
             new_bed = new_instance.bed

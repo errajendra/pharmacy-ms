@@ -73,11 +73,13 @@
 				
 		@media print {
 			@page {
-				size: A4;
+				size: A4 landscape;
 				margin: 0;
 			}
 			body {
-				margin: 1.6cm;
+				width: 100%;
+				height: 14.85cm; /* Half of A4 height */
+				margin: 1cm; /* Adjust margin as needed */
 				font-size: 12pt;
 				line-height: 1.2;
 			}
@@ -142,7 +144,7 @@
 				<span class="bold ml-10">Facilities: </span> {% if addmission.facilities %} {{addmission.facilities}} {% else %} ......................... {% endif %}
 			</p>
 			<p class="text-left">
-				<span class="bold ml-10">Staff: </span> {% if addmission.staff %} {{addmission.staff}} {% else %} ......................... {% endif %}
+				<span				class="bold ml-10">Staff: </span> {% if addmission.staff %} {{addmission.staff}} {% else %} ......................... {% endif %}
 			</p>
 			<p class="text-left">
 				<span class="bold ml-10">Summary of Case: </span> {% if addmission.summary_of_case %} {{addmission.summary_of_case}} {% else %} ......................... {% endif %}
@@ -169,3 +171,4 @@
 	</div>
 </body>
 </html>
+
